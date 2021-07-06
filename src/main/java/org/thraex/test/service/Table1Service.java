@@ -17,7 +17,7 @@ import java.util.concurrent.CompletableFuture;
 @Service
 public class Table1Service extends ServiceImpl<Table1Mapper, Table1> {
 
-    protected Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Transactional(rollbackFor = Exception.class)
     public Table1 test1(long sleep, boolean async) {
