@@ -3,12 +3,15 @@ spring:
     name: thraex-boardroom
   jackson:
     time-zone: GMT+8
-    default-property-inclusion: non_null
+    default-property-inclusion: NON_NULL
   datasource:
     url: jdbc:mysql://localhost:3306/mydb?serverTimezone=GMT
     username: root
     password: hanzo
 
+server:
+  port: 8037
+
 logging:
   level:
-    org.thraex.test: debug
+    org.springframework.web.socket: debug
