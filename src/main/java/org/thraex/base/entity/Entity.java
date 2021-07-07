@@ -1,4 +1,4 @@
-package org.thraex.entity;
+package org.thraex.base.entity;
 
 import java.io.Serializable;
 
