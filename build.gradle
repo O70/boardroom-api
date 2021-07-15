@@ -5,8 +5,8 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 }
 
-group 'org.thraex'
-version '1.0-SNAPSHOT'
+group 'org.thraex.boardroom'
+version '1.0.0'
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
@@ -18,12 +18,11 @@ tasks.withType(JavaCompile) {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'mysql:mysql-connector-java:8.0.21'
-    implementation 'com.baomidou:mybatis-plus-boot-starter:3.4.0'
-//    implementation 'org.thraex.toolkit:toolkit:1.0-SNAPSHOT'
+    implementation 'com.github.THRAEX-70:toolkit:dev-SNAPSHOT'
 }
