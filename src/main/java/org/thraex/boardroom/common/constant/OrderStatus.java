@@ -1,4 +1,4 @@
-package org.thraex.boardroom.constant;
+package org.thraex.boardroom.common.constant;
 
 import java.util.Arrays;
 

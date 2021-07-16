@@ -1,6 +1,6 @@
 package org.thraex.boardroom.entity;
 
-import org.thraex.boardroom.constant.OrderStatus;
+import org.thraex.boardroom.common.constant.OrderStatus;
 import org.thraex.toolkit.constant.Whether;
 import org.thraex.toolkit.entity.Entity;
 
@@ -11,6 +11,11 @@ import java.time.LocalDateTime;
  * @date 2021/07/15 15:08
  */
 public class OrderDetail extends Entity<OrderDetail> {
+
+    /**
+     * @see {@link Room#getId()}
+     */
+    private String roomId;
 
     /**
      * 会议类型(Dict ID)
@@ -124,6 +129,15 @@ public class OrderDetail extends Entity<OrderDetail> {
     private LocalDateTime endTime;
 
     private OrderStatus status;
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public OrderDetail setRoomId(String roomId) {
+        this.roomId = roomId;
+        return this;
+    }
 
     public String getTypeId() {
         return typeId;

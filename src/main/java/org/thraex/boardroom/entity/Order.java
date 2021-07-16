@@ -1,7 +1,7 @@
 package org.thraex.boardroom.entity;
 
-import org.thraex.boardroom.constant.ApprovalStatus;
-import org.thraex.boardroom.constant.BookingType;
+import org.thraex.boardroom.common.constant.ApprovalStatus;
+import org.thraex.boardroom.common.constant.BookingType;
 import org.thraex.toolkit.entity.Entity;
 
 /**
@@ -12,23 +12,9 @@ import org.thraex.toolkit.entity.Entity;
  */
 public class Order extends Entity<Order> {
 
-    /**
-     * @see {@link Room#getId()}
-     */
-    private String roomId;
-
     private BookingType type;
 
     private ApprovalStatus status;
-
-    public String getRoomId() {
-        return roomId;
-    }
-
-    public Order setRoomId(String roomId) {
-        this.roomId = roomId;
-        return this;
-    }
 
     public BookingType getType() {
         return type;
