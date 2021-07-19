@@ -1,7 +1,9 @@
 package org.thraex.boardroom.entity;
 
-import org.thraex.boardroom.common.entity.JpaEntity;
+import org.thraex.boardroom.common.constant.ApprovalStatus;
 import org.thraex.boardroom.common.constant.BookingType;
+import org.thraex.boardroom.common.constant.OrderStatus;
+import org.thraex.boardroom.common.entity.JpaEntity;
 
 import javax.persistence.Entity;
 
@@ -21,6 +23,10 @@ public class User extends JpaEntity<User> {
     private Double price;
 
     private BookingType type;
+
+    private ApprovalStatus approvalStatus;
+
+    private OrderStatus orderStatus;
 
     private String remark;
 
@@ -69,6 +75,24 @@ public class User extends JpaEntity<User> {
         return this;
     }
 
+    public ApprovalStatus getApprovalStatus() {
+        return approvalStatus;
+    }
+
+    public User setApprovalStatus(ApprovalStatus approvalStatus) {
+        this.approvalStatus = approvalStatus;
+        return this;
+    }
+
+    public OrderStatus getOrderStatus() {
+        return orderStatus;
+    }
+
+    public User setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
+        return this;
+    }
+
     public String getRemark() {
         return remark;
     }
@@ -77,4 +101,17 @@ public class User extends JpaEntity<User> {
         this.remark = remark;
         return this;
     }
+
+    /*@PostLoad
+    void fillTransient() {
+        this.type = BookingType.of(this.typeValue);
+    }
+
+    @PrePersist
+    void fillPersistent() {
+        if (this.type != null) {
+            this.typeValue = this.type.value();
+        }
+    }*/
+
 }

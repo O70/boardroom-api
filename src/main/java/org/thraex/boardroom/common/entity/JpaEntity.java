@@ -2,6 +2,7 @@ package org.thraex.boardroom.common.entity;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
@@ -10,20 +11,23 @@ import java.time.LocalDateTime;
 
 /**
  * @author 鬼王
- * @date 2021/07/16 16:46
+ * @date 2021/07/10 16:46
  */
 @MappedSuperclass
 public class JpaEntity<E extends JpaEntity<?>> implements Serializable {
 
     @Id
-    //@GenericGenerator(name = "uuidGenerator", strategy = "uuid")
-    //@GeneratedValue(generator= "uuidGenerator")
+    @Column(length = 36)
+    @GeneratedValue(generator= "uuidGenerator")
+    @GenericGenerator(name = "uuidGenerator", strategy = "uuid2")
     private String id;
 
+    @Column(length = 36)
     private String createBy;
 
     private LocalDateTime createTime;
 
+    @Column(length = 36)
     private String updateBy;
 
     private LocalDateTime updateTime;
