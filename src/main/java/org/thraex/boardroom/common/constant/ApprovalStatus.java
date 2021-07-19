@@ -27,7 +27,7 @@ public enum ApprovalStatus {
         return this.value;
     }
 
-    public static ApprovalStatus valueOf(final int value) {
+    public static ApprovalStatus of(final int value) {
         return Arrays.stream(values())
                 .filter(it -> it.value == value)
                 .findFirst()

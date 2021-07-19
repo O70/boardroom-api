@@ -27,7 +27,7 @@ public enum OrderStatus {
         return this.value;
     }
 
-    public static OrderStatus valueOf(final int value) {
+    public static OrderStatus of(final int value) {
         return Arrays.stream(values())
                 .filter(it -> it.value == value)
                 .findFirst()

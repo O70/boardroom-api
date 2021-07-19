@@ -27,7 +27,7 @@ public enum BookingType {
         return this.value;
     }
 
-    public static BookingType valueOf(final int value) {
+    public static BookingType of(final int value) {
         return Arrays.stream(values())
                 .filter(it -> it.value == value)
                 .findFirst()
