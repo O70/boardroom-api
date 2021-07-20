@@ -1,6 +1,8 @@
 package org.thraex.boardroom.common.constant;
 
-import java.util.Arrays;
+import org.thraex.boardroom.common.converter.IntegerOperator;
+
+import java.util.stream.Stream;
 
 /**
  * 预定订单状态
@@ -8,7 +10,7 @@ import java.util.Arrays;
  * @author 鬼王
  * @date 2021/07/15 11:39
  */
-public enum OrderStatus {
+public enum OrderStatus implements IntegerOperator {
 
     NEWEST(20, "最新"),
     NON_NEWEST(21, "非最新"),
@@ -23,12 +25,13 @@ public enum OrderStatus {
         this.phrase = phrase;
     }
 
-    public int value() {
+    @Override
+    public Integer value() {
         return this.value;
     }
 
     public static OrderStatus of(final int value) {
-        return Arrays.stream(values())
+        return Stream.of(values())
                 .filter(it -> it.value == value)
                 .findFirst()
                 .orElse(null);
@@ -36,7 +39,7 @@ public enum OrderStatus {
 
     @Override
     public String toString() {
-        return name() + " " + this.value + " " + this.phrase;
+        return String.format("%s %d %s", name(), value, phrase);
     }
 
 }

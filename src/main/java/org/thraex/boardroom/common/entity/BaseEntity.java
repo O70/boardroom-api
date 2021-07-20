@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
  * @date 2021/07/16 16:19
  */
 @MappedSuperclass
-public class BaseEntity <E extends BaseEntity<?>> implements Serializable {
+public class BaseEntity <E extends BaseEntity<E>> implements Serializable {
 
     @Id
     @GenericGenerator(name = "uuidGenerator", strategy = "uuid")

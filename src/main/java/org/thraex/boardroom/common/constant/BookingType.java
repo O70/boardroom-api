@@ -1,6 +1,8 @@
 package org.thraex.boardroom.common.constant;
 
-import java.util.Arrays;
+import org.thraex.boardroom.common.converter.IntegerOperator;
+
+import java.util.stream.Stream;
 
 /**
  * 预定类型
@@ -8,7 +10,7 @@ import java.util.Arrays;
  * @author 鬼王
  * @date 2021/07/15 15:21
  */
-public enum BookingType {
+public enum BookingType implements IntegerOperator {
 
     ORDINARY(10, "普通预定"),
     PERIODIC(20, "周期预定"),
@@ -23,12 +25,13 @@ public enum BookingType {
         this.phrase = phrase;
     }
 
-    public int value() {
+    @Override
+    public Integer value() {
         return this.value;
     }
 
     public static BookingType of(final int value) {
-        return Arrays.stream(values())
+        return Stream.of(values())
                 .filter(it -> it.value == value)
                 .findFirst()
                 .orElse(null);
@@ -36,7 +39,7 @@ public enum BookingType {
 
     @Override
     public String toString() {
-        return name() + " " + this.value + " " + this.phrase;
+        return String.format("%s %d %s", name(), value, phrase);
     }
 
 }

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
  * @date 2021/07/10 16:46
  */
 @MappedSuperclass
-public class JpaEntity<E extends JpaEntity<?>> implements Serializable {
+public class JpaEntity<E extends JpaEntity<E>> implements Serializable {
 
     @Id
     @Column(length = 36)
