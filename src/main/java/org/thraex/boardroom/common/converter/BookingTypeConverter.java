@@ -12,11 +12,11 @@ import java.util.Optional;
 @Converter(autoApply = true)
 public class BookingTypeConverter extends IntegerAttributeConverter<BookingType> {
 
-    @Override
+    /*@Override
     public BookingType convertToEntityAttribute(Integer value) {
         return Optional.ofNullable(value)
                 .map(BookingType::of)
                 .orElse(null);
-    }
+    }*/
 
 }

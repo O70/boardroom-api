@@ -2,8 +2,6 @@ package org.thraex.boardroom.common.constant;
 
 import org.thraex.boardroom.common.converter.IntegerOperator;
 
-import java.util.stream.Stream;
-
 /**
  * 预定类型
  *
@@ -26,15 +24,12 @@ public enum BookingType implements IntegerOperator {
     }
 
     @Override
-    public Integer value() {
+    public int value() {
         return this.value;
     }
 
-    public static BookingType of(final int value) {
-        return Stream.of(values())
-                .filter(it -> it.value == value)
-                .findFirst()
-                .orElse(null);
+    public static BookingType of(int value) {
+        return IntegerOperator.find(values(), value);
     }
 
     @Override

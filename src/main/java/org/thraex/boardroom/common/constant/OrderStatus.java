@@ -2,8 +2,6 @@ package org.thraex.boardroom.common.constant;
 
 import org.thraex.boardroom.common.converter.IntegerOperator;
 
-import java.util.stream.Stream;
-
 /**
  * 预定订单状态
  *
@@ -26,15 +24,12 @@ public enum OrderStatus implements IntegerOperator {
     }
 
     @Override
-    public Integer value() {
+    public int value() {
         return this.value;
     }
 
-    public static OrderStatus of(final int value) {
-        return Stream.of(values())
-                .filter(it -> it.value == value)
-                .findFirst()
-                .orElse(null);
+    public static OrderStatus of(int value) {
+        return IntegerOperator.find(values(), value);
     }
 
     @Override
