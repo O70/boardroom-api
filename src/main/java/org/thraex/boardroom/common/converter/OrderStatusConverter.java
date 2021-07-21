@@ -3,7 +3,6 @@ package org.thraex.boardroom.common.converter;
 import org.thraex.boardroom.common.constant.OrderStatus;
 
 import javax.persistence.Converter;
-import java.util.Optional;
 
 /**
  * @author 鬼王
@@ -11,12 +10,4 @@ import java.util.Optional;
  */
 @Converter(autoApply = true)
 public class OrderStatusConverter extends IntegerAttributeConverter<OrderStatus> {
-
-    @Override
-    public OrderStatus convertToEntityAttribute(Integer value) {
-        return Optional.ofNullable(value)
-                .map(OrderStatus::of)
-                .orElse(null);
-    }
-
 }

@@ -1,5 +1,6 @@
 package org.thraex.boardroom.common.converter;
 
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -11,6 +12,8 @@ public interface IntegerOperator {
     int value();
 
     static <X extends IntegerOperator> X find(X[] values, int value) {
+        if (Objects.isNull(values)) { return null; }
+
         return Stream.of(values)
                 .filter(it -> it.value() == value)
                 .findFirst()

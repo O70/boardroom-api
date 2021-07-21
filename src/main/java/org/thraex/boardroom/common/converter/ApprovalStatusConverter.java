@@ -3,7 +3,6 @@ package org.thraex.boardroom.common.converter;
 import org.thraex.boardroom.common.constant.ApprovalStatus;
 
 import javax.persistence.Converter;
-import java.util.Optional;
 
 /**
  * @author 鬼王
@@ -11,12 +10,4 @@ import java.util.Optional;
  */
 @Converter(autoApply = true)
 public class ApprovalStatusConverter extends IntegerAttributeConverter<ApprovalStatus> {
-
-    @Override
-    public ApprovalStatus convertToEntityAttribute(Integer value) {
-        return Optional.ofNullable(value)
-                .map(ApprovalStatus::of)
-                .orElse(null);
-    }
-
 }
