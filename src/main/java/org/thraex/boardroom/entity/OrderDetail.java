@@ -2,7 +2,7 @@ package org.thraex.boardroom.entity;
 
 import org.thraex.boardroom.common.constant.OrderStatus;
 import org.thraex.toolkit.constant.Whether;
-import org.thraex.toolkit.entity.Entity;
+import org.thraex.toolkit.entity.BaseEntity;
 
 import java.time.LocalDateTime;
 
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
  * @author 鬼王
  * @date 2021/07/15 15:08
  */
-public class OrderDetail extends Entity<OrderDetail> {
+public class OrderDetail extends BaseEntity<OrderDetail> {
 
     /**
      * @see {@link Room#getId()}

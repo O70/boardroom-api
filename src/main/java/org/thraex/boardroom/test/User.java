@@ -1,9 +1,9 @@
-package org.thraex.boardroom.entity;
+package org.thraex.boardroom.test;
 
 import org.thraex.boardroom.common.constant.ApprovalStatus;
 import org.thraex.boardroom.common.constant.BookingType;
 import org.thraex.boardroom.common.constant.OrderStatus;
-import org.thraex.boardroom.common.entity.JpaEntity;
+import org.thraex.toolkit.entity.JpaEntity;
 
 import javax.persistence.Entity;
 

@@ -1,13 +1,13 @@
 package org.thraex.boardroom.entity;
 
 import org.thraex.toolkit.constant.Whether;
-import org.thraex.toolkit.entity.Entity;
+import org.thraex.toolkit.entity.BaseEntity;
 
 /**
  * @author 鬼王
  * @date 2021/07/14 18:04
  */
-public class Room extends Entity<Room> {
+public class Room extends BaseEntity<Room> {
 
     private String name;
 

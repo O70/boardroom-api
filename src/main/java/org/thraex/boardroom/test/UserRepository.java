@@ -1,7 +1,6 @@
-package org.thraex.boardroom.repository;
+package org.thraex.boardroom.test;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.thraex.boardroom.entity.User;
 
 /**
  * @author 鬼王
