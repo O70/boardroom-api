@@ -1,6 +1,6 @@
 package org.thraex.boardroom.common.constant;
 
-import org.thraex.toolkit.jpa.EnumAttributeOperator;
+import org.thraex.toolkit.jpa.IntegerEnumAttributeOperator;
 
 /**
  * 预定类型
@@ -8,7 +8,7 @@ import org.thraex.toolkit.jpa.EnumAttributeOperator;
  * @author 鬼王
  * @date 2021/07/15 15:21
  */
-public enum BookingType implements EnumAttributeOperator<Integer> {
+public enum BookingType implements IntegerEnumAttributeOperator {
 
     ORDINARY(10, "普通预定"),
     PERIODIC(20, "周期预定"),
@@ -28,8 +28,8 @@ public enum BookingType implements EnumAttributeOperator<Integer> {
         return this.value;
     }
 
-    public static BookingType of(int value) {
-        return EnumAttributeOperator.find(values(), value);
+    public static BookingType of(Integer value) {
+        return IntegerEnumAttributeOperator.find(values(), value);
     }
 
     @Override

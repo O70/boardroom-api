@@ -1,6 +1,6 @@
 package org.thraex.boardroom.common.constant;
 
-import org.thraex.toolkit.jpa.EnumAttributeOperator;
+import org.thraex.toolkit.jpa.IntegerEnumAttributeOperator;
 
 /**
  * 审批状态
@@ -8,7 +8,7 @@ import org.thraex.toolkit.jpa.EnumAttributeOperator;
  * @author 鬼王
  * @date 2021/07/15 08:34
  */
-public enum ApprovalStatus implements EnumAttributeOperator<Integer> {
+public enum ApprovalStatus implements IntegerEnumAttributeOperator {
 
     APPROVAL(10, "审批中"),
     RETURNED(19, "审批退回"),
@@ -28,8 +28,8 @@ public enum ApprovalStatus implements EnumAttributeOperator<Integer> {
         return this.value;
     }
 
-    public static ApprovalStatus of(int value) {
-        return EnumAttributeOperator.find(values(), value);
+    public static ApprovalStatus of(Integer value) {
+        return IntegerEnumAttributeOperator.find(values(), value);
     }
 
     @Override
