@@ -3,6 +3,7 @@ package org.thraex.boardroom.test;
 import org.thraex.boardroom.common.constant.ApprovalStatus;
 import org.thraex.boardroom.common.constant.BookingType;
 import org.thraex.boardroom.common.constant.OrderStatus;
+import org.thraex.toolkit.constant.Whether;
 import org.thraex.toolkit.entity.JpaEntity;
 
 import javax.persistence.Entity;
@@ -27,6 +28,8 @@ public class User extends JpaEntity<User> {
     private ApprovalStatus approvalStatus;
 
     private OrderStatus orderStatus;
+
+    private Whether deleted;
 
     private String remark;
 
@@ -90,6 +93,15 @@ public class User extends JpaEntity<User> {
 
     public User setOrderStatus(OrderStatus orderStatus) {
         this.orderStatus = orderStatus;
+        return this;
+    }
+
+    public Whether getDeleted() {
+        return deleted;
+    }
+
+    public User setDeleted(Whether deleted) {
+        this.deleted = deleted;
         return this;
     }
 

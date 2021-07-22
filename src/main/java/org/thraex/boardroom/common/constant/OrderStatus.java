@@ -1,6 +1,6 @@
 package org.thraex.boardroom.common.constant;
 
-import org.thraex.boardroom.common.converter.IntegerOperator;
+import org.thraex.toolkit.jpa.EnumAttributeOperator;
 
 /**
  * 预定订单状态
@@ -8,7 +8,7 @@ import org.thraex.boardroom.common.converter.IntegerOperator;
  * @author 鬼王
  * @date 2021/07/15 11:39
  */
-public enum OrderStatus implements IntegerOperator {
+public enum OrderStatus implements EnumAttributeOperator<Integer> {
 
     NEWEST(20, "最新"),
     NON_NEWEST(21, "非最新"),
@@ -24,12 +24,12 @@ public enum OrderStatus implements IntegerOperator {
     }
 
     @Override
-    public int value() {
+    public Integer value() {
         return this.value;
     }
 
     public static OrderStatus of(int value) {
-        return IntegerOperator.find(values(), value);
+        return EnumAttributeOperator.find(values(), value);
     }
 
     @Override

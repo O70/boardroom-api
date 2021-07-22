@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.thraex.boardroom.common.constant.ApprovalStatus;
 import org.thraex.boardroom.common.constant.BookingType;
 import org.thraex.boardroom.common.constant.OrderStatus;
+import org.thraex.toolkit.constant.Whether;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,6 +35,7 @@ public class UserController {
                 .setApprovalStatus(ApprovalStatus.APPROVAL)
                 .setOrderStatus(OrderStatus.NON_NEWEST)
             .setCreateTime(LocalDateTime.now())
+            .setDeleted(Whether.NO)
         ;
         User save = userRepository.save(user);
         return save;
