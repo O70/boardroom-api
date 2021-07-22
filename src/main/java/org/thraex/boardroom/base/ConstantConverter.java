@@ -1,8 +1,8 @@
-package org.thraex.boardroom.common;
+package org.thraex.boardroom.base;
 
-import org.thraex.boardroom.common.constant.ApprovalStatus;
-import org.thraex.boardroom.common.constant.BookingType;
-import org.thraex.boardroom.common.constant.OrderStatus;
+import org.thraex.boardroom.base.constant.ApprovalStatus;
+import org.thraex.boardroom.base.constant.BookingType;
+import org.thraex.boardroom.base.constant.OrderStatus;
 import org.thraex.toolkit.constant.Whether;
 import org.thraex.toolkit.jpa.IntegerEnumAttributeConverter;
 

@@ -1,24 +1,24 @@
-package org.thraex.boardroom.common.constant;
+package org.thraex.boardroom.base.constant;
 
 import org.thraex.toolkit.jpa.IntegerEnumAttributeOperator;
 
 /**
- * 审批状态
+ * 预定类型
  *
  * @author 鬼王
- * @date 2021/07/15 08:34
+ * @date 2021/07/15 15:21
  */
-public enum ApprovalStatus implements IntegerEnumAttributeOperator {
+public enum BookingType implements IntegerEnumAttributeOperator {
 
-    APPROVAL(10, "审批中"),
-    RETURNED(19, "审批退回"),
-    APPROVED(20, "审批通过");
+    ORDINARY(10, "普通预定"),
+    PERIODIC(20, "周期预定"),
+    LONG_TERM(30, "长期预定");
 
     private final int value;
 
     private final String phrase;
 
-    ApprovalStatus(int value, String phrase) {
+    BookingType(int value, String phrase) {
         this.value = value;
         this.phrase = phrase;
     }
@@ -28,7 +28,7 @@ public enum ApprovalStatus implements IntegerEnumAttributeOperator {
         return this.value;
     }
 
-    public static ApprovalStatus of(Integer value) {
+    public static BookingType of(Integer value) {
         return IntegerEnumAttributeOperator.find(values(), value);
     }
 

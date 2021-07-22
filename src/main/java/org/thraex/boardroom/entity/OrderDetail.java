@@ -1,6 +1,6 @@
 package org.thraex.boardroom.entity;
 
-import org.thraex.boardroom.common.constant.OrderStatus;
+import org.thraex.boardroom.base.constant.OrderStatus;
 import org.thraex.toolkit.constant.Whether;
 import org.thraex.toolkit.entity.BaseEntity;
 

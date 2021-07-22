@@ -1,8 +1,7 @@
 package org.thraex.boardroom.test;
 
-import org.thraex.boardroom.common.constant.ApprovalStatus;
-import org.thraex.boardroom.common.constant.BookingType;
-import org.thraex.boardroom.common.constant.OrderStatus;
+import org.thraex.boardroom.base.constant.BookingType;
+import org.thraex.boardroom.base.constant.OrderStatus;
 import org.thraex.toolkit.constant.Whether;
 import org.thraex.toolkit.entity.JpaEntity;
 
@@ -25,7 +24,7 @@ public class User extends JpaEntity<User> {
 
     private BookingType type;
 
-    private ApprovalStatus approvalStatus;
+    //private ApprovalStatus approvalStatus;
 
     private OrderStatus orderStatus;
 
@@ -78,14 +77,14 @@ public class User extends JpaEntity<User> {
         return this;
     }
 
-    public ApprovalStatus getApprovalStatus() {
-        return approvalStatus;
-    }
-
-    public User setApprovalStatus(ApprovalStatus approvalStatus) {
-        this.approvalStatus = approvalStatus;
-        return this;
-    }
+    //public ApprovalStatus getApprovalStatus() {
+    //    return approvalStatus;
+    //}
+    //
+    //public User setApprovalStatus(ApprovalStatus approvalStatus) {
+    //    this.approvalStatus = approvalStatus;
+    //    return this;
+    //}
 
     public OrderStatus getOrderStatus() {
         return orderStatus;

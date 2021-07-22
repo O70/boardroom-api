@@ -12,6 +12,9 @@ spring:
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     hibernate:
       ddl-auto: update
+      naming:
+        prefix: boardroom
+        physical-strategy: org.thraex.boardroom.base.PrefixPhysicalNamingStrategy
 
 server:
   port: 8037

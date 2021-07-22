@@ -1,8 +1,9 @@
 package org.thraex.boardroom.entity;
 
-import org.thraex.boardroom.common.constant.ApprovalStatus;
-import org.thraex.boardroom.common.constant.BookingType;
-import org.thraex.toolkit.entity.BaseEntity;
+import org.thraex.boardroom.base.constant.BookingType;
+import org.thraex.toolkit.entity.JpaEntity;
+
+import javax.persistence.Entity;
 
 /**
  * 会议室预定订单记录
@@ -10,11 +11,10 @@ import org.thraex.toolkit.entity.BaseEntity;
  * @author 鬼王
  * @date 2021/07/14 16:49
  */
-public class Order extends BaseEntity<Order> {
+@Entity
+public class Order extends JpaEntity<Order> {
 
     private BookingType type;
-
-    private ApprovalStatus status;
 
     public BookingType getType() {
         return type;
@@ -22,15 +22,6 @@ public class Order extends BaseEntity<Order> {
 
     public Order setType(BookingType type) {
         this.type = type;
-        return this;
-    }
-
-    public ApprovalStatus getStatus() {
-        return status;
-    }
-
-    public Order setStatus(ApprovalStatus status) {
-        this.status = status;
         return this;
     }
 

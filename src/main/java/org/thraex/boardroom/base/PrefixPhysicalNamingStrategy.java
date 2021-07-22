@@ -1,0 +1,29 @@
+package org.thraex.boardroom.base;
+
+import org.hibernate.boot.model.naming.Identifier;
+import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy;
+import org.springframework.stereotype.Component;
+
+import java.util.Optional;
+
+/**
+ * @author 鬼王
+ * @date 2021/07/22 16:11
+ */
+@Component
+public class PrefixPhysicalNamingStrategy extends SpringPhysicalNamingStrategy {
+
+    @Value("${spring.jpa.hibernate.naming.prefix:}")
+    private String prefix;
+
+    @Override
+    public Identifier toPhysicalTableName(Identifier name, JdbcEnvironment context) {
+        Identifier boardroom = Identifier.toIdentifier(String.format("%s%s",
+                Optional.ofNullable(prefix).map(String::toLowerCase).orElse(null),
+                name.getText()));
+        return super.toPhysicalTableName(boardroom, context);
+    }
+
+}
