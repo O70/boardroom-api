@@ -1,4 +1,4 @@
-package org.thraex.boardroom.business.test;
+package test;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

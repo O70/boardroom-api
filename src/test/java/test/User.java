@@ -1,4 +1,4 @@
-package org.thraex.boardroom.business.test;
+package test;
 
 import org.thraex.boardroom.base.constant.BookingType;
 import org.thraex.boardroom.base.constant.OrderState;

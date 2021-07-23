@@ -1,4 +1,4 @@
-package org.thraex.boardroom.business.test;
+package test;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
