@@ -2,7 +2,7 @@ package org.thraex.boardroom.base;
 
 import org.thraex.boardroom.base.constant.ApprovalStatus;
 import org.thraex.boardroom.base.constant.BookingType;
-import org.thraex.boardroom.base.constant.OrderStatus;
+import org.thraex.boardroom.base.constant.OrderState;
 import org.thraex.toolkit.constant.Whether;
 import org.thraex.toolkit.jpa.IntegerEnumAttributeConverter;
 
@@ -21,7 +21,7 @@ public final class ConstantConverter {
     public static class BookingTypeConverter extends IntegerEnumAttributeConverter<BookingType> {}
 
     @Converter(autoApply = true)
-    public static class OrderStatusConverter extends IntegerEnumAttributeConverter<OrderStatus> {}
+    public static class OrderStatusConverter extends IntegerEnumAttributeConverter<OrderState> {}
 
     @Converter(autoApply = true)
     public static class ApprovalStatusConverter extends IntegerEnumAttributeConverter<ApprovalStatus> {}

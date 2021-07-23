@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.thraex.boardroom.base.constant.BookingType;
-import org.thraex.boardroom.base.constant.OrderStatus;
+import org.thraex.boardroom.base.constant.OrderState;
 import org.thraex.toolkit.constant.Whether;
 
 import java.time.LocalDateTime;
@@ -31,8 +31,7 @@ public class UserController {
             .setName("鬼王")
             .setPrice(30100.0)
             .setType(BookingType.PERIODIC)
-                //.setApprovalStatus(ApprovalStatus.APPROVAL)
-                .setOrderStatus(OrderStatus.APPROVED_NON_NEW)
+                .setOrderState(OrderState.APPROVED_NON_NEW)
             .setCreateTime(LocalDateTime.now())
             .setDeleted(Whether.NO)
         ;

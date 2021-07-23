@@ -3,8 +3,6 @@ package org.thraex.boardroom.base.constant;
 import org.thraex.toolkit.jpa.IntegerEnumAttributeOperator;
 
 /**
- * 预定类型
- *
  * @author 鬼王
  * @date 2021/07/15 15:21
  */

@@ -3,18 +3,14 @@ package org.thraex.boardroom.base.constant;
 import org.thraex.toolkit.jpa.IntegerEnumAttributeOperator;
 
 /**
- * 预定订单状态
- *
  * @author 鬼王
  * @date 2021/07/15 11:39
  */
-public enum OrderStatus implements IntegerEnumAttributeOperator {
+public enum OrderState implements IntegerEnumAttributeOperator {
 
     APPROVAL(10, "审批中"),
     RETURNED(19, "审批退回"),
     APPROVED_NEW(20, "审批通过"),
-    //NEWEST(20, "最新"),
-    //NON_NEWEST(21, "非最新"),
     APPROVED_NON_NEW(21, "审批通过"),
     CANCELLED(30, "已取消");
 
@@ -22,7 +18,7 @@ public enum OrderStatus implements IntegerEnumAttributeOperator {
 
     private final String phrase;
 
-    OrderStatus(int value, String phrase) {
+    OrderState(int value, String phrase) {
         this.value = value;
         this.phrase = phrase;
     }
@@ -32,7 +28,7 @@ public enum OrderStatus implements IntegerEnumAttributeOperator {
         return this.value;
     }
 
-    public static OrderStatus of(Integer value) {
+    public static OrderState of(Integer value) {
         return IntegerEnumAttributeOperator.find(values(), value);
     }
 

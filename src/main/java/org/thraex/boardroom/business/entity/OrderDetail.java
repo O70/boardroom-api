@@ -1,20 +1,26 @@
 package org.thraex.boardroom.business.entity;
 
-import org.thraex.boardroom.base.constant.OrderStatus;
+import org.thraex.boardroom.base.constant.OrderState;
 import org.thraex.toolkit.constant.Whether;
-import org.thraex.toolkit.entity.BaseEntity;
+import org.thraex.toolkit.entity.JpaEntity;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
 import java.time.LocalDateTime;
 
 /**
+ * 预定订单详情
+ *
  * @author 鬼王
  * @date 2021/07/15 15:08
  */
-public class OrderDetail extends BaseEntity<OrderDetail> {
+@Entity
+public class OrderDetail extends JpaEntity<OrderDetail> {
 
     /**
      * @see {@link Room#getId()}
      */
+    @Column(length = IDENTIFIER_LENGTH)
     private String roomId;
 
     /**
@@ -25,6 +31,7 @@ public class OrderDetail extends BaseEntity<OrderDetail> {
     /**
      * 会议类型名称
      */
+    @Column(length = IDENTIFIER_LENGTH)
     private String typeName;
 
     /**
@@ -40,6 +47,7 @@ public class OrderDetail extends BaseEntity<OrderDetail> {
     /**
      * 院内承办单位ID
      */
+    @Column(length = IDENTIFIER_LENGTH)
     private String orgId;
 
     /**
@@ -128,7 +136,7 @@ public class OrderDetail extends BaseEntity<OrderDetail> {
 
     private LocalDateTime endTime;
 
-    private OrderStatus status;
+    private OrderState state;
 
     public String getRoomId() {
         return roomId;
@@ -331,12 +339,13 @@ public class OrderDetail extends BaseEntity<OrderDetail> {
         this.endTime = endTime;
     }
 
-    public OrderStatus getStatus() {
-        return status;
+    public OrderState getState() {
+        return state;
     }
 
-    public void setStatus(OrderStatus status) {
-        this.status = status;
+    public OrderDetail setState(OrderState state) {
+        this.state = state;
+        return this;
     }
 
 }

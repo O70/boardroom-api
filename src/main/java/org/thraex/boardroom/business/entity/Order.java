@@ -6,7 +6,7 @@ import org.thraex.toolkit.entity.JpaEntity;
 import javax.persistence.Entity;
 
 /**
- * 会议室预定订单记录
+ * 预定订单记录
  *
  * @author 鬼王
  * @date 2021/07/14 16:49
