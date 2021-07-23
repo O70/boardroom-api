@@ -20,10 +20,10 @@ public class PrefixPhysicalNamingStrategy extends SpringPhysicalNamingStrategy {
 
     @Override
     public Identifier toPhysicalTableName(Identifier name, JdbcEnvironment context) {
-        Identifier boardroom = Identifier.toIdentifier(String.format("%s%s",
-                Optional.ofNullable(prefix).map(String::toLowerCase).orElse(null),
-                name.getText()));
-        return super.toPhysicalTableName(boardroom, context);
+        String lower = Optional.of(prefix).map(String::toLowerCase).get();
+        Identifier identifier = Identifier.toIdentifier(String.format("%s%s", lower, name.getText()));
+
+        return super.toPhysicalTableName(identifier, context);
     }
 
 }

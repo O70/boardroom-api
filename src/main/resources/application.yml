@@ -13,8 +13,8 @@ spring:
     hibernate:
       ddl-auto: update
       naming:
-        prefix: boardroom
         physical-strategy: org.thraex.boardroom.base.PrefixPhysicalNamingStrategy
+        prefix: boardroom
 
 server:
   port: 8037

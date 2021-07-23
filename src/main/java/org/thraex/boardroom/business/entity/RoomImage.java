@@ -1,4 +1,4 @@
-package org.thraex.boardroom.entity;
+package org.thraex.boardroom.business.entity;
 
 import org.thraex.toolkit.entity.BaseEntity;
 
