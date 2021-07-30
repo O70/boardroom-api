@@ -11,6 +11,8 @@ import jxl.write.WritableFont;
 import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -79,6 +81,23 @@ public class DownloadController {
         } catch (IOException | WriteException e) {
             e.printStackTrace();
         }
+    }
+
+    @GetMapping("spring")
+    public ResponseEntity<byte[]> spring() throws IOException, WriteException {
+        String charset = "UTF-8";
+        String title = "会议室预定情况查询(服务人员)-SPRING";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/vnd.ms-excel");
+        headers.add("Content-Disposition",
+                String.format("attachment;filename=%s.xls", URLEncoder.encode(title, charset)));
+
+        Path path = Excel.create(title, 21);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(Files.readAllBytes(path));
     }
 
     private static class Excel {
