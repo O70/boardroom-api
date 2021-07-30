@@ -12,6 +12,7 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -89,8 +90,9 @@ public class DownloadController {
         String title = "会议室预定情况查询(服务人员)-SPRING";
 
         HttpHeaders headers = new HttpHeaders();
-        headers.add("Content-Type", "application/vnd.ms-excel");
-        headers.add("Content-Disposition",
+        //headers.add("Content-Type", "application/vnd.ms-excel");
+        headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE);
+        headers.add(HttpHeaders.CONTENT_DISPOSITION,
                 String.format("attachment;filename=%s.xls", URLEncoder.encode(title, charset)));
 
         Path path = Excel.create(title, 21);
