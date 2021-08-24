@@ -5,6 +5,8 @@ import org.thraex.toolkit.entity.JpaEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
  * @author 鬼王
@@ -13,18 +15,20 @@ import javax.persistence.Entity;
 @Entity
 public class Room extends JpaEntity<Room> {
 
+    @NotBlank
+    @Size(min = 1, max = 255)
     private String name;
 
     /**
      * 类型(Dict ID)
      */
-    @Column(length = IDENTIFIER_LENGTH)
+    @Column(length = 36)
     private String typeId;
 
     /**
      * 地点(Dict ID)
      */
-    @Column(length = IDENTIFIER_LENGTH)
+    @Column(length = 36)
     private String locationId;
 
     /**
@@ -45,7 +49,7 @@ public class Room extends JpaEntity<Room> {
     /**
      * 投影类型(Dict ID)
      */
-    @Column(length = IDENTIFIER_LENGTH)
+    @Column(length = 36)
     private String projectionTypeId;
 
     /**

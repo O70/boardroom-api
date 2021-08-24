@@ -15,13 +15,13 @@ public class RoomImage extends JpaEntity<RoomImage> {
     /**
      * {@link Room#getId()}
      */
-    @Column(length = IDENTIFIER_LENGTH)
+    @Column(length = 36)
     private String roomId;
 
     /**
      * File service FileInfo#getId()
      */
-    @Column(length = IDENTIFIER_LENGTH)
+    @Column(length = 36)
     private String fileId;
 
     public String getRoomId() {
