@@ -39,6 +39,8 @@ public class EntityAspect {
         } else {
             Method setUpdateBy = aClass.getMethod("setUpdateBy", String.class);
             Method setUpdateTime = aClass.getMethod("setUpdateTime", LocalDateTime.class);
+            setUpdateBy.invoke(arg, "THRAEX");
+            setUpdateTime.invoke(arg, LocalDateTime.now());
         }
     }
 

@@ -1,6 +1,5 @@
 package org.thraex.boardroom.business.controller;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -36,7 +35,7 @@ public class RoomController {
 
     @GetMapping("{id}")
     public Room one(@PathVariable String id) {
-        return roomService.getOne(id);
+        return roomService.findById(id).orElse(null);
     }
 
     @PostMapping
@@ -46,10 +45,7 @@ public class RoomController {
 
     @PutMapping
     public Room update(@RequestBody Room room) {
-        Room old = roomService.getOne(room.getId());
-        BeanUtils.copyProperties(room, old);
-        roomService.save(old);
-        return old;
+        return roomService.update(room);
     }
 
     @DeleteMapping("{id}")
