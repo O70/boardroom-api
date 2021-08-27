@@ -43,6 +43,17 @@ public class RoomController {
         return roomService.save(room);
     }
 
+    /**
+     * TODO: Valid
+     *
+     * @param rooms
+     * @return
+     */
+    @PostMapping("batch")
+    public List<Room> saveBatch(@RequestBody List<Room> rooms) {
+        return roomService.saveAll(rooms);
+    }
+
     @PutMapping
     public Room update(@RequestBody Room room) {
         return roomService.update(room);
