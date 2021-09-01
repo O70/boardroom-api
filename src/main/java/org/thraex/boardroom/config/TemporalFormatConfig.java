@@ -8,6 +8,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,10 +28,26 @@ public class TemporalFormatConfig {
 
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer builder() {
-        final int capacity = 3;
         DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
         DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+        return builder -> builder
+                .serializers(new LocalDateSerializer(date),
+                        new LocalTimeSerializer(time),
+                        new LocalDateTimeSerializer(dateTime))
+                .deserializers(new LocalDateDeserializer(date),
+                        new LocalTimeDeserializer(time),
+                        new LocalDateTimeDeserializer(dateTime));
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(Jackson2ObjectMapperBuilderCustomizer.class)
+    public Jackson2ObjectMapperBuilderCustomizer builderV1() {
+        final int capacity = 3;
+        DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd&&HH:mm:ss");
 
         return builder -> builder
                 .serializersByType(new HashMap<Class<?>, JsonSerializer<?>>(capacity) {{
