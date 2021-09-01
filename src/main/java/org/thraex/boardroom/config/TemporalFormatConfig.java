@@ -47,7 +47,7 @@ public class TemporalFormatConfig {
         final int capacity = 3;
         DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
-        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd&&HH:mm:ss");
+        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
         return builder -> builder
                 .serializersByType(new HashMap<Class<?>, JsonSerializer<?>>(capacity) {{
