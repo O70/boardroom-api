@@ -1,5 +1,6 @@
 package org.thraex.boardroom.business.mock;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,6 +64,31 @@ public class MockController {
                 .collect(Collectors.toList());
 
         return roomService.saveAll(collect);
+    }
+
+    @GetMapping("book/dicts")
+    public BookDict bookDict() {
+        return new BookDict(Mock.meetingTypes(), Mock.leaders());
+    }
+
+    class BookDict {
+
+        private List<Dict> types;
+        private List<Dict> leaders;
+
+        public BookDict(List<Dict> types, List<Dict> leaders) {
+            this.types = types;
+            this.leaders = leaders;
+        }
+
+        public List<Dict> getTypes() {
+            return types;
+        }
+
+        public List<Dict> getLeaders() {
+            return leaders;
+        }
+
     }
 
 }
