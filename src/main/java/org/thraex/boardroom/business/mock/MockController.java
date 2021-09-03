@@ -8,6 +8,8 @@ import org.thraex.boardroom.business.entity.Room;
 import org.thraex.boardroom.business.service.RoomService;
 import org.thraex.toolkit.constant.Whether;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -66,7 +68,19 @@ public class MockController {
         return roomService.saveAll(collect);
     }
 
-    @GetMapping("book/dicts")
+    @GetMapping("server/time")
+    public long time() {
+        return LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli();
+    }
+
+    @GetMapping("orgs")
+    public List<Org> org() {
+        return IntStream.range(0, 50)
+                .mapToObj(i -> new Org("ID-ORG-" + i, "ORG-NAME-" + i))
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("book/dict")
     public BookDict bookDict() {
         return new BookDict(Mock.meetingTypes(), Mock.leaders());
     }
@@ -74,6 +88,7 @@ public class MockController {
     class BookDict {
 
         private List<Dict> types;
+
         private List<Dict> leaders;
 
         public BookDict(List<Dict> types, List<Dict> leaders) {
@@ -87,6 +102,27 @@ public class MockController {
 
         public List<Dict> getLeaders() {
             return leaders;
+        }
+
+    }
+
+    class Org {
+
+        private String id;
+
+        private String name;
+
+        public Org(String id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        public String getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
         }
 
     }
