@@ -5,7 +5,12 @@ import org.thraex.toolkit.constant.Whether;
 import org.thraex.toolkit.entity.JpaEntity;
 
 import javax.persistence.Column;
+import javax.persistence.ConstraintMode;
 import javax.persistence.Entity;
+import javax.persistence.ForeignKey;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import java.time.LocalDateTime;
 
 /**
@@ -17,21 +22,46 @@ import java.time.LocalDateTime;
 @Entity
 public class OrderDetail extends JpaEntity<OrderDetail> {
 
-    /**
-     * @see {@link Room#getId()}
-     */
-    @Column(length = IDENTIFIER_LENGTH)
-    private String roomId;
+    @ManyToOne
+    //@JoinColumn(foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Order order;
+
+    ///**
+    // * @see {@link Room#getId()}
+    // */
+    //@Column(length = 36)
+    //private String roomId;
+    @OneToOne
+    //@JoinColumn(foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    private Room room;
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public OrderDetail setOrder(Order order) {
+        this.order = order;
+        return this;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public OrderDetail setRoom(Room room) {
+        this.room = room;
+        return this;
+    }
 
     /**
      * 会议类型(Dict ID)
      */
+    @Column(length = 36)
     private String typeId;
 
     /**
      * 会议类型名称
      */
-    @Column(length = IDENTIFIER_LENGTH)
     private String typeName;
 
     /**
@@ -47,7 +77,7 @@ public class OrderDetail extends JpaEntity<OrderDetail> {
     /**
      * 院内承办单位ID
      */
-    @Column(length = IDENTIFIER_LENGTH)
+    @Column(length = 36)
     private String orgId;
 
     /**
@@ -138,14 +168,14 @@ public class OrderDetail extends JpaEntity<OrderDetail> {
 
     private OrderState state;
 
-    public String getRoomId() {
-        return roomId;
-    }
-
-    public OrderDetail setRoomId(String roomId) {
-        this.roomId = roomId;
-        return this;
-    }
+    //public String getRoomId() {
+    //    return roomId;
+    //}
+    //
+    //public OrderDetail setRoomId(String roomId) {
+    //    this.roomId = roomId;
+    //    return this;
+    //}
 
     public String getTypeId() {
         return typeId;
