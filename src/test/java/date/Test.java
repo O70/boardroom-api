@@ -1,4 +1,4 @@
-package org.thraex.boardroom.base.constant;
+package date;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -18,7 +18,7 @@ import java.util.stream.Stream;
 public class Test {
 
     public static void main(String[] args) {
-        LocalDate start = LocalDate.of(2021, 9,8);
+        /*LocalDate start = LocalDate.of(2021, 9,8);
         LocalDate end = LocalDate.of(2024, 10,10);
 
         //new Test().calc(start, end);
@@ -43,17 +43,50 @@ public class Test {
             new Item(LocalDate.of(2021, 8,18), LocalDate.of(2021, 12,15)),
             new Item(LocalDate.of(2021, 8,18), LocalDate.of(2021, 12,16))
         ).forEach(it -> {
-            /*int y = 2024;
+            *//*int y = 2024;
             List<Item> items = t.calcV3(it.getStart(), it.getEnd());
             Item item1 = items.parallelStream().filter(i -> i.getYear() == y).findFirst().orElse(null);
             System.out.println(item1);
 
             Stream<Item> stream = t.calcV2(it.getStart(), it.getEnd());
             Item item = stream.filter(i -> i.getYear() == y).findFirst().orElse(null);
-            System.out.println(item);*/
+            System.out.println(item);*//*
 
             t.calcV3(it.getStart(), it.getEnd()).forEach(System.out::println);
             System.out.println("*******************");
+        });*/
+
+        LocalDate start = LocalDate.of(2021, 9,8);
+        LocalDate end = LocalDate.of(2024, 10,10);
+
+        //List<MonthUtils.Item> calc = MonthUtils.calc(start, end);
+        //System.out.println(calc);
+
+        Stream.of(
+                //new MonthUtils.Item(start, end)
+                //new MonthUtils.Item(LocalDate.of(2021, 9,17), LocalDate.of(2024, 10,10)),
+                //new MonthUtils.Item(LocalDate.of(2021, 9,17), LocalDate.of(2024, 10,18)),
+                //new MonthUtils.Item(LocalDate.of(2021, 9,17), LocalDate.of(2021, 10,18)),
+                //new MonthUtils.Item(LocalDate.of(2021, 9,17), LocalDate.of(2021, 10,31)),
+                //new MonthUtils.Item(LocalDate.of(2021, 9,17), LocalDate.of(2021, 11,2)),
+                //new MonthUtils.Item(LocalDate.of(2021, 9,17), LocalDate.of(2021, 11,16)),
+                //new MonthUtils.Item(LocalDate.of(2021, 9,17), LocalDate.of(2021, 12,16)),
+                //new MonthUtils.Item(LocalDate.of(2021, 9,17), LocalDate.of(2021, 12,15)),
+                //new MonthUtils.Item(LocalDate.of(2021, 9,15), LocalDate.of(2021, 12,15)),
+                //new MonthUtils.Item(LocalDate.of(2021, 8,18), LocalDate.of(2021, 12,14)),
+                //new MonthUtils.Item(LocalDate.of(2021, 8,18), LocalDate.of(2021, 12,15)),
+                //new MonthUtils.Item(LocalDate.of(2021, 8,18), LocalDate.of(2021, 12,16))
+                //new MonthUtils.Item(LocalDate.of(2021, 12,18), LocalDate.of(2021, 12,18))
+                new MonthUtils.Item(LocalDate.of(2021, 12,18), null)
+        ).forEach(it -> {
+            //List<MonthUtils.Item> calc = MonthUtils.calc(it);
+            //calc.stream().forEach(System.out::println);
+
+            MonthUtils.calcStream(it).forEach(System.out::println);
+
+            //MonthUtils.
+            //
+            //MonthUtils.calcStream(start, end, 10)
         });
     }
 
@@ -71,7 +104,8 @@ public class Test {
 
         BiPredicate<LocalDate, LocalDate> validate = (s, e) -> Period.between(s, e).getDays() + 1 < 15;
 
-        BiFunction<LocalDate, LocalDate, LocalDate> build = (b, p) -> b.withMonth(p.getMonthValue()).withDayOfMonth(p.getDayOfMonth());
+        BiFunction<LocalDate, LocalDate, LocalDate> build = (b, p) ->
+                b.withMonth(p.getMonthValue()).withDayOfMonth(p.getDayOfMonth());
 
         return IntStream.range(0, diff + 1).mapToObj(i -> {
             int year = base + i;
