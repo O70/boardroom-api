@@ -5,6 +5,7 @@ import java.time.Period;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -66,9 +67,15 @@ public abstract class MonthUtils {
 
         BiPredicate<LocalDate, LocalDate> validate = (s, e) -> Period.between(s, e).getDays() + 1 < round;
 
+        BiFunction<Integer, Boolean, LocalDate> build = (year, max) -> {
+            LocalDate date = max ? end : start;
+            return year == date.getYear() ? LocalDate.of(year, date.getMonth(), date.getDayOfMonth()) :
+                    (max ? LocalDate.MAX : LocalDate.MIN).withYear(year);
+        };
+
         return IntStream.range(startYear, endYear + 1).mapToObj(year -> {
-            LocalDate s = startYear == year ? LocalDate.of(year, start.getMonth(), start.getDayOfMonth()) : LocalDate.MIN.withYear(year);
-            LocalDate e = endYear == year ? LocalDate.of(year, end.getMonth(), end.getDayOfMonth()) : LocalDate.MAX.withYear(year);
+            LocalDate s = build.apply(year, false);
+            LocalDate e = build.apply(year, true);
 
             int m;
 

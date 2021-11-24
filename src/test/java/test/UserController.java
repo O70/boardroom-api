@@ -32,7 +32,7 @@ public class UserController {
             .setPrice(30100.0)
             .setType(BookingType.PERIODIC)
                 .setOrderState(OrderState.APPROVED_NON_NEW)
-            .setCreateTime(LocalDateTime.now())
+            .setCreatedDate(LocalDateTime.now())
             .setDeleted(Whether.NO)
         ;
         User save = userRepository.save(user);

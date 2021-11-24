@@ -63,7 +63,7 @@ public class Test {
         //System.out.println(calc);
 
         Stream.of(
-                //new MonthUtils.Item(start, end)
+                new MonthUtils.Item(start, end)
                 //new MonthUtils.Item(LocalDate.of(2021, 9,17), LocalDate.of(2024, 10,10)),
                 //new MonthUtils.Item(LocalDate.of(2021, 9,17), LocalDate.of(2024, 10,18)),
                 //new MonthUtils.Item(LocalDate.of(2021, 9,17), LocalDate.of(2021, 10,18)),
@@ -77,7 +77,7 @@ public class Test {
                 //new MonthUtils.Item(LocalDate.of(2021, 8,18), LocalDate.of(2021, 12,15)),
                 //new MonthUtils.Item(LocalDate.of(2021, 8,18), LocalDate.of(2021, 12,16))
                 //new MonthUtils.Item(LocalDate.of(2021, 12,18), LocalDate.of(2021, 12,18))
-                new MonthUtils.Item(LocalDate.of(2021, 12,18), null)
+                //new MonthUtils.Item(LocalDate.of(2021, 12,18), null)
         ).forEach(it -> {
             //List<MonthUtils.Item> calc = MonthUtils.calc(it);
             //calc.stream().forEach(System.out::println);
