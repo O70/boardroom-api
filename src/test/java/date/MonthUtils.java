@@ -65,13 +65,13 @@ public abstract class MonthUtils {
 
         final int startYear = start.getYear(), endYear = end.getYear();
 
-        BiPredicate<LocalDate, LocalDate> validate = (s, e) -> Period.between(s, e).getDays() + 1 < round;
-
         BiFunction<Integer, Boolean, LocalDate> build = (year, max) -> {
             LocalDate date = max ? end : start;
             return year == date.getYear() ? LocalDate.of(year, date.getMonth(), date.getDayOfMonth()) :
                     (max ? LocalDate.MAX : LocalDate.MIN).withYear(year);
         };
+
+        BiPredicate<LocalDate, LocalDate> validate = (s, e) -> Period.between(s, e).getDays() + 1 < round;
 
         return IntStream.range(startYear, endYear + 1).mapToObj(year -> {
             LocalDate s = build.apply(year, false);
