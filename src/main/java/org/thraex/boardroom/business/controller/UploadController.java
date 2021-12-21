@@ -47,7 +47,7 @@ public class UploadController {
      * Map receiving parameters
      *
      * <p>
-     *     {@link RequestParam} must be added
+     *     {@link RequestParam} must be added: name -> valueString
      * </p>
      *
      * <pre>
@@ -61,7 +61,7 @@ public class UploadController {
      * @param params
      */
     @PostMapping("v1")
-    public void single(MultipartFile file, @RequestParam Map<String, Object> params) {
+    public void single(MultipartFile file, @RequestParam Map<String, String> params) {
         System.out.println("*********** Single(Map receiving parameters) ***********");
         System.out.println(String.format("Map params: %s", params));
         mockTransfer(file);
@@ -132,7 +132,7 @@ public class UploadController {
      * @param params
      */
     @PostMapping("batch/v1")
-    public void batch(MultipartFile[] file, @RequestParam Map<String, Object> params) {
+    public void batch(MultipartFile[] file, @RequestParam Map<String, String> params) {
         System.out.println("*********** Batch(Map receiving parameters) ***********");
         System.out.println(String.format("Map params: %s", params));
         Stream.of(file).forEach(this::mockTransfer);
@@ -173,7 +173,7 @@ public class UploadController {
         private String app;
         private String dir;
 
-        private Map<String, Object> other1; // rejected value [[object Object]]
+        private Map<String, String> other1; // rejected value [[object Object]]
         private User other2; // rejected value [[object Object]]
         private List<String> other3;
 
@@ -195,11 +195,11 @@ public class UploadController {
             return this;
         }
 
-        public Map<String, Object> getOther1() {
+        public Map<String, String> getOther1() {
             return other1;
         }
 
-        public Params setOther1(Map<String, Object> other1) {
+        public Params setOther1(Map<String, String> other1) {
             this.other1 = other1;
             return this;
         }

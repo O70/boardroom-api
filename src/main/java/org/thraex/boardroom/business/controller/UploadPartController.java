@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +22,7 @@ import java.util.stream.Stream;
 public class UploadPartController {
 
     @PostMapping
-    public void upload(Params params) {
+    public void upload(@Valid Params params) {
         System.out.println("*********** Bundle params upload ***********");
         System.out.println(String.format("Bundle params: %s", params));
         Stream.of(params.getFile()).forEach(this::mockTransfer);
@@ -51,6 +53,7 @@ public class UploadPartController {
         /**
          * Note the null pointer exception
          */
+        @NotNull
         private MultipartFile[] file;
 
         private String app;
