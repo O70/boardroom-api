@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
@@ -26,9 +27,9 @@ public class UploadController {
      *
      * <pre>
      *     Payload(Form Data):
-     *      file: (binary)
      *      app: test-app
      *      dir: d1/d2/d3
+     *      file: (binary)
      * </pre>
      *
      * @param file
@@ -51,9 +52,9 @@ public class UploadController {
      *
      * <pre>
      *     Payload(Form Data):
-     *      file: (binary)
      *      app: test-app
      *      dir: d1/d2/d3
+     *      file: (binary)
      * </pre>
      *
      * @param file
@@ -67,13 +68,13 @@ public class UploadController {
     }
 
     /**
-     * POJO accepts parameters
+     * POJO receiving parameters
      *
      * <pre>
      *     Payload(Form Data):
-     *      file: (binary)
      *      app: test-app
      *      dir: d1/d2/d3
+     *      file: (binary)
      * </pre>
      *
      * @param file
@@ -81,19 +82,83 @@ public class UploadController {
      */
     @PostMapping("v2")
     public void single(MultipartFile file, Params params) {
-        System.out.println("*********** Single(POJO accepts parameters) ***********");
+        System.out.println("*********** Single(POJO receiving parameters) ***********");
         System.out.println(String.format("POJO params: %s", params));
         mockTransfer(file);
     }
 
     /**
+     * Simple types receive parameters
      *
-     * @param files Or List<MultipartFile>
+     * <pre>
+     *     Payload(Form Data):
+     *      app: test-app
+     *      dir: d1/d2/d3
+     *      file: (binary)
+     *      file: (binary)
+     *      file: (binary)
+     *      ...
+     * </pre>
+     *
+     * @param file or List<MultipartFile>
+     * @param app
+     * @param dir
      */
     @PostMapping("batch")
-    public void batch(MultipartFile[] files) {
-        System.out.println("*********** Batch ***********");
-        Stream.of(files).forEach(this::mockTransfer);
+    public void batch(MultipartFile[] file, String app, String dir) {
+        System.out.println("*********** Batch(Simple types receive parameters) ***********");
+        System.out.println(String.format("App: %s, Dir: %s", app, dir));
+        Stream.of(file).forEach(this::mockTransfer);
+    }
+
+    /**
+     * Map receiving parameters
+     *
+     * <p>
+     *     {@link RequestParam} must be added
+     * </p>
+     *
+     * <pre>
+     *     Payload(Form Data):
+     *      app: test-app
+     *      dir: d1/d2/d3
+     *      file: (binary)
+     *      file: (binary)
+     *      file: (binary)
+     *      ...
+     * </pre>
+     *
+     * @param file
+     * @param params
+     */
+    @PostMapping("batch/v1")
+    public void batch(MultipartFile[] file, @RequestParam Map<String, Object> params) {
+        System.out.println("*********** Batch(Map receiving parameters) ***********");
+        System.out.println(String.format("Map params: %s", params));
+        Stream.of(file).forEach(this::mockTransfer);
+    }
+
+    /**
+     * POJO receiving parameters
+     *
+     * <pre>
+     *     Payload(Form Data):
+     *      app: test-app
+     *      dir: d1/d2/d3
+     *      file: (binary)
+     *      file: (binary)
+     *      file: (binary)
+     *      ...
+     * </pre>
+     *
+     * @param file
+     * @param params
+     */
+    @PostMapping("batch/v2")
+    public void batch(MultipartFile[] file, Params params) {
+        System.out.println("*********** Batch(POJO receiving parameters) ***********");
+        System.out.println(String.format("POJO params: %s", params));
+        Stream.of(file).forEach(this::mockTransfer);
     }
 
     private void mockTransfer(MultipartFile file) {
@@ -107,6 +172,10 @@ public class UploadController {
 
         private String app;
         private String dir;
+
+        private Map<String, Object> other1; // rejected value [[object Object]]
+        private User other2; // rejected value [[object Object]]
+        private List<String> other3;
 
         public String getApp() {
             return app;
@@ -126,13 +195,76 @@ public class UploadController {
             return this;
         }
 
+        public Map<String, Object> getOther1() {
+            return other1;
+        }
+
+        public Params setOther1(Map<String, Object> other1) {
+            this.other1 = other1;
+            return this;
+        }
+
+        public User getOther2() {
+            return other2;
+        }
+
+        public Params setOther2(User other2) {
+            this.other2 = other2;
+            return this;
+        }
+
+        public List<String> getOther3() {
+            return other3;
+        }
+
+        public Params setOther3(List<String> other3) {
+            this.other3 = other3;
+            return this;
+        }
+
         @Override
         public String toString() {
             return "Params{" +
                     "app='" + app + '\'' +
                     ", dir='" + dir + '\'' +
+                    ", other1=" + other1 +
+                    ", other2=" + other2 +
+                    ", other3=" + other3 +
                     '}';
         }
+    }
+
+    static class User {
+
+        private String name;
+        private Integer age;
+
+        public String getName() {
+            return name;
+        }
+
+        public User setName(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Integer getAge() {
+            return age;
+        }
+
+        public User setAge(Integer age) {
+            this.age = age;
+            return this;
+        }
+
+        @Override
+        public String toString() {
+            return "User{" +
+                    "name='" + name + '\'' +
+                    ", age=" + age +
+                    '}';
+        }
+
     }
 
 }
