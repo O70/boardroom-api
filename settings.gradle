@@ -1,4 +1,5 @@
-rootProject.name = 'boardroom-api'
+rootProject.name = 'vii-admin'
+include('app')
 
-include 'toolkit'
+include('toolkit')
 project(':toolkit').projectDir = file('../toolkit')
