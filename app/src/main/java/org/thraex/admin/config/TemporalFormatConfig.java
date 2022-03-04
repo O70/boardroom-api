@@ -26,11 +26,15 @@ import java.util.HashMap;
 @Configuration
 public class TemporalFormatConfig {
 
+    private static final String FORMAT_DATE = "yyyy-MM-dd";
+    private static final String FORMAT_TIME = "HH:mm:ss";
+    private static final String FORMAT_DATE_TIME = "yyyy-MM-dd HH:mm:ss";
+
     @Bean
     public Jackson2ObjectMapperBuilderCustomizer builder() {
-        DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
-        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter date = DateTimeFormatter.ofPattern(FORMAT_DATE);
+        DateTimeFormatter time = DateTimeFormatter.ofPattern(FORMAT_TIME);
+        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern(FORMAT_DATE_TIME);
 
         return builder -> builder
                 .serializers(new LocalDateSerializer(date),
@@ -45,9 +49,9 @@ public class TemporalFormatConfig {
     @ConditionalOnMissingBean(Jackson2ObjectMapperBuilderCustomizer.class)
     public Jackson2ObjectMapperBuilderCustomizer builderV1() {
         final int capacity = 3;
-        DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
-        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter date = DateTimeFormatter.ofPattern(FORMAT_DATE);
+        DateTimeFormatter time = DateTimeFormatter.ofPattern(FORMAT_TIME);
+        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern(FORMAT_DATE_TIME);
 
         return builder -> builder
                 .serializersByType(new HashMap<Class<?>, JsonSerializer<?>>(capacity) {{

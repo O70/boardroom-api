@@ -1,4 +1,4 @@
-package org.thraex.admin.base;
+package org.thraex.admin.generics.naming;
 
 import org.hibernate.boot.model.naming.Identifier;
 import org.hibernate.engine.jdbc.env.spi.JdbcEnvironment;

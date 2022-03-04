@@ -1,5 +1,2 @@
-rootProject.name = 'vii-admin'
+rootProject.name = 'fund-admin'
 include('app')
-
-include('toolkit')
-project(':toolkit').projectDir = file('../toolkit')
