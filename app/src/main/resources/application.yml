@@ -13,7 +13,7 @@ spring:
     hibernate:
       ddl-auto: update
       naming:
-        physical-strategy: org.thraex.boardroom.base.PrefixPhysicalNamingStrategy
+        physical-strategy: org.thraex.admin.base.PrefixPhysicalNamingStrategy
         prefix: boardroom
   servlet:
     multipart:

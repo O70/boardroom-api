@@ -5,7 +5,7 @@ plugins {
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
 }
 
-group 'org.thraex.boardroom'
+group 'org.thraex.admin'
 version '1.0.0'
 
 java {

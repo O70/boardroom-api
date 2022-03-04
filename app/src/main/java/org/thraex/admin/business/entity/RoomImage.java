@@ -1,0 +1,45 @@
+package org.thraex.admin.business.entity;
+
+import org.thraex.toolkit.entity.JpaEntity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+
+/**
+ * @author 鬼王
+ * @date 2021/07/14 18:17
+ */
+@Entity
+public class RoomImage extends JpaEntity<RoomImage> {
+
+    /**
+     * {@link Room#getId()}
+     */
+    @Column(length = 36)
+    private String roomId;
+
+    /**
+     * File service FileInfo#getId()
+     */
+    @Column(length = 36)
+    private String fileId;
+
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public RoomImage setRoomId(String roomId) {
+        this.roomId = roomId;
+        return this;
+    }
+
+    public String getFileId() {
+        return fileId;
+    }
+
+    public RoomImage setFileId(String fileId) {
+        this.fileId = fileId;
+        return this;
+    }
+
+}
