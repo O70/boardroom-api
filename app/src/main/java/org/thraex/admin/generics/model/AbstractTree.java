@@ -1,5 +1,8 @@
-package org.thraex.admin.generics.entity;
+package org.thraex.admin.generics.model;
 
+import org.thraex.admin.generics.entity.LogicEntity;
+
+import javax.persistence.Column;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
@@ -17,6 +20,7 @@ public abstract class AbstractTree<T extends AbstractTree<T>>
 
     private String name;
 
+    @Column(unique = true)
     private String code;
 
     private String level;

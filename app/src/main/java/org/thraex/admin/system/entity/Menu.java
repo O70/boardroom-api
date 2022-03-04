@@ -1,6 +1,6 @@
 package org.thraex.admin.system.entity;
 
-import org.thraex.admin.generics.entity.AbstractTree;
+import org.thraex.admin.generics.model.AbstractTree;
 
 import javax.persistence.Entity;
 

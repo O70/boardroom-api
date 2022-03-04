@@ -1,12 +1,8 @@
 package org.thraex.admin.system.entity;
 
-import org.thraex.admin.generics.entity.AbstractTree;
+import org.thraex.admin.generics.model.AbstractTree;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
-import java.util.Collection;
-import java.util.List;
 
 /**
  * @author 鬼王
@@ -17,10 +13,6 @@ public class Dict extends AbstractTree<Dict> {
 
     private String value;
 
-    //@OneToMany
-    //@JoinColumn(name = "parent_id")
-    //private List<Dict> children;
-
     public String getValue() {
         return value;
     }
@@ -29,10 +21,5 @@ public class Dict extends AbstractTree<Dict> {
         this.value = value;
         return this;
     }
-
-    //@Override
-    //public Collection<Dict> children() {
-    //    return null;
-    //}
 
 }
