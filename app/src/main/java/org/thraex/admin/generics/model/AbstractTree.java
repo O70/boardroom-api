@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -34,7 +35,7 @@ public abstract class AbstractTree<T extends AbstractTree<T>>
 
     @OneToMany
     @JoinColumn(name = "parent_id")
-    private List<T> children;
+    private Collection<T> children;
 
     public String getName() {
         return name;
@@ -90,7 +91,7 @@ public abstract class AbstractTree<T extends AbstractTree<T>>
         return (T) this;
     }
 
-    public List<T> getChildren() {
+    public Collection<T> getChildren() {
         return children;
     }
 
