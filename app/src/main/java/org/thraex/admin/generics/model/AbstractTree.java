@@ -1,15 +1,16 @@
 package org.thraex.admin.generics.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.thraex.admin.generics.entity.LogicEntity;
 
 import javax.persistence.Column;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
-import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * @author 鬼王
@@ -26,16 +27,23 @@ public abstract class AbstractTree<T extends AbstractTree<T>>
 
     private String level;
 
-    @ManyToOne
+    @OneToOne
+    @JsonIgnoreProperties("children")
     private T parent;
 
     private boolean enabled;
 
     private String remark;
 
-    @OneToMany
-    @JoinColumn(name = "parent_id")
-    private Collection<T> children;
+    /**
+     * <pre>
+     *     Remove {@code transient}
+     *     Add:
+     *     {@code @OneToMany(fetch = FetchType.EAGER)}
+     *     {@code @JoinColumn(name = "parent_id")}
+     * </pre>
+     */
+    private transient List<T> children;
 
     public String getName() {
         return name;
@@ -91,13 +99,32 @@ public abstract class AbstractTree<T extends AbstractTree<T>>
         return (T) this;
     }
 
-    public Collection<T> getChildren() {
+    public List<T> getChildren() {
         return children;
     }
 
     public T setChildren(List<T> children) {
         this.children = children;
         return (T) this;
+    }
+
+    public static <E extends AbstractTree<E>> List<E> toTree(E root, List<E> list) {
+        Objects.requireNonNull(list);
+
+        boolean isNull = Objects.isNull(root);
+
+        Predicate<E> predicate = isNull
+                ? it -> Objects.isNull(it.getParent())
+                : it -> Objects.nonNull(it.getParent()) && Objects.equals(it.getParent().getId(), root.getId());
+
+        List<E> pool = isNull
+                ? list.stream().filter(it -> Objects.nonNull(it.getParent())).collect(Collectors.toList())
+                : list;
+
+        return list.stream()
+                .filter(predicate)
+                .peek(it -> it.setChildren(toTree(it, pool)))
+                .collect(Collectors.toList());
     }
 
 }

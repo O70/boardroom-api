@@ -1,5 +1,6 @@
 package org.thraex.admin.system.controller;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.thraex.admin.generics.model.AbstractTree;
 import org.thraex.admin.system.entity.Dict;
 import org.thraex.admin.system.repository.DictRepository;
 
@@ -29,7 +31,12 @@ public class DictController {
 
     @GetMapping
     public List<Dict> list() {
-        return repository.findAll();
+        return repository.findAll(Sort.by(Sort.Order.asc("level")));
+    }
+
+    @GetMapping("tree")
+    public List<Dict> tree() {
+        return AbstractTree.toTree(null, list());
     }
 
     @GetMapping("{id}")
@@ -40,11 +47,6 @@ public class DictController {
     @PostMapping
     public Dict save(@RequestBody Dict dict) {
         return repository.save(dict);
-    }
-
-    @PostMapping("batch")
-    public List<Dict> batch(List<Dict> dicts) {
-        return repository.saveAll(dicts);
     }
 
     @PutMapping
