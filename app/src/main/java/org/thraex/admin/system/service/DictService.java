@@ -29,11 +29,8 @@ public class DictService {
         return repository;
     }
 
-    public List<Dict> findAll(Dict dict) {
-        ExampleMatcher matcher = ExampleMatcher.matching().withIgnorePaths(IGNORE_PATHS);
-        Example<Dict> example = Example.of(dict, matcher);
-
-        return repository.findAll(example, Sort.by(Sort.Order.asc("level")));
+    public List<Dict> findAll() {
+        return repository.findAll(Sort.by(Sort.Order.asc("level")));
     }
 
     public Optional<Dict> findOne(String identifier) {
