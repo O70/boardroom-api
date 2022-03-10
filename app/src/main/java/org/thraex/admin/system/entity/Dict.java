@@ -22,4 +22,8 @@ public class Dict extends AbstractTree<Dict> {
         return this;
     }
 
+    public static Dict of() {
+        return new Dict();
+    }
+
 }

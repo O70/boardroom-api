@@ -25,4 +25,12 @@ public interface DictRepository extends JpaRepository<Dict, String> {
      */
     List<Dict> findByParentIsNull();
 
+    /**
+     * 获取子节点
+     *
+     * @param id
+     * @return
+     */
+    List<Dict> findByParentId(String id);
+
 }
