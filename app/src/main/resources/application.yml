@@ -18,4 +18,3 @@ spring:
       naming:
         physical-strategy: org.thraex.admin.generics.naming.PrefixPhysicalNamingStrategy
         prefix: base
-
