@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.thraex.admin.generics.response.Result;
+import org.thraex.admin.generics.util.BeanUtils;
 import org.thraex.admin.system.entity.Dict;
 import org.thraex.admin.system.service.DictService;
 
@@ -61,7 +62,13 @@ public class DictController {
 
     @PostMapping
     public Result<Dict> save(@RequestBody Dict dict) {
-        return Result.ok(service.repo().save(dict));
+        Dict data = Optional.ofNullable(dict.getId())
+                .map(id -> service.repo().findById(id).map(it -> {
+                    BeanUtils.copyProperties(dict, it, true, "name", "code", "level");
+                    return it;
+                }).orElse(null)).orElse(dict);
+
+        return Result.ok(service.repo().save(data));
     }
 
     @DeleteMapping("{id}")
