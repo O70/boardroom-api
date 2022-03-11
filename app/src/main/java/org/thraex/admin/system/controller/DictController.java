@@ -1,5 +1,7 @@
 package org.thraex.admin.system.controller;
 
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,12 +10,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.thraex.admin.generics.response.Result;
-import org.thraex.admin.generics.util.BeanUtils;
 import org.thraex.admin.system.entity.Dict;
 import org.thraex.admin.system.service.DictService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /**
  * @author 鬼王
@@ -62,13 +65,27 @@ public class DictController {
 
     @PostMapping
     public Result<Dict> save(@RequestBody Dict dict) {
-        Dict data = Optional.ofNullable(dict.getId())
-                .map(id -> service.repo().findById(id).map(it -> {
-                    BeanUtils.copyProperties(dict, it, true, "name", "code", "level");
-                    return it;
-                }).orElse(null)).orElse(dict);
+        String id = dict.getId();
 
-        return Result.ok(service.repo().save(data));
+        Supplier<Dict> from = () -> {
+            Dict old = service.repo().findById(id).orElseThrow(() ->
+                    new IllegalArgumentException(String.format("Target does not exist: [%s]", id)));
+            String[] ignore = Stream.of(
+                    "id",
+                    "deleted",
+                    "createdBy",
+                    "createdDate",
+                    "modifiedBy",
+                    "modifiedDate"
+            ).toArray(String[]::new);
+            BeanUtils.copyProperties(dict, old, ignore);
+
+            return old;
+        };
+
+        Dict edit = StringUtils.isBlank(id) ? dict : from.get();
+
+        return Result.ok(service.repo().save(edit));
     }
 
     @DeleteMapping("{id}")
