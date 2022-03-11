@@ -33,13 +33,13 @@ public class DictController {
     }
 
     @GetMapping
-    public Result<List<Dict>> list() {
-        return Result.ok(service.findAll());
+    public Result<List<Dict>> list(Dict.Query query) {
+        return Result.ok(service.findAll(query));
     }
 
     @GetMapping("tree")
-    public Result<List<Dict>> tree() {
-        return Result.ok(Dict.toTree(null, service.findAll()));
+    public Result<List<Dict>> tree(Dict.Query query) {
+        return Result.ok(Dict.toTree(null, service.findAll(query)));
     }
 
     /**
@@ -58,7 +58,7 @@ public class DictController {
     @GetMapping("{identifier}/children")
     public Result<Dict> children(@PathVariable String identifier) {
         Optional<Dict> one = service.findOne(identifier);
-        one.ifPresent(it -> it.setChildren(service.repo().findByParentId(it.getId())));
+        one.ifPresent(it -> it.setChildren(service.repo().findByParentIdOrderByLevel(it.getId())));
 
         return Result.ok(one.orElse(null));
     }

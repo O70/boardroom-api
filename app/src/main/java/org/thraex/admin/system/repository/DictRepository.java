@@ -23,14 +23,14 @@ public interface DictRepository extends JpaRepository<Dict, String> {
      *
      * @return
      */
-    List<Dict> findByParentIsNull();
+    List<Dict> findByParentIsNullOrderByLevel();
 
     /**
      * 获取子节点
      *
-     * @param id
+     * @param id {@link Dict#getId()}
      * @return
      */
-    List<Dict> findByParentId(String id);
+    List<Dict> findByParentIdOrderByLevel(String id);
 
 }
