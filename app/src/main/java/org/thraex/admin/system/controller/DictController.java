@@ -58,7 +58,7 @@ public class DictController {
     @GetMapping("{identifier}/children")
     public Result<Dict> children(@PathVariable String identifier) {
         Optional<Dict> one = service.findOne(identifier);
-        one.ifPresent(it -> it.setChildren(service.repo().findByParentIdOrderByLevel(it.getId())));
+        one.ifPresent(it -> it.setChildren(service.repo().findByParentIdAndDeletedIsFalseOrderByLevel(it.getId())));
 
         return Result.ok(one.orElse(null));
     }

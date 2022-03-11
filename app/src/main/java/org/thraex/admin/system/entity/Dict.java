@@ -42,9 +42,7 @@ public class Dict extends AbstractTree<Dict> {
                         dict.setParent(Dict.of().setId(q.getParentId()));
                     }
 
-                    if (Objects.nonNull(q.getEnabled())) {
-                        dict.setEnabled(q.getEnabled());
-                    }
+                    Optional.ofNullable(q.isEnabled()).ifPresent(dict::setEnabled);
 
                     return dict;
                 }).orElse(Dict.of());
@@ -145,7 +143,7 @@ public class Dict extends AbstractTree<Dict> {
             return this;
         }
 
-        public Boolean getEnabled() {
+        public Boolean isEnabled() {
             return enabled;
         }
 

@@ -7,9 +7,7 @@ import org.springframework.stereotype.Service;
 import org.thraex.admin.system.entity.Dict;
 import org.thraex.admin.system.repository.DictRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -18,6 +16,8 @@ import java.util.Optional;
  */
 @Service
 public class DictService {
+
+    private static final Sort SORT = Sort.by(Sort.Order.asc("level"));
 
     private final DictRepository repository;
 
@@ -30,15 +30,15 @@ public class DictService {
     }
 
     public List<Dict> findAll(Dict.Query query) {
-        List<String> ignorePaths = new ArrayList<>(2);
-        ignorePaths.add("deleted");
-        if (Objects.isNull(query) || Objects.isNull(query.getEnabled())) {
-            ignorePaths.add("enabled");
-        }
+        //List<String> ignorePaths = new ArrayList<>(2);
+        ////ignorePaths.add("deleted");
+        //if (Objects.isNull(query) || Objects.isNull(query.getEnabled())) {
+        //    ignorePaths.add("enabled");
+        //}
 
-        ExampleMatcher matcher = ExampleMatcher.matching()
+        ExampleMatcher baseMatcher = ExampleMatcher.matching()
                 .withMatcher("name", ExampleMatcher.GenericPropertyMatchers.contains().ignoreCase())
-                .withMatcher("level", ExampleMatcher.GenericPropertyMatchers.startsWith())
+                .withMatcher("level", ExampleMatcher.GenericPropertyMatchers.startsWith());
                 //.withMatcher("parent", matcher1 -> {
                 //    matcher1.transform(new ExampleMatcher.PropertyValueTransformer() {
                 //
@@ -50,20 +50,31 @@ public class DictService {
                 //    ExampleMatcher.GenericPropertyMatcher matcher11 = matcher1;
                 //    System.out.println(matcher1);
                 //})
-                .withTransformer("parent", o -> {
-                    Optional<Dict> dict = o.map(d -> (Dict) d).flatMap(d -> repository.findById(d.getId()));
-                    return dict.map(d -> (Object) d);
-                })
-                .withIgnorePaths(ignorePaths.toArray(new String[ignorePaths.size()]));
+                //.withTransformer("parent", o -> {
+                //    Optional<Dict> dict = o.map(d -> (Dict) d).flatMap(d -> repository.findById(d.getId()));
+                //    return dict.map(d -> (Object) d);
+                //})
+                //.withIgnorePaths(ignorePaths.toArray(new String[ignorePaths.size()]));
+        /*if (Objects.isNull(query) || Objects.isNull(query.isEnabled())) {
+            matcher = matcher.withIgnorePaths("enabled");
+        }*/
+        ExampleMatcher matcher = Optional.ofNullable(query)
+                .map(Dict.Query::isEnabled)
+                // TODO: Opt parent condition
+                .map(it -> baseMatcher)
+                .orElse(baseMatcher.withIgnorePaths("enabled"));
+
         Example<Dict> example = Example.of(Dict.of(query), matcher);
 
-        return repository.findAll(example, Sort.by(Sort.Order.asc("level")));
+        return repository.findAll(example, SORT);
     }
 
     public Optional<Dict> findOne(String identifier) {
         Dict dict = Dict.of().setId(identifier).setCode(identifier);
         ExampleMatcher matcher = ExampleMatcher.matchingAny().withIgnorePaths("enabled", "deleted");
         Example<Dict> example = Example.of(dict, matcher);
+
+        // TODO: filter deleted
 
         return repository.findOne(example);
     }
