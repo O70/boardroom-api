@@ -1,5 +1,6 @@
 package org.thraex.admin.generics.entity;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 
 /**
@@ -9,13 +10,14 @@ import javax.persistence.MappedSuperclass;
 @MappedSuperclass
 public abstract class LogicEntity<T extends LogicEntity<T>> extends JpaEntity<T> {
 
-    private boolean deleted;
+    @Column(nullable = false)
+    private Boolean deleted;
 
-    public boolean isDeleted() {
+    public Boolean isDeleted() {
         return deleted;
     }
 
-    public T setDeleted(boolean deleted) {
+    public T setDeleted(Boolean deleted) {
         this.deleted = deleted;
         return (T) this;
     }

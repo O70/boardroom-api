@@ -22,7 +22,7 @@ public abstract class AbstractTree<T extends AbstractTree<T>>
 
     private String name;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String code;
 
     private String level;
@@ -31,7 +31,8 @@ public abstract class AbstractTree<T extends AbstractTree<T>>
     @JsonIgnoreProperties("children")
     private T parent;
 
-    private boolean enabled;
+    @Column(nullable = false)
+    private Boolean enabled;
 
     private String remark;
 
@@ -81,11 +82,11 @@ public abstract class AbstractTree<T extends AbstractTree<T>>
         return (T) this;
     }
 
-    public boolean isEnabled() {
+    public Boolean isEnabled() {
         return enabled;
     }
 
-    public T setEnabled(boolean enabled) {
+    public T setEnabled(Boolean enabled) {
         this.enabled = enabled;
         return (T) this;
     }
