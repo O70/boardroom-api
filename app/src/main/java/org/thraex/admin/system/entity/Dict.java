@@ -1,6 +1,7 @@
 package org.thraex.admin.system.entity;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.thraex.admin.generics.model.AbstractTree;
 
@@ -12,6 +13,7 @@ import java.util.Optional;
  * @date 2021/12/27 17:25
  */
 @Entity
+@SQLDelete(sql = "UPDATE base_dict SET deleted = true WHERE id = ?")
 @Where(clause = "deleted = false")
 public class Dict extends AbstractTree<Dict> {
 

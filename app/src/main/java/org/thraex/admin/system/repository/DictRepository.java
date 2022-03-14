@@ -23,7 +23,7 @@ public interface DictRepository extends JpaRepository<Dict, String> {
      *
      * @return
      */
-    List<Dict> findByParentIsNullAndDeletedIsFalseOrderByLevel();
+    List<Dict> findByParentIsNullOrderByLevel();
 
     /**
      * 获取子节点
@@ -31,6 +31,6 @@ public interface DictRepository extends JpaRepository<Dict, String> {
      * @param id {@link Dict#getId()}
      * @return
      */
-    List<Dict> findByParentIdAndDeletedIsFalseOrderByLevel(String id);
+    List<Dict> findByParentIdOrderByLevel(String id);
 
 }

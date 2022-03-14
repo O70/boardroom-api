@@ -1,7 +1,5 @@
 package org.thraex.admin.system.controller;
 
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,8 +13,6 @@ import org.thraex.admin.system.service.DictService;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 /**
  * @author 鬼王
@@ -58,34 +54,14 @@ public class DictController {
     @GetMapping("{identifier}/children")
     public Result<Dict> children(@PathVariable String identifier) {
         Optional<Dict> one = service.findOne(identifier);
-        one.ifPresent(it -> it.setChildren(service.repo().findByParentIdAndDeletedIsFalseOrderByLevel(it.getId())));
+        one.ifPresent(it -> it.setChildren(service.repo().findByParentIdOrderByLevel(it.getId())));
 
         return Result.ok(one.orElse(null));
     }
 
     @PostMapping
     public Result<Dict> save(@RequestBody Dict dict) {
-        String id = dict.getId();
-
-        Supplier<Dict> from = () -> {
-            Dict old = service.repo().findById(id).orElseThrow(() ->
-                    new IllegalArgumentException(String.format("Target does not exist: [%s]", id)));
-            String[] ignore = Stream.of(
-                    "id",
-                    "deleted",
-                    "createdBy",
-                    "createdDate",
-                    "modifiedBy",
-                    "modifiedDate"
-            ).toArray(String[]::new);
-            BeanUtils.copyProperties(dict, old, ignore);
-
-            return old;
-        };
-
-        Dict edit = StringUtils.isBlank(id) ? dict : from.get();
-
-        return Result.ok(service.repo().save(edit));
+        return Result.ok(service.save(dict));
     }
 
     @DeleteMapping("{id}")
