@@ -60,8 +60,8 @@ public class DictController {
     }
 
     @PostMapping
-    public Result<Dict> save(@RequestBody Dict dict) {
-        return Result.ok(service.save(dict));
+    public Result<Dict> save(@RequestBody Dict entity) {
+        return Result.ok(service.save(entity));
     }
 
     @DeleteMapping("{id}")

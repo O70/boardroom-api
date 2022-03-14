@@ -35,7 +35,7 @@ public class DictService {
     }
 
     public List<Dict> findAll(Dict.Query query) {
-        ExampleMatcher matcher = ExampleMatcher.matching()
+        ExampleMatcher basic = ExampleMatcher.matching()
                 .withMatcher("name", contains().ignoreCase())
                 .withMatcher("level", startsWith())
                 /*.withMatcher("parent", matcher1 -> {
@@ -49,17 +49,15 @@ public class DictService {
                     ExampleMatcher.GenericPropertyMatcher matcher11 = matcher1;
                     System.out.println(matcher1);
                 })*/
-                /*.withTransformer("parent", o -> {
+                .withTransformer("parent", o -> {
                     Optional<Dict> dict = o.map(d -> (Dict) d).flatMap(d -> repository.findById(d.getId()));
-                    //Optional<Optional<Dict>> dict1 = Optional.of(dict);
-                    //Optional<Dict> dict2 = dict1.flatMap(Function.identity());
-                    return Optional.of(dict); //.map(d -> (Object) d);
-                })*/;
+                    return dict.map(d -> (Object) d);
+                });
 
-        /*ExampleMatcher matcher = Optional.ofNullable(query)
-                .map(Dict.Query::isEnabled)
+        ExampleMatcher matcher = Optional.ofNullable(query)
+                .map(Dict.Query::getEnabled)
                 .map(it -> basic)
-                .orElse(basic.withIgnorePaths("enabled"));*/
+                .orElse(basic.withIgnorePaths("enabled"));
 
         Example<Dict> example = Example.of(Dict.of(query), matcher);
 
@@ -67,14 +65,21 @@ public class DictService {
     }
 
     public Optional<Dict> findOne(String identifier) {
-        Dict dict = Dict.of().setId(identifier).setCode(identifier);
-        Example<Dict> example = Example.of(dict, ExampleMatcher.matchingAny());
+        Dict probe = Dict.of().setId(identifier).setCode(identifier);
+        ExampleMatcher matcher = ExampleMatcher.matchingAny().withIgnorePaths("enabled", "deleted");
+        Example<Dict> example = Example.of(probe, matcher);
 
         return repository.findOne(example);
     }
 
-    public Dict save(Dict dict) {
-        String id = dict.getId();
+    /**
+     * TODO: Opt update
+     *
+     * @param entity
+     * @return
+     */
+    public Dict save(Dict entity) {
+        String id = entity.getId();
 
         Supplier<Dict> from = () -> {
             Dict old = repository.findById(id).orElseThrow(() ->
@@ -87,12 +92,12 @@ public class DictService {
                     "modifiedBy",
                     "modifiedDate"
             ).toArray(String[]::new);
-            BeanUtils.copyProperties(dict, old, ignore);
+            BeanUtils.copyProperties(entity, old, ignore);
 
             return old;
         };
 
-        Dict edit = StringUtils.isBlank(id) ? dict : from.get();
+        Dict edit = StringUtils.isBlank(id) ? entity : from.get();
 
         return repository.save(edit);
     }
