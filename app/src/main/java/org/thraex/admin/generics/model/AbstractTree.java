@@ -6,6 +6,7 @@ import org.thraex.admin.generics.entity.LogicEntity;
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -107,6 +108,13 @@ public abstract class AbstractTree<T extends AbstractTree<T>>
     public T setChildren(List<T> children) {
         this.children = children;
         return (T) this;
+    }
+
+    @PrePersist
+    void preEnabled() {
+        if (Objects.isNull(enabled)) {
+            this.enabled = false;
+        }
     }
 
     public static <E extends AbstractTree<E>> List<E> toTree(E root, List<E> list) {
