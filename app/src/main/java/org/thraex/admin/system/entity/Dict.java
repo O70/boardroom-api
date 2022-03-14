@@ -3,6 +3,8 @@ package org.thraex.admin.system.entity;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.beans.BeanUtils;
+import org.springframework.util.Assert;
 import org.thraex.admin.generics.model.AbstractTree;
 
 import javax.persistence.Entity;
@@ -37,22 +39,16 @@ public class Dict extends AbstractTree<Dict> {
     }
 
     public static Dict of(Query query) {
-        return Optional.ofNullable(query)
-                .map(q -> {
-                    Dict dict = Dict.of()
-                            .setId(q.getId())
-                            .setName(q.getName())
-                            .setCode(q.getCode())
-                            .setLevel(q.getLevel());
+        Assert.notNull(query, "query must not be null.");
 
-                    if (StringUtils.isNotBlank(q.getParentId())) {
-                        dict.setParent(Dict.of().setId(q.getParentId()));
-                    }
+        Dict target = Dict.of();
+        BeanUtils.copyProperties(query, target, "enabled");
 
-                    Optional.ofNullable(q.getEnabled()).ifPresent(dict::setEnabled);
+        Optional.ofNullable(query.getEnabled()).ifPresent(target::setEnabled);
+        Optional.ofNullable(query.getParentId()).filter(StringUtils::isNotBlank)
+                .map(it -> Dict.of().setId(it)).ifPresent(target::setParent);
 
-                    return dict;
-                }).orElse(Dict.of());
+        return target;
     }
 
     public class Query {

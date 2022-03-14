@@ -28,8 +28,8 @@ public class RoleController {
     }
 
     @GetMapping
-    public Result<List<Role>> list(Role query) {
-        return Result.ok(service.repo().findAll());
+    public Result<List<Role>> list(Role.Query query) {
+        return Result.ok(service.findAll(query));
     }
 
     @GetMapping("page")

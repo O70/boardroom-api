@@ -52,7 +52,7 @@ public class DictService {
                 .withTransformer("parent", o -> {
                     Optional<Dict> dict = o.map(d -> (Dict) d).flatMap(d -> repository.findById(d.getId()));
                     return dict.map(d -> (Object) d);
-                });
+                }).withIgnorePaths("deleted");
 
         ExampleMatcher matcher = Optional.ofNullable(query)
                 .map(Dict.Query::getEnabled)
@@ -61,7 +61,7 @@ public class DictService {
 
         Example<Dict> example = Example.of(Dict.of(query), matcher);
 
-        return repository.findAll(example, Sort.by(Sort.Order.asc("level")));
+        return repository.findAll(example, Sort.by("level"));
     }
 
     public Optional<Dict> findOne(String identifier) {
