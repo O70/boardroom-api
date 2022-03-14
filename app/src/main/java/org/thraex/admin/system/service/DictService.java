@@ -65,7 +65,7 @@ public class DictService {
     }
 
     public Optional<Dict> findOne(String identifier) {
-        Dict probe = Dict.of().setId(identifier).setCode(identifier);
+        Dict probe = Dict.of(identifier);
         ExampleMatcher matcher = ExampleMatcher.matchingAny().withIgnorePaths("enabled", "deleted");
         Example<Dict> example = Example.of(probe, matcher);
 

@@ -76,4 +76,8 @@ public class Role extends LogicEntity<Role> {
         return new Role();
     }
 
+    public static Role of(String identifier) {
+        return of().setId(identifier).setCode(identifier);
+    }
+
 }

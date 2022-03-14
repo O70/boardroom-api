@@ -30,7 +30,7 @@ public class RoleService {
     }
 
     public Optional<Role> findOne(String identifier) {
-        Role probe = Role.of().setId(identifier).setCode(identifier);
+        Role probe = Role.of(identifier);
         ExampleMatcher matcher = ExampleMatcher.matchingAny().withIgnorePaths("enabled", "deleted");
         Example<Role> example = Example.of(probe, matcher);
 

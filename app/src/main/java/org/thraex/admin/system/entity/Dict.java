@@ -32,6 +32,10 @@ public class Dict extends AbstractTree<Dict> {
         return new Dict();
     }
 
+    public static Dict of(String identifier) {
+        return of().setId(identifier).setCode(identifier);
+    }
+
     public static Dict of(Query query) {
         return Optional.ofNullable(query)
                 .map(q -> {
