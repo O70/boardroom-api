@@ -59,7 +59,7 @@ public class RoleService {
 
     /**
      * TODO: Opt update
-     * 
+     *
      * @param entity
      * @return
      */

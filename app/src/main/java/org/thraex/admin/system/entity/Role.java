@@ -5,9 +5,11 @@ import org.hibernate.annotations.Where;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import org.thraex.admin.generics.entity.LogicEntity;
+import org.thraex.admin.generics.page.Query;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import java.io.Serializable;
 import java.util.Optional;
 
 /**
@@ -94,7 +96,7 @@ public class Role extends LogicEntity<Role> {
         return target;
     }
 
-    public class Query {
+    public class Query implements Serializable {
 
         /**
          * Operator: {@code equals}
@@ -195,6 +197,21 @@ public class Role extends LogicEntity<Role> {
 
         public Query setRemark(String remark) {
             this.remark = remark;
+            return this;
+        }
+
+    }
+
+    public class PageQuery extends org.thraex.admin.generics.page.Query {
+
+        private Query params = new Query();
+
+        public Query getParams() {
+            return params;
+        }
+
+        public PageQuery setParams(Query params) {
+            this.params = params;
             return this;
         }
 

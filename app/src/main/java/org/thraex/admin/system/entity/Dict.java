@@ -8,6 +8,7 @@ import org.springframework.util.Assert;
 import org.thraex.admin.generics.model.AbstractTree;
 
 import javax.persistence.Entity;
+import java.io.Serializable;
 import java.util.Optional;
 
 /**
@@ -51,7 +52,7 @@ public class Dict extends AbstractTree<Dict> {
         return target;
     }
 
-    public class Query {
+    public class Query implements Serializable {
 
         /**
          * Operator: {@code equals}
