@@ -1,6 +1,5 @@
 package org.thraex.admin.system.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -8,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.thraex.admin.generics.response.PageWrapper;
 import org.thraex.admin.generics.response.Result;
 import org.thraex.admin.system.entity.Role;
 import org.thraex.admin.system.service.RoleService;
@@ -34,7 +34,7 @@ public class RoleController {
     }
 
     @GetMapping("page")
-    public Result<Page<Role>> page(Role.Page page) {
+    public Result<PageWrapper> page(Role.Page page) {
         return Result.ok(service.findAll(page));
     }
 

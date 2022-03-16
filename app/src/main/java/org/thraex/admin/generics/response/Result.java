@@ -2,8 +2,11 @@ package org.thraex.admin.generics.response;
 
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
+import org.springframework.data.domain.Page;
+import org.springframework.util.Assert;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author 鬼王
@@ -17,20 +20,66 @@ public class Result<T> implements Serializable {
 
     private String message;
 
-    public static <T> Result<T> ok(T data) {
-        return ok(200, data);
+    public Result() {}
+
+    public Result(ResultStatus status, T data, String message) {
+        Assert.notNull(status, "status must not be null.");
+
+        this.code = status.value();
+        this.data = data;
+        this.message = message;
     }
 
-    public static <T> Result<T> ok(Integer code, T data) {
-        return new Result<T>().setCode(code).setData(data);
+    public static Result of() {
+        return new Result();
+    }
+
+    public static Result of(ResultStatus status) {
+        return of(status, null, null);
+    }
+
+    public static <T> Result<T> of(ResultStatus status, T data) {
+        return of(status, data, null);
+    }
+
+    public static Result of(ResultStatus status, String message) {
+        return of(status, null, message);
+    }
+
+    public static <T> Result<T> of(ResultStatus status, T data, String message) {
+        return new Result<>(status, data, message);
+    }
+
+    public static Result ok() {
+        return of(ResultStatus.OK);
+    }
+
+    public static <T> Result<T> ok(T data) {
+        return ok().setData(data);
+    }
+
+    public static <T> Result<PageWrapper> ok(Page<T> page) {
+        Assert.notNull(page, "page must not be null.");
+
+        int pages = page.getTotalPages();
+        long elements = page.getTotalElements();
+        int number = page.getNumber();
+        int size = page.getSize();
+        List<T> content = page.getContent();
+
+        return ok(new PageWrapper(pages, elements, number, size, content));
+    }
+
+    public static Result fail() {
+        return fail(null);
     }
 
     public static Result fail(String message) {
-        return fail(500, message);
+        return fail(ResultStatus.INTERNAL_SERVER_ERROR, message);
     }
 
-    public static Result fail(Integer code, String message) {
-        return new Result().setCode(code).setMessage(message);
+    public static Result fail(ResultStatus status, String message) {
+        return of(status, message);
     }
 
     public Integer getCode() {
@@ -39,6 +88,13 @@ public class Result<T> implements Serializable {
 
     public Result<T> setCode(Integer code) {
         this.code = code;
+        return this;
+    }
+
+    public Result<T> setCode(ResultStatus status) {
+        Assert.notNull(status, "status must not be null.");
+
+        this.code = status.value();
         return this;
     }
 
