@@ -6,14 +6,14 @@ import java.io.Serializable;
  * @author 鬼王
  * @date 2022/03/14 18:37
  */
-public class Query implements Serializable {
+public class PageQuery implements Serializable {
 
     private int page;
 
     private int size;
 
-    public Query() {
-        this.page = 1;
+    public PageQuery() {
+        this.page = 0;
         this.size = 10;
     }
 
@@ -21,7 +21,7 @@ public class Query implements Serializable {
         return page;
     }
 
-    public Query setPage(int page) {
+    public PageQuery setPage(int page) {
         this.page = page;
         return this;
     }
@@ -30,7 +30,7 @@ public class Query implements Serializable {
         return size;
     }
 
-    public Query setSize(int size) {
+    public PageQuery setSize(int size) {
         this.size = size;
         return this;
     }

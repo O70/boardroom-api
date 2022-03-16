@@ -5,7 +5,7 @@ import org.hibernate.annotations.Where;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import org.thraex.admin.generics.entity.LogicEntity;
-import org.thraex.admin.generics.page.Query;
+import org.thraex.admin.generics.page.PageQuery;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -202,16 +202,16 @@ public class Role extends LogicEntity<Role> {
 
     }
 
-    public class PageQuery extends org.thraex.admin.generics.page.Query {
+    public class Page extends PageQuery {
 
-        private Query params = new Query();
+        private Query query = new Query();
 
-        public Query getParams() {
-            return params;
+        public Query getQuery() {
+            return query;
         }
 
-        public PageQuery setParams(Query params) {
-            this.params = params;
+        public Page setQuery(Query query) {
+            this.query = query;
             return this;
         }
 

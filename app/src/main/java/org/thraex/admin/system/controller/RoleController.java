@@ -1,13 +1,12 @@
 package org.thraex.admin.system.controller;
 
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.thraex.admin.generics.response.Result;
 import org.thraex.admin.system.entity.Role;
@@ -35,15 +34,8 @@ public class RoleController {
     }
 
     @GetMapping("page")
-    public Result<List<Role>> page(
-            Role.PageQuery query
-            /*@RequestParam(defaultValue = "1")int page,
-            @RequestParam(defaultValue = "10") int size,
-            Role.Query params*/) {
-        //PageRequest page
-        //PageRequest.of()
-        //service.repo().findAll()
-        return Result.ok(null);
+    public Result<Page<Role>> page(Role.Page page) {
+        return Result.ok(service.findAll(page));
     }
 
     /**

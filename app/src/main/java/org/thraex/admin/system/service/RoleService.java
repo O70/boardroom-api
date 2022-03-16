@@ -4,6 +4,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.thraex.admin.system.entity.Role;
@@ -34,6 +36,17 @@ public class RoleService {
     }
 
     public List<Role> findAll(Role.Query query) {
+        return repository.findAll(example(query), Sort.by("sort"));
+    }
+
+    public Page<Role> findAll(Role.Page page) {
+        Role.Query query = page.getQuery();
+        PageRequest pageable = PageRequest.of(page.getPage(), page.getSize(), Sort.by("sort"));
+
+        return repository.findAll(example(query), pageable);
+    }
+
+    private Example<Role> example(Role.Query query) {
         ExampleMatcher basic = ExampleMatcher.matching()
                 .withMatcher("name", contains().ignoreCase())
                 .withMatcher("remark", contains())
@@ -44,9 +57,7 @@ public class RoleService {
                 .map(it -> basic)
                 .orElse(basic.withIgnorePaths("enabled"));
 
-        Example<Role> example = Example.of(Role.of(query), matcher);
-
-        return repository.findAll(example, Sort.by("sort"));
+        return Example.of(Role.of(query), matcher);
     }
 
     public Optional<Role> findOne(String identifier) {
