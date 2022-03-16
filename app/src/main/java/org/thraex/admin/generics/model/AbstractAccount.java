@@ -20,7 +20,7 @@ public abstract class AbstractAccount<T extends AbstractAccount<T>>
 
     private String nickname;
 
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     private String username;
 
     private String password;
