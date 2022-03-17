@@ -2,7 +2,6 @@ package org.thraex.admin.system.service;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
@@ -10,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.thraex.admin.generics.util.Mixins;
 import org.thraex.admin.system.entity.User;
 import org.thraex.admin.system.repository.UserRepository;
 
@@ -87,17 +87,8 @@ public class UserService {
         String id = entity.getId();
 
         Supplier<User> from = () -> {
-            User old = repository.findById(id).orElseThrow(() ->
-                    new EmptyResultDataAccessException(String.format("Target does not exist: [%s]", id), 1));
-            String[] ignore = Stream.of(
-                    "id",
-                    "deleted",
-                    "createdBy",
-                    "createdDate",
-                    "modifiedBy",
-                    "modifiedDate"
-            ).toArray(String[]::new);
-            BeanUtils.copyProperties(entity, old, ignore);
+            User old = repository.findById(id).orElseThrow(Mixins.updateException(id));
+            BeanUtils.copyProperties(entity, old, Mixins.IGNORE_UPDATE_FIELDS);
 
             return old;
         };
