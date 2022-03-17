@@ -1,7 +1,7 @@
 package org.thraex.admin.generics.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.thraex.admin.generics.entity.LogicEntity;
+import org.thraex.admin.generics.entity.SoftEntity;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 @MappedSuperclass
 public abstract class AbstractTree<T extends AbstractTree<T>>
-        extends LogicEntity<T> implements Serializable {
+        extends SoftEntity<T> implements Serializable {
 
     private String name;
 

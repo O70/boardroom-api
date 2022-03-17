@@ -1,6 +1,6 @@
 package org.thraex.admin.generics.model;
 
-import org.thraex.admin.generics.entity.LogicEntity;
+import org.thraex.admin.generics.entity.SoftEntity;
 
 import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
@@ -16,7 +16,7 @@ import java.util.Optional;
  */
 @MappedSuperclass
 public abstract class AbstractAccount<T extends AbstractAccount<T>>
-        extends LogicEntity<T> implements Serializable {
+        extends SoftEntity<T> implements Serializable {
 
     private String nickname;
 

@@ -4,7 +4,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
-import org.thraex.admin.generics.entity.LogicEntity;
+import org.thraex.admin.generics.entity.SoftEntity;
 import org.thraex.admin.generics.page.PageQuery;
 import org.thraex.admin.generics.util.Mixins;
 
@@ -20,7 +20,7 @@ import java.util.Optional;
 @Entity
 @SQLDelete(sql = Mixins.SOFT_DELETE_ROLE)
 @Where(clause = Mixins.WHERE_CLAUSE)
-public class Role extends LogicEntity<Role> {
+public class Role extends SoftEntity<Role> {
 
     private String name;
 

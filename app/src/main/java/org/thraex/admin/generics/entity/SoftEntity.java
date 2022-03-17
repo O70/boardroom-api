@@ -7,7 +7,7 @@ import javax.persistence.MappedSuperclass;
  * @date 2021/12/28 16:23
  */
 @MappedSuperclass
-public abstract class LogicEntity<T extends LogicEntity<T>> extends JpaEntity<T> {
+public abstract class SoftEntity<T extends SoftEntity<T>> extends JpaEntity<T> {
 
     private boolean deleted;
 
