@@ -44,7 +44,7 @@ public class DictController {
      */
     @GetMapping("{identifier}")
     public Result<Dict> one(@PathVariable String identifier) {
-        return Result.ok(service.findOne(identifier).orElse(null));
+        return Result.ok(service.findOne(identifier));
     }
 
     /**
@@ -65,8 +65,9 @@ public class DictController {
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable String id) {
+    public Result delete(@PathVariable String id) {
         service.repo().deleteById(id);
+        return Result.ok();
     }
 
 }

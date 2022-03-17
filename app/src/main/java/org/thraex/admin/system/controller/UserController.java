@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.thraex.admin.generics.response.PageWrapper;
 import org.thraex.admin.generics.response.Result;
 import org.thraex.admin.system.entity.User;
 import org.thraex.admin.system.service.UserService;
@@ -32,13 +33,18 @@ public class UserController {
         return Result.ok(service.findAll(query));
     }
 
+    @GetMapping("page")
+    public Result<PageWrapper> page(User.Page page) {
+        return Result.ok(service.findAll(page));
+    }
+
     /**
      * @param identifier id or username
      * @return
      */
     @GetMapping("{identifier}")
     public Result<User> one(@PathVariable String identifier) {
-        return Result.ok(service.findOne(identifier).orElse(null));
+        return Result.ok(service.findOne(identifier));
     }
 
     @PostMapping
@@ -47,8 +53,9 @@ public class UserController {
     }
 
     @DeleteMapping("{id}")
-    public void delete(@PathVariable String id) {
+    public Result delete(@PathVariable String id) {
         service.repo().deleteById(id);
+        return Result.ok();
     }
 
 }

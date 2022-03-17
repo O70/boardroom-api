@@ -2,6 +2,7 @@ package org.thraex.admin.system.service;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Sort;
@@ -18,6 +19,10 @@ import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatc
 import static org.springframework.data.domain.ExampleMatcher.GenericPropertyMatchers.startsWith;
 
 /**
+ * <pre>
+ *     TODO:
+ *     - Opt: QBE to Specifications
+ * </pre>
  * @author 鬼王
  * @date 2022/03/10 13:40
  */
@@ -83,7 +88,7 @@ public class DictService {
 
         Supplier<Dict> from = () -> {
             Dict old = repository.findById(id).orElseThrow(() ->
-                    new IllegalArgumentException(String.format("Target does not exist: [%s]", id)));
+                    new EmptyResultDataAccessException(String.format("Target does not exist: [%s]", id), 1));
             String[] ignore = Stream.of(
                     "id",
                     "deleted",

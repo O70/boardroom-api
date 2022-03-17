@@ -7,6 +7,7 @@ import org.springframework.util.Assert;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author 鬼王
@@ -55,6 +56,10 @@ public class Result<T> implements Serializable {
     }
 
     public static <T> Result<T> ok(T data) {
+        return ok().setData(data);
+    }
+
+    public static <T> Result<T> ok(Optional<T> data) {
         return ok().setData(data);
     }
 
