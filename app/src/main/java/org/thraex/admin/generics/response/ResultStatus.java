@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 public enum  ResultStatus {
 
     OK(20000, "OK"),
+    TARGET_NOT_EXIST(40004, "Target does not exist"),
     INTERNAL_SERVER_ERROR(50000, "Internal Server Error");
 
     private final int value;
@@ -23,6 +24,10 @@ public enum  ResultStatus {
 
     public int value() {
         return value;
+    }
+
+    public String phrase() {
+        return phrase;
     }
 
     public static Optional<ResultStatus> of(int value) {

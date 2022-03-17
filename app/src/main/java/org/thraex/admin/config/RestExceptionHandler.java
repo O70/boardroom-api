@@ -6,6 +6,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.thraex.admin.generics.response.Result;
+import org.thraex.admin.generics.response.ResultStatus;
 
 /**
  * @author 鬼王
@@ -20,7 +21,8 @@ public class RestExceptionHandler {
     Result handler(EmptyResultDataAccessException e) {
         logger.warn("EmptyResultDataAccessException: {}", e.getMessage());
 
-        return Result.fail("Target does not exist.");
+        // TODO: Opt
+        return Result.fail(ResultStatus.TARGET_NOT_EXIST, "Target does not exist.");
     }
 
     @ExceptionHandler(Exception.class)
