@@ -1,5 +1,7 @@
 package org.thraex.admin.system.entity;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.thraex.admin.generics.model.AbstractAccount;
 import org.thraex.admin.generics.page.PageQuery;
 
@@ -12,10 +14,14 @@ import java.io.Serializable;
  * @date 2022/03/04 19:07
  */
 @Entity
+@SQLDelete(sql = "UPDATE base_user SET deleted = true WHERE id = ?")
+@Where(clause = "deleted = false")
 public class User extends AbstractAccount<User> {
 
     @Column(length = 36)
     private String orgId;
+
+    private Integer sort;
 
     public String getOrgId() {
         return orgId;
@@ -23,6 +29,15 @@ public class User extends AbstractAccount<User> {
 
     public User setOrgId(String orgId) {
         this.orgId = orgId;
+        return this;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public User setSort(Integer sort) {
+        this.sort = sort;
         return this;
     }
 

@@ -29,7 +29,7 @@ public class UserController {
 
     @GetMapping
     public Result<List<User>> list(User.Query query) {
-        return null;
+        return Result.ok(service.findAll(query));
     }
 
     /**
