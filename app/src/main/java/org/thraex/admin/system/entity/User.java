@@ -57,6 +57,8 @@ public class User extends AbstractAccount<User> {
 
         private Boolean enabled;
 
+        private Boolean locked;
+
         public String getKeyword() {
             return keyword;
         }
@@ -81,6 +83,15 @@ public class User extends AbstractAccount<User> {
 
         public Query setEnabled(Boolean enabled) {
             this.enabled = enabled;
+            return this;
+        }
+
+        public Boolean getLocked() {
+            return locked;
+        }
+
+        public Query setLocked(Boolean locked) {
+            this.locked = locked;
             return this;
         }
 
