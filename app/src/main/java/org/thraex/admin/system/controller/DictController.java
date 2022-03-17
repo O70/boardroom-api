@@ -44,7 +44,7 @@ public class DictController {
      */
     @GetMapping("{identifier}")
     public Result<Dict> one(@PathVariable String identifier) {
-        return Result.ok(service.findOne(identifier));
+        return Result.ok(service.findByIdentifier(Dict.of(identifier)));
     }
 
     /**
@@ -53,7 +53,7 @@ public class DictController {
      */
     @GetMapping("{identifier}/children")
     public Result<Dict> children(@PathVariable String identifier) {
-        Optional<Dict> one = service.findOne(identifier);
+        Optional<Dict> one = service.findByIdentifier(Dict.of(identifier));
         one.ifPresent(it -> it.setChildren(service.repo().findByParentIdOrderByLevel(it.getId())));
 
         return Result.ok(one.orElse(null));

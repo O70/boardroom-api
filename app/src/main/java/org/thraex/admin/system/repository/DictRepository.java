@@ -1,6 +1,6 @@
 package org.thraex.admin.system.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
 import org.thraex.admin.system.entity.Dict;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
  * @author 鬼王
  * @date 2022/03/07 14:53
  */
-public interface DictRepository extends JpaRepository<Dict, String> {
+public interface DictRepository extends JpaRepositoryImplementation<Dict, String> {
 
     /**
      * <pre>

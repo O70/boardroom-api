@@ -1,15 +1,12 @@
 package org.thraex.admin.system.service;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.BeanUtils;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.thraex.admin.generics.util.Mixins;
+import org.thraex.admin.generics.service.GenericService;
 import org.thraex.admin.system.entity.User;
 import org.thraex.admin.system.repository.UserRepository;
 
@@ -17,7 +14,6 @@ import javax.persistence.criteria.Predicate;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -25,19 +21,9 @@ import java.util.stream.Stream;
  * @date 2022/03/16 18:39
  */
 @Service
-public class UserService {
+public class UserService extends GenericService<User, UserRepository> {
 
     private static final String PERCENT_SIGN = "%";
-
-    private final UserRepository repository;
-
-    public UserService(UserRepository repository) {
-        this.repository = repository;
-    }
-
-    public UserRepository repo() {
-        return repository;
-    }
 
     public List<User> findAll(User.Query query) {
         return repository.findAll(specification(query), Sort.by("sort"));
@@ -69,35 +55,6 @@ public class UserService {
 
             return cq.where(predicates).getRestriction();
         };
-    }
-
-    public Optional<User> findOne(String identifier) {
-        User probe = User.of(identifier);
-        ExampleMatcher matcher = ExampleMatcher.matchingAny().withIgnorePaths("enabled", "deleted", "locked");
-        Example<User> example = Example.of(probe, matcher);
-
-        return repository.findOne(example);
-    }
-
-    /**
-     * TODO: Opt update
-     *
-     * @param entity
-     * @return
-     */
-    public User save(User entity) {
-        String id = entity.getId();
-
-        Supplier<User> from = () -> {
-            User old = repository.findById(id).orElseThrow(Mixins.updateException(id));
-            BeanUtils.copyProperties(entity, old, Mixins.IGNORE_UPDATE_FIELDS);
-
-            return old;
-        };
-
-        User edit = StringUtils.isBlank(id) ? entity : from.get();
-
-        return repository.save(edit);
     }
 
 }

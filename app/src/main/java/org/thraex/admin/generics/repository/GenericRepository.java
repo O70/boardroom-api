@@ -1,0 +1,20 @@
+package org.thraex.admin.generics.repository;
+
+import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
+import org.springframework.data.repository.NoRepositoryBean;
+
+import java.io.Serializable;
+import java.util.Optional;
+
+/**
+ * TODO: feat
+ *
+ * @author 鬼王
+ * @date 2022/03/17 20:21
+ */
+@NoRepositoryBean
+public interface GenericRepository<T, ID extends Serializable> extends JpaRepositoryImplementation<T, ID> {
+
+    Optional<T> findOne(String identifier);
+
+}

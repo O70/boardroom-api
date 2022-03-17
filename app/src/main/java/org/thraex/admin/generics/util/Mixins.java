@@ -1,9 +1,5 @@
 package org.thraex.admin.generics.util;
 
-import org.springframework.dao.EmptyResultDataAccessException;
-
-import java.util.function.Supplier;
-
 /**
  * TODO: Opt
  *
@@ -17,7 +13,7 @@ public abstract class Mixins {
     public static final String SOFT_DELETE_ROLE = "UPDATE base_role SET deleted = true WHERE id = ?";
     public static final String SOFT_DELETE_USER = "UPDATE base_user SET deleted = true WHERE id = ?";
 
-    public static final String[] IGNORE_UPDATE_FIELDS = {
+    public static final String[] IGNORED_PATHS_UPDATE = {
             "id",
             "deleted",
             "createdBy",
@@ -26,8 +22,6 @@ public abstract class Mixins {
             "modifiedDate"
     };
 
-    public static Supplier<EmptyResultDataAccessException> updateException(String id) {
-        return () -> new EmptyResultDataAccessException(String.format("Target does not exist: [%s]", id), 1);
-    }
+    public static final String[] IGNORED_PATHS_FIND = { "enabled", "deleted" };
 
 }

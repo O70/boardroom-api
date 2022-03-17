@@ -44,7 +44,7 @@ public class UserController {
      */
     @GetMapping("{identifier}")
     public Result<User> one(@PathVariable String identifier) {
-        return Result.ok(service.findOne(identifier));
+        return Result.ok(service.findByIdentifier(User.of(identifier), "locked"));
     }
 
     @PostMapping
