@@ -26,8 +26,6 @@ public abstract class Mixins {
             "modifiedDate"
     };
 
-
-
     public static Supplier<EmptyResultDataAccessException> updateException(String id) {
         return () -> new EmptyResultDataAccessException(String.format("Target does not exist: [%s]", id), 1);
     }

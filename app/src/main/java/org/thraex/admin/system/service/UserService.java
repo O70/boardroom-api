@@ -15,6 +15,7 @@ import org.thraex.admin.system.repository.UserRepository;
 
 import javax.persistence.criteria.Predicate;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
@@ -26,7 +27,6 @@ import java.util.stream.Stream;
 @Service
 public class UserService {
 
-    private static final Stream<String> stream = Stream.of("nickname", "username", "email", "mobile");
     private static final String PERCENT_SIGN = "%";
 
     private final UserRepository repository;
@@ -51,6 +51,8 @@ public class UserService {
     }
 
     private Specification<User> specification(User.Query query) {
+        Stream<String> stream = Stream.of("nickname", "username", "email", "mobile");
+
         return (root, cq, cb) -> {
             Optional<Predicate> keyword = Optional.ofNullable(query.getKeyword())
                     .filter(StringUtils::isNotBlank)
@@ -63,7 +65,7 @@ public class UserService {
                     Optional.ofNullable(query.getOrgId()).map(v -> cb.equal(root.get("orgId"), v)),
                     Optional.ofNullable(query.getEnabled()).map(v -> cb.equal(root.get("enabled"), v)),
                     Optional.ofNullable(query.getLocked()).map(v -> cb.equal(root.get("locked"), v))
-            ).filter(Optional::isPresent).toArray(Predicate[]::new);
+            ).map(p -> p.orElse(null)).filter(Objects::nonNull).toArray(Predicate[]::new);
 
             return cq.where(predicates).getRestriction();
         };
