@@ -1,12 +1,10 @@
 package org.thraex.admin.system.controller;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.thraex.admin.generics.mvc.controller.GenericController;
 import org.thraex.admin.generics.response.ResponseResult;
 import org.thraex.admin.system.entity.Dict;
 import org.thraex.admin.system.service.DictService;
@@ -20,13 +18,7 @@ import java.util.Optional;
  */
 @RestController
 @RequestMapping("dict")
-public class DictController {
-
-    private final DictService service;
-
-    public DictController(DictService service) {
-        this.service = service;
-    }
+public class DictController extends GenericController<Dict, DictService> {
 
     @GetMapping
     public ResponseResult<List<Dict>> list(Dict.Query query) {
@@ -43,7 +35,7 @@ public class DictController {
      * @return
      */
     @GetMapping("identifier/{identifier}")
-    public ResponseResult<Dict> one(@PathVariable String identifier) {
+    public ResponseResult<Dict> orOne(@PathVariable String identifier) {
         return ResponseResult.ok(service.findOneByAny(Dict.of(identifier)));
     }
 
@@ -57,17 +49,6 @@ public class DictController {
         one.ifPresent(it -> it.setChildren(service.repo().findByParentIdOrderByLevel(it.getId())));
 
         return ResponseResult.ok(one.orElse(null));
-    }
-
-    @PostMapping
-    public ResponseResult<Dict> save(@RequestBody Dict entity) {
-        return ResponseResult.ok(service.save(entity));
-    }
-
-    @DeleteMapping("{id}")
-    public ResponseResult delete(@PathVariable String id) {
-        service.repo().deleteById(id);
-        return ResponseResult.ok();
     }
 
 }

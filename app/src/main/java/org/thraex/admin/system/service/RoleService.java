@@ -32,7 +32,7 @@ public class RoleService extends GenericService<Role, RoleRepository> {
     }
 
     public Page<Role> findAll(Role.Page page) {
-        Role.Query query = page.getQuery();
+        Role.Query query = page.getParams();
         PageRequest pageable = PageRequest.of(page.getPage(), page.getSize(), Sort.by("sort"));
 
         return repository.findAll(example(query), pageable);

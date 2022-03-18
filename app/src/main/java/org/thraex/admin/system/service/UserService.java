@@ -31,7 +31,7 @@ public class UserService extends GenericService<User, UserRepository> {
     }
 
     public Page<User> findAll(User.Page page) {
-        User.Query query = page.getQuery();
+        User.Query query = page.getParams();
         PageRequest pageable = PageRequest.of(page.getPage(), page.getSize(), Sort.by("sort"));
 
         return repository.findAll(specification(query), pageable);

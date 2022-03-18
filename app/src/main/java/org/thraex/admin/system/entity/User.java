@@ -100,14 +100,14 @@ public class User extends AbstractAccount<User> {
 
     public class Page extends PageQuery {
 
-        private Query query = new Query();
+        private Query params = new Query();
 
-        public Query getQuery() {
-            return query;
+        public Query getParams() {
+            return params;
         }
 
-        public Page setQuery(Query query) {
-            this.query = query;
+        public Page setParams(Query params) {
+            this.params = params;
             return this;
         }
 

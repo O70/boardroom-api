@@ -1,12 +1,10 @@
 package org.thraex.admin.system.controller;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.thraex.admin.generics.mvc.controller.GenericController;
 import org.thraex.admin.generics.response.PageWrapper;
 import org.thraex.admin.generics.response.ResponseResult;
 import org.thraex.admin.system.entity.Role;
@@ -20,13 +18,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("role")
-public class RoleController {
-
-    private final RoleService service;
-
-    public RoleController(RoleService service) {
-        this.service = service;
-    }
+public class RoleController extends GenericController<Role, RoleService> {
 
     @GetMapping
     public ResponseResult<List<Role>> list(Role.Query query) {
@@ -43,19 +35,8 @@ public class RoleController {
      * @return
      */
     @GetMapping("identifier/{identifier}")
-    public ResponseResult<Role> one(@PathVariable String identifier) {
+    public ResponseResult<Role> orOne(@PathVariable String identifier) {
         return ResponseResult.ok(service.findOneByAny(Role.of(identifier)));
-    }
-
-    @PostMapping
-    public ResponseResult<Role> save(@RequestBody Role entity) {
-        return ResponseResult.ok(service.save(entity));
-    }
-
-    @DeleteMapping("{id}")
-    public ResponseResult delete(@PathVariable String id) {
-        service.repo().deleteById(id);
-        return ResponseResult.ok();
     }
 
 }
