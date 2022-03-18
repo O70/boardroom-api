@@ -7,7 +7,7 @@ import java.util.stream.Stream;
  * @author 鬼王
  * @date 2022/03/16 13:26
  */
-public enum  ResultStatus {
+public enum ResponseStatus {
 
     OK(20000, "OK"),
     TARGET_NOT_EXIST(40004, "Target does not exist"),
@@ -17,7 +17,7 @@ public enum  ResultStatus {
 
     private final String phrase;
 
-    ResultStatus(int value, String phrase) {
+    ResponseStatus(int value, String phrase) {
         this.value = value;
         this.phrase = phrase;
     }
@@ -30,7 +30,7 @@ public enum  ResultStatus {
         return phrase;
     }
 
-    public static Optional<ResultStatus> of(int value) {
+    public static Optional<ResponseStatus> of(int value) {
         return Stream.of(values()).filter(it -> it.value == value).findFirst();
     }
 

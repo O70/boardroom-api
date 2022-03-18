@@ -10,10 +10,12 @@ import java.util.List;
 import java.util.Optional;
 
 /**
+ * TODO: Opt
+ *
  * @author 鬼王
  * @date 2022/03/10 10:52
  */
-public class Result<T> implements Serializable {
+public class ResponseResult<T> implements Serializable {
 
     private Integer code;
 
@@ -21,9 +23,9 @@ public class Result<T> implements Serializable {
 
     private String message;
 
-    public Result() {}
+    public ResponseResult() {}
 
-    public Result(ResultStatus status, T data, String message) {
+    public ResponseResult(ResponseStatus status, T data, String message) {
         Assert.notNull(status, "status must not be null.");
 
         this.code = status.value();
@@ -31,39 +33,39 @@ public class Result<T> implements Serializable {
         this.message = message;
     }
 
-    public static Result of() {
-        return new Result();
+    public static ResponseResult of() {
+        return new ResponseResult();
     }
 
-    public static Result of(ResultStatus status) {
+    public static ResponseResult of(ResponseStatus status) {
         return of(status, null, null);
     }
 
-    public static <T> Result<T> of(ResultStatus status, T data) {
+    public static <T> ResponseResult<T> of(ResponseStatus status, T data) {
         return of(status, data, null);
     }
 
-    public static Result of(ResultStatus status, String message) {
+    public static ResponseResult of(ResponseStatus status, String message) {
         return of(status, null, message);
     }
 
-    public static <T> Result<T> of(ResultStatus status, T data, String message) {
-        return new Result<>(status, data, message);
+    public static <T> ResponseResult<T> of(ResponseStatus status, T data, String message) {
+        return new ResponseResult<>(status, data, message);
     }
 
-    public static Result ok() {
-        return of(ResultStatus.OK);
+    public static ResponseResult ok() {
+        return of(ResponseStatus.OK);
     }
 
-    public static <T> Result<T> ok(T data) {
+    public static <T> ResponseResult<T> ok(T data) {
         return ok().setData(data);
     }
 
-    public static <T> Result<T> ok(Optional<T> data) {
+    public static <T> ResponseResult<T> ok(Optional<T> data) {
         return ok().setData(data);
     }
 
-    public static <T> Result<PageWrapper> ok(Page<T> page) {
+    public static <T> ResponseResult<PageWrapper<T>> ok(Page<T> page) {
         Assert.notNull(page, "page must not be null.");
 
         int pages = page.getTotalPages();
@@ -75,15 +77,15 @@ public class Result<T> implements Serializable {
         return ok(new PageWrapper(pages, elements, number, size, content));
     }
 
-    public static Result fail() {
+    public static ResponseResult fail() {
         return fail(null);
     }
 
-    public static Result fail(String message) {
-        return fail(ResultStatus.INTERNAL_SERVER_ERROR, message);
+    public static ResponseResult fail(String message) {
+        return fail(ResponseStatus.INTERNAL_SERVER_ERROR, message);
     }
 
-    public static Result fail(ResultStatus status, String message) {
+    public static ResponseResult fail(ResponseStatus status, String message) {
         return of(status, message);
     }
 
@@ -91,12 +93,12 @@ public class Result<T> implements Serializable {
         return code;
     }
 
-    public Result<T> setCode(Integer code) {
+    public ResponseResult<T> setCode(Integer code) {
         this.code = code;
         return this;
     }
 
-    public Result<T> setCode(ResultStatus status) {
+    public ResponseResult<T> setCode(ResponseStatus status) {
         Assert.notNull(status, "status must not be null.");
 
         this.code = status.value();
@@ -107,7 +109,7 @@ public class Result<T> implements Serializable {
         return data;
     }
 
-    public Result<T> setData(T data) {
+    public ResponseResult<T> setData(T data) {
         this.data = data;
         return this;
     }
@@ -116,7 +118,7 @@ public class Result<T> implements Serializable {
         return message;
     }
 
-    public Result<T> setMessage(String message) {
+    public ResponseResult<T> setMessage(String message) {
         this.message = message;
         return this;
     }

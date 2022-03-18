@@ -5,8 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.thraex.admin.generics.response.Result;
-import org.thraex.admin.generics.response.ResultStatus;
+import org.thraex.admin.generics.response.ResponseResult;
+import org.thraex.admin.generics.response.ResponseStatus;
 
 /**
  * @author 鬼王
@@ -18,18 +18,18 @@ public class RestExceptionHandler {
     private Logger logger = LoggerFactory.getLogger(RestExceptionHandler.class);
 
     @ExceptionHandler(EmptyResultDataAccessException.class)
-    Result handler(EmptyResultDataAccessException e) {
+    ResponseResult handler(EmptyResultDataAccessException e) {
         logger.warn("EmptyResultDataAccessException: {}", e.getMessage());
 
         // TODO: Opt
-        return Result.fail(ResultStatus.TARGET_NOT_EXIST, "Target does not exist.");
+        return ResponseResult.fail(ResponseStatus.TARGET_NOT_EXIST, "Target does not exist.");
     }
 
     @ExceptionHandler(Exception.class)
-    Result handler(Exception e) {
+    ResponseResult handler(Exception e) {
         logger.error("Handling exception", e);
 
-        return Result.fail(e.getMessage());
+        return ResponseResult.fail(e.getMessage());
     }
 
 }

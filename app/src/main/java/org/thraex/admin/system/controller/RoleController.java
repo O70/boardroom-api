@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.thraex.admin.generics.response.PageWrapper;
-import org.thraex.admin.generics.response.Result;
+import org.thraex.admin.generics.response.ResponseResult;
 import org.thraex.admin.system.entity.Role;
 import org.thraex.admin.system.service.RoleService;
 
@@ -29,13 +29,13 @@ public class RoleController {
     }
 
     @GetMapping
-    public Result<List<Role>> list(Role.Query query) {
-        return Result.ok(service.findAll(query));
+    public ResponseResult<List<Role>> list(Role.Query query) {
+        return ResponseResult.ok(service.findAll(query));
     }
 
     @GetMapping("page")
-    public Result<PageWrapper> page(Role.Page page) {
-        return Result.ok(service.findAll(page));
+    public ResponseResult<PageWrapper<Role>> page(Role.Page page) {
+        return ResponseResult.ok(service.findAll(page));
     }
 
     /**
@@ -43,19 +43,19 @@ public class RoleController {
      * @return
      */
     @GetMapping("{identifier}")
-    public Result<Role> one(@PathVariable String identifier) {
-        return Result.ok(service.findByIdentifier(Role.of(identifier)));
+    public ResponseResult<Role> one(@PathVariable String identifier) {
+        return ResponseResult.ok(service.findByIdentifier(Role.of(identifier)));
     }
 
     @PostMapping
-    public Result<Role> save(@RequestBody Role entity) {
-        return Result.ok(service.save(entity));
+    public ResponseResult<Role> save(@RequestBody Role entity) {
+        return ResponseResult.ok(service.save(entity));
     }
 
     @DeleteMapping("{id}")
-    public Result delete(@PathVariable String id) {
+    public ResponseResult delete(@PathVariable String id) {
         service.repo().deleteById(id);
-        return Result.ok();
+        return ResponseResult.ok();
     }
 
 }

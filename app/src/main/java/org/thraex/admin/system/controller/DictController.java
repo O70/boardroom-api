@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.thraex.admin.generics.response.Result;
+import org.thraex.admin.generics.response.ResponseResult;
 import org.thraex.admin.system.entity.Dict;
 import org.thraex.admin.system.service.DictService;
 
@@ -29,13 +29,13 @@ public class DictController {
     }
 
     @GetMapping
-    public Result<List<Dict>> list(Dict.Query query) {
-        return Result.ok(service.findAll(query));
+    public ResponseResult<List<Dict>> list(Dict.Query query) {
+        return ResponseResult.ok(service.findAll(query));
     }
 
     @GetMapping("tree")
-    public Result<List<Dict>> tree(Dict.Query query) {
-        return Result.ok(Dict.toTree(null, service.findAll(query)));
+    public ResponseResult<List<Dict>> tree(Dict.Query query) {
+        return ResponseResult.ok(Dict.toTree(null, service.findAll(query)));
     }
 
     /**
@@ -43,8 +43,8 @@ public class DictController {
      * @return
      */
     @GetMapping("{identifier}")
-    public Result<Dict> one(@PathVariable String identifier) {
-        return Result.ok(service.findByIdentifier(Dict.of(identifier)));
+    public ResponseResult<Dict> one(@PathVariable String identifier) {
+        return ResponseResult.ok(service.findByIdentifier(Dict.of(identifier)));
     }
 
     /**
@@ -52,22 +52,22 @@ public class DictController {
      * @return
      */
     @GetMapping("{identifier}/children")
-    public Result<Dict> children(@PathVariable String identifier) {
+    public ResponseResult<Dict> children(@PathVariable String identifier) {
         Optional<Dict> one = service.findByIdentifier(Dict.of(identifier));
         one.ifPresent(it -> it.setChildren(service.repo().findByParentIdOrderByLevel(it.getId())));
 
-        return Result.ok(one.orElse(null));
+        return ResponseResult.ok(one.orElse(null));
     }
 
     @PostMapping
-    public Result<Dict> save(@RequestBody Dict entity) {
-        return Result.ok(service.save(entity));
+    public ResponseResult<Dict> save(@RequestBody Dict entity) {
+        return ResponseResult.ok(service.save(entity));
     }
 
     @DeleteMapping("{id}")
-    public Result delete(@PathVariable String id) {
+    public ResponseResult delete(@PathVariable String id) {
         service.repo().deleteById(id);
-        return Result.ok();
+        return ResponseResult.ok();
     }
 
 }
