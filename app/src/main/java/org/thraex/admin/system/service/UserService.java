@@ -23,6 +23,7 @@ import java.util.stream.Stream;
 @Service
 public class UserService extends GenericService<User, UserRepository> {
 
+    private static final String[] LIKE_FIELDS = { "nickname", "username", "email", "mobile" };
     private static final String PERCENT_SIGN = "%";
 
     public List<User> findAll(User.Query query) {
@@ -37,13 +38,11 @@ public class UserService extends GenericService<User, UserRepository> {
     }
 
     private Specification<User> specification(User.Query query) {
-        Stream<String> stream = Stream.of("nickname", "username", "email", "mobile");
-
         return (root, cq, cb) -> {
             Optional<Predicate> keyword = Optional.ofNullable(query.getKeyword())
                     .filter(StringUtils::isNotBlank)
                     .map(v -> String.format("%s%s%s", PERCENT_SIGN, v, PERCENT_SIGN))
-                    .map(v -> stream.map(p -> cb.like(root.get(p), v)))
+                    .map(v -> Stream.of(LIKE_FIELDS).map(p -> cb.like(root.get(p), v)))
                     .map(p -> cb.or(p.toArray(Predicate[]::new)));
 
             Predicate[] predicates = Stream.of(
