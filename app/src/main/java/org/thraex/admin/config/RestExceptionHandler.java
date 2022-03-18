@@ -9,6 +9,8 @@ import org.thraex.admin.generics.response.ResponseResult;
 import org.thraex.admin.generics.response.ResponseStatus;
 
 /**
+ * TODO: Opt Exception
+ *
  * @author 鬼王
  * @date 2022/03/10 11:13
  */
@@ -21,6 +23,12 @@ public class RestExceptionHandler {
     ResponseResult handler(EmptyResultDataAccessException e) {
         logger.warn("EmptyResultDataAccessException: {}", e.getMessage());
         return ResponseResult.fail(ResponseStatus.TARGET_NOT_EXIST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    ResponseResult handler(IllegalArgumentException e) {
+        logger.warn("IllegalArgumentException: {}", e.getMessage());
+        return ResponseResult.fail(ResponseStatus.ILLEGAL_ARGUMENT);
     }
 
     @ExceptionHandler(Exception.class)

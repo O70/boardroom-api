@@ -8,6 +8,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
+import org.springframework.util.Assert;
 import org.thraex.admin.generics.entity.SoftEntity;
 import org.thraex.admin.generics.util.Mixins;
 
@@ -44,6 +45,8 @@ public class GenericService<T extends SoftEntity<T>, R extends JpaRepositoryImpl
      * @return
      */
     public T save(T entity) {
+        Assert.notNull(entity, "The given entity must not be null!");
+
         String id = entity.getId();
 
         Supplier<T> from = () -> {

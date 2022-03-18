@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 public enum ResponseStatus {
 
     OK(20000, "OK"),
+    ILLEGAL_ARGUMENT(40000, "Illegal Argument"),
     TARGET_NOT_EXIST(40004, "Target does not exist"),
     INTERNAL_SERVER_ERROR(50000, "Internal Server Error");
 

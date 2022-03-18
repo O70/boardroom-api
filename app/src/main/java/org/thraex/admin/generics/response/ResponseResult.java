@@ -17,6 +17,8 @@ import java.util.Optional;
  */
 public class ResponseResult<T> implements Serializable {
 
+    private static final String STATUS_MUST_NOT_BE_NULL = "status must not be null!";
+
     private Integer code;
 
     private T data;
@@ -24,7 +26,7 @@ public class ResponseResult<T> implements Serializable {
     private String message;
 
     public ResponseResult(ResponseStatus status, T data, String message) {
-        Assert.notNull(status, "status must not be null.");
+        Assert.notNull(status, STATUS_MUST_NOT_BE_NULL);
 
         this.code = status.value();
         this.data = data;
@@ -74,7 +76,7 @@ public class ResponseResult<T> implements Serializable {
     }
 
     public static ResponseResult fail(ResponseStatus status) {
-        Assert.notNull(status, "status must not be null.");
+        Assert.notNull(status, STATUS_MUST_NOT_BE_NULL);
         return fail(status, status.phrase());
     }
 
@@ -96,7 +98,7 @@ public class ResponseResult<T> implements Serializable {
     }
 
     public ResponseResult<T> setCode(ResponseStatus status) {
-        Assert.notNull(status, "status must not be null.");
+        Assert.notNull(status, STATUS_MUST_NOT_BE_NULL);
 
         this.code = status.value();
         return this;
