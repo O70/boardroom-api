@@ -23,8 +23,6 @@ public class ResponseResult<T> implements Serializable {
 
     private String message;
 
-    public ResponseResult() {}
-
     public ResponseResult(ResponseStatus status, T data, String message) {
         Assert.notNull(status, "status must not be null.");
 
@@ -33,20 +31,12 @@ public class ResponseResult<T> implements Serializable {
         this.message = message;
     }
 
-    public static ResponseResult of() {
-        return new ResponseResult();
-    }
-
     public static ResponseResult of(ResponseStatus status) {
         return of(status, null, null);
     }
 
     public static <T> ResponseResult<T> of(ResponseStatus status, T data) {
         return of(status, data, null);
-    }
-
-    public static ResponseResult of(ResponseStatus status, String message) {
-        return of(status, null, message);
     }
 
     public static <T> ResponseResult<T> of(ResponseStatus status, T data, String message) {
@@ -62,6 +52,7 @@ public class ResponseResult<T> implements Serializable {
     }
 
     public static <T> ResponseResult<T> ok(Optional<T> data) {
+        // TODO: Opt generic type
         return ok().setData(data);
     }
 
@@ -78,7 +69,13 @@ public class ResponseResult<T> implements Serializable {
     }
 
     public static ResponseResult fail() {
-        return fail(null);
+        ResponseStatus status = ResponseStatus.INTERNAL_SERVER_ERROR;
+        return of(status, null, status.phrase());
+    }
+
+    public static ResponseResult fail(ResponseStatus status) {
+        Assert.notNull(status, "status must not be null.");
+        return fail(status, status.phrase());
     }
 
     public static ResponseResult fail(String message) {
@@ -86,7 +83,7 @@ public class ResponseResult<T> implements Serializable {
     }
 
     public static ResponseResult fail(ResponseStatus status, String message) {
-        return of(status, message);
+        return of(status, null, message);
     }
 
     public Integer getCode() {

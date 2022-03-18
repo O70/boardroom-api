@@ -20,15 +20,12 @@ public class RestExceptionHandler {
     @ExceptionHandler(EmptyResultDataAccessException.class)
     ResponseResult handler(EmptyResultDataAccessException e) {
         logger.warn("EmptyResultDataAccessException: {}", e.getMessage());
-
-        // TODO: Opt
-        return ResponseResult.fail(ResponseStatus.TARGET_NOT_EXIST, "Target does not exist.");
+        return ResponseResult.fail(ResponseStatus.TARGET_NOT_EXIST);
     }
 
     @ExceptionHandler(Exception.class)
     ResponseResult handler(Exception e) {
         logger.error("Handling exception", e);
-
         return ResponseResult.fail(e.getMessage());
     }
 
