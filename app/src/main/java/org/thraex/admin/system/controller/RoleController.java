@@ -44,7 +44,7 @@ public class RoleController {
      */
     @GetMapping("identifier/{identifier}")
     public ResponseResult<Role> one(@PathVariable String identifier) {
-        return ResponseResult.ok(service.findByIdentifier(Role.of(identifier)));
+        return ResponseResult.ok(service.findOneByAny(Role.of(identifier)));
     }
 
     @PostMapping

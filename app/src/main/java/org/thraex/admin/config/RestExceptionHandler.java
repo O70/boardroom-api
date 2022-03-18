@@ -28,7 +28,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(IllegalArgumentException.class)
     ResponseResult handler(IllegalArgumentException e) {
         logger.warn("IllegalArgumentException: {}", e.getMessage());
-        return ResponseResult.fail(ResponseStatus.ILLEGAL_ARGUMENT);
+        return ResponseResult.fail(ResponseStatus.ILLEGAL_ARGUMENT, e.getMessage());
     }
 
     @ExceptionHandler(Exception.class)

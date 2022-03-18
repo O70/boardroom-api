@@ -30,7 +30,15 @@ public class GenericService<T extends SoftEntity<T>, R extends JpaRepositoryImpl
         return repository;
     }
 
-    public Optional<T> findByIdentifier(T probe, String... ignoredPaths) {
+    /**
+     * Returns a single entity matching the given {@link Example} or {@literal null} if none was found.
+     * e.g.: a = ? or b = ?
+     *
+     * @param probe must not be {@literal null}.
+     * @param ignoredPaths must not be {@literal null} and not empty.
+     * @return a single entity matching the given {@link Example} or {@link Optional#empty()} if none was found.
+     */
+    public Optional<T> findOneByAny(T probe, String... ignoredPaths) {
         String[] paths = ArrayUtils.addAll(Mixins.IGNORED_PATHS_FIND, ignoredPaths);
         ExampleMatcher matcher = ExampleMatcher.matchingAny().withIgnorePaths(paths);
         Example<T> example = Example.of(probe, matcher);
@@ -39,20 +47,21 @@ public class GenericService<T extends SoftEntity<T>, R extends JpaRepositoryImpl
     }
 
     /**
+     * Saves a given entity.
      * {@code <S extends T>}
      *
-     * @param entity
-     * @return
+     * @param entity must not be {@literal null}.
+     * @return the saved entity will never be {@literal null}.
      */
-    public T save(T entity) {
+    public T save(T entity, String... ignoredPaths) {
         Assert.notNull(entity, "The given entity must not be null!");
 
         String id = entity.getId();
-
         Supplier<T> from = () -> {
             T old = repository.findById(id).orElseThrow(() ->
                     new EmptyResultDataAccessException(String.format("Target does not exist: [%s]", id), 1));
-            BeanUtils.copyProperties(entity, old, Mixins.IGNORED_PATHS_UPDATE);
+            String[] ignoreProperties = ArrayUtils.addAll(Mixins.IGNORED_PATHS_UPDATE, ignoredPaths);
+            BeanUtils.copyProperties(entity, old, ignoreProperties);
 
             return old;
         };

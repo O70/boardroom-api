@@ -4,7 +4,6 @@ import org.springframework.data.jpa.repository.support.JpaRepositoryImplementati
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.io.Serializable;
-import java.util.Optional;
 
 /**
  * TODO: feat
@@ -14,7 +13,4 @@ import java.util.Optional;
  */
 @NoRepositoryBean
 public interface GenericRepository<T, ID extends Serializable> extends JpaRepositoryImplementation<T, ID> {
-
-    Optional<T> findOne(String identifier);
-
 }
