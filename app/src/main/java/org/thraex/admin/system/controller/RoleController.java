@@ -42,7 +42,7 @@ public class RoleController {
      * @param identifier id or code
      * @return
      */
-    @GetMapping("{identifier}")
+    @GetMapping("identifier/{identifier}")
     public ResponseResult<Role> one(@PathVariable String identifier) {
         return ResponseResult.ok(service.findByIdentifier(Role.of(identifier)));
     }

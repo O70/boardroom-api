@@ -42,7 +42,7 @@ public class UserController {
      * @param identifier id or username
      * @return
      */
-    @GetMapping("{identifier}")
+    @GetMapping("identifier/{identifier}")
     public ResponseResult<User> one(@PathVariable String identifier) {
         return ResponseResult.ok(service.findByIdentifier(User.of(identifier), "locked"));
     }

@@ -1,4 +1,4 @@
-package org.thraex.admin.generics.service;
+package org.thraex.admin.generics.mvc.service;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;

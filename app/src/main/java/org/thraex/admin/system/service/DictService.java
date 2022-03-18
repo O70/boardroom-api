@@ -4,7 +4,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.thraex.admin.generics.service.GenericService;
+import org.thraex.admin.generics.mvc.service.GenericService;
 import org.thraex.admin.system.entity.Dict;
 import org.thraex.admin.system.repository.DictRepository;
 

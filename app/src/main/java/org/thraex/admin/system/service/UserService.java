@@ -6,7 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.thraex.admin.generics.service.GenericService;
+import org.thraex.admin.generics.mvc.service.GenericService;
 import org.thraex.admin.system.entity.User;
 import org.thraex.admin.system.repository.UserRepository;
 

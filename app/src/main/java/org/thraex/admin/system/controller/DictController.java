@@ -42,7 +42,7 @@ public class DictController {
      * @param identifier id or code
      * @return
      */
-    @GetMapping("{identifier}")
+    @GetMapping("identifier/{identifier}")
     public ResponseResult<Dict> one(@PathVariable String identifier) {
         return ResponseResult.ok(service.findByIdentifier(Dict.of(identifier)));
     }

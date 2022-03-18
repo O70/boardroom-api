@@ -1,4 +1,4 @@
-package org.thraex.admin.generics.repository;
+package org.thraex.admin.generics.mvc.repository;
 
 import org.springframework.data.jpa.repository.support.JpaRepositoryImplementation;
 import org.springframework.data.repository.NoRepositoryBean;
