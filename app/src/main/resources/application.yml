@@ -4,6 +4,11 @@ server:
 spring:
   application:
     name: fund-admin
+  security:
+    user:
+      name: master
+      password: admin
+      roles: SUPER_ADMIN
   jackson:
     time-zone: GMT+8
     default-property-inclusion: non_null
