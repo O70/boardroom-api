@@ -6,7 +6,7 @@ import org.hibernate.annotations.Where;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import org.thraex.admin.generics.model.AbstractTree;
-import org.thraex.admin.generics.util.Mixins;
+import org.thraex.admin.generics.constant.EntityMixins;
 
 import javax.persistence.Entity;
 import java.io.Serializable;
@@ -17,8 +17,8 @@ import java.util.Optional;
  * @date 2021/12/27 17:25
  */
 @Entity
-@SQLDelete(sql = Mixins.SOFT_DELETE_DICT)
-@Where(clause = Mixins.WHERE_CLAUSE)
+@SQLDelete(sql = EntityMixins.SOFT_DELETE_DICT)
+@Where(clause = EntityMixins.WHERE_CLAUSE)
 public class Dict extends AbstractTree<Dict> {
 
     private String value;

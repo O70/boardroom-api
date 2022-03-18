@@ -4,7 +4,7 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.thraex.admin.generics.model.AbstractAccount;
 import org.thraex.admin.generics.page.PageQuery;
-import org.thraex.admin.generics.util.Mixins;
+import org.thraex.admin.generics.constant.EntityMixins;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,8 +15,8 @@ import java.io.Serializable;
  * @date 2022/03/04 19:07
  */
 @Entity
-@SQLDelete(sql = Mixins.SOFT_DELETE_USER)
-@Where(clause = Mixins.WHERE_CLAUSE)
+@SQLDelete(sql = EntityMixins.SOFT_DELETE_USER)
+@Where(clause = EntityMixins.WHERE_CLAUSE)
 public class User extends AbstractAccount<User> {
 
     @Column(length = 36)

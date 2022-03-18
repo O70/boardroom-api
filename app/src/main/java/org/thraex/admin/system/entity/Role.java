@@ -6,7 +6,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.util.Assert;
 import org.thraex.admin.generics.entity.SoftEntity;
 import org.thraex.admin.generics.page.PageQuery;
-import org.thraex.admin.generics.util.Mixins;
+import org.thraex.admin.generics.constant.EntityMixins;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,8 +18,8 @@ import java.util.Optional;
  * @date 2022/03/04 19:02
  */
 @Entity
-@SQLDelete(sql = Mixins.SOFT_DELETE_ROLE)
-@Where(clause = Mixins.WHERE_CLAUSE)
+@SQLDelete(sql = EntityMixins.SOFT_DELETE_ROLE)
+@Where(clause = EntityMixins.WHERE_CLAUSE)
 public class Role extends SoftEntity<Role> {
 
     private String name;
