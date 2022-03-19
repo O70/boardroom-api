@@ -23,7 +23,7 @@ import org.springframework.security.web.server.authorization.HttpStatusServerAcc
 @EnableWebFluxSecurity
 public class SecurityConfig {
 
-    @Bean
+    /*@Bean
     MapReactiveUserDetailsService userDetailsService() {
         UserDetails user = User
                 .withUsername("master1")
@@ -33,7 +33,7 @@ public class SecurityConfig {
                 .build();
 
         return new MapReactiveUserDetailsService(user);
-    }
+    }*/
 
     /*@Bean
     ReactiveAuthenticationManager authenticationManager(ReactiveUserDetailsService us) {
@@ -41,27 +41,27 @@ public class SecurityConfig {
     }*/
 
     @Bean
-    public SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
-        UserDetails user = User
-                .withUsername("master1")
-                .password("admin")
-                .roles("SUPER_ADMIN")
-                .passwordEncoder(PasswordEncoderFactories.createDelegatingPasswordEncoder()::encode)
-                .build();
+    SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
+        //UserDetails user = User
+        //        .withUsername("master1")
+        //        .password("admin")
+        //        .roles("SUPER_ADMIN")
+        //        .passwordEncoder(PasswordEncoderFactories.createDelegatingPasswordEncoder()::encode)
+        //        .build();
 
-        MapReactiveUserDetailsService userDetailsService = new MapReactiveUserDetailsService(user);
-        ReactiveAuthenticationManager authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService());
+        //MapReactiveUserDetailsService userDetailsService = new MapReactiveUserDetailsService(user);
+        //ReactiveAuthenticationManager authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService());
 
         http.authorizeExchange()
-                //.pathMatchers().permitAll()
+                //.pathMatchers("/login").permitAll()
                 .anyExchange().authenticated()
                 .and()
-                .csrf().disable().headers().frameOptions().disable()
-                .and()
-                .authenticationManager(authenticationManager)
+                .csrf().disable().headers().frameOptions().disable();
+                //.and()
+                //.authenticationManager(authenticationManager)
                 //.exceptionHandling()
                 //.accessDeniedHandler(new HttpStatusServerAccessDeniedHandler(HttpStatus.UNAUTHORIZED))
-                .httpBasic()
+                //.httpBasic();
                 //.securityContextRepository()
         ;
 
