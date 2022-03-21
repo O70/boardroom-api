@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authorization.HttpStatusServerAccessDeniedHandler;
 
@@ -40,6 +41,8 @@ public class SecurityConfig {
         return new UserDetailsRepositoryReactiveAuthenticationManager(us);
     }*/
 
+    ReactiveAuthenticationManager ReactiveAuthenticationManager;
+
     @Bean
     SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
         //UserDetails user = User
@@ -52,16 +55,26 @@ public class SecurityConfig {
         //MapReactiveUserDetailsService userDetailsService = new MapReactiveUserDetailsService(user);
         //ReactiveAuthenticationManager authenticationManager = new UserDetailsRepositoryReactiveAuthenticationManager(userDetailsService());
 
+        //UsernamePasswordAuthenticationFilter upFilter = new UsernamePasswordAuthenticationFilter();
+        //upFilter.setRequiresAuthenticationRequestMatcher();
+        //upFilter.setAuth
+
         http.authorizeExchange()
                 //.pathMatchers("/login").permitAll()
                 .anyExchange().authenticated()
                 .and()
-                .csrf().disable().headers().frameOptions().disable();
-                //.and()
+                .csrf().disable().headers().frameOptions().disable()
+                .and()
                 //.authenticationManager(authenticationManager)
                 //.exceptionHandling()
                 //.accessDeniedHandler(new HttpStatusServerAccessDeniedHandler(HttpStatus.UNAUTHORIZED))
-                //.httpBasic();
+                .httpBasic()
+                .and()
+                .formLogin()
+                .and()
+
+                //.addFilterAt()
+                //.exceptionHandling().accessDeniedHandler(new HttpStatusServerAccessDeniedHandler(HttpStatus.FORBIDDEN))
                 //.securityContextRepository()
         ;
 
