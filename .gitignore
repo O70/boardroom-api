@@ -55,3 +55,4 @@ tmp/
 !gradle-wrapper.jar
 
 *.tmp.*
+*-local.*
