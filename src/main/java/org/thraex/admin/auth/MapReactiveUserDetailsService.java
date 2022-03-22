@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.util.Map;
@@ -20,8 +19,8 @@ import java.util.stream.Stream;
  * @author 鬼王
  * @date 2022/03/22 11:33
  */
-@Service
-public class CryptoReactiveUserDetailsService implements ReactiveUserDetailsService {
+@Deprecated
+public class MapReactiveUserDetailsService implements ReactiveUserDetailsService {
 
     private static final Pattern PASSWORD_ALGORITHM_PATTERN = Pattern.compile("^\\{.+}.*$");
 
@@ -30,7 +29,7 @@ public class CryptoReactiveUserDetailsService implements ReactiveUserDetailsServ
 
     private final Map<String, UserDetails> users;
 
-    public CryptoReactiveUserDetailsService(SecurityProperties properties) {
+    public MapReactiveUserDetailsService(SecurityProperties properties) {
         SecurityProperties.User user = properties.getUser();
 
         String password = user.getPassword();

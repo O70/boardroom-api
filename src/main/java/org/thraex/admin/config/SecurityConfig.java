@@ -1,21 +1,12 @@
 package org.thraex.admin.config;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.authorization.HttpStatusServerAccessDeniedHandler;
+import org.thraex.admin.auth.JpaUserDetailsService;
+import org.thraex.admin.system.repository.UserRepository;
 
 /**
  * @author 鬼王
@@ -36,12 +27,10 @@ public class SecurityConfig {
         return new MapReactiveUserDetailsService(user);
     }*/
 
-    /*@Bean
-    ReactiveAuthenticationManager authenticationManager(ReactiveUserDetailsService us) {
-        return new UserDetailsRepositoryReactiveAuthenticationManager(us);
-    }*/
-
-    ReactiveAuthenticationManager ReactiveAuthenticationManager;
+    @Bean
+    ReactiveUserDetailsService userDetailsService(UserRepository userRepository) {
+        return new JpaUserDetailsService(userRepository);
+    }
 
     @Bean
     SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http) {
