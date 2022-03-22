@@ -1,8 +1,7 @@
-package org.thraex.admin.authentication;
+package org.thraex.admin.auth;
 
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 import org.springframework.security.web.server.util.matcher.MediaTypeServerWebExchangeMatcher;
@@ -19,6 +18,7 @@ import java.util.Collections;
  * @author 鬼王
  * @date 2022/03/21 22:18
  */
+@Deprecated
 public class CryptoAuthenticationWebFilter implements WebFilter {
 
     private ServerWebExchangeMatcher matcher = ServerWebExchangeMatchers
