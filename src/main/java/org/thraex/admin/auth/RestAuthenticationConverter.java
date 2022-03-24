@@ -5,6 +5,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
@@ -14,12 +16,18 @@ import reactor.core.publisher.Mono;
 import java.io.IOException;
 
 /**
+ * TODO: Solve [Only one connection receive subscriber allowed.]
+ *
+ *
+ *
  * @author 鬼王
  * @date 2022/03/22 18:44
  */
 public class RestAuthenticationConverter implements ServerAuthenticationConverter {
 
     private Logger logger = LoggerFactory.getLogger(RestAuthenticationConverter.class);
+
+    public static final String BASIC = "THRAEX ";
 
     public static RestAuthenticationConverter of() {
         return new RestAuthenticationConverter();
@@ -31,12 +39,33 @@ public class RestAuthenticationConverter implements ServerAuthenticationConverte
     }
 
     private Mono<Authentication> apply(ServerWebExchange exchange) {
+        ServerHttpRequest request = exchange.getRequest();
+
+        String authorization = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
+        if (authorization == null || !authorization.toLowerCase().startsWith("thraex ")) {
+            return Mono.empty();
+        }
+
+        String credentials = authorization.length() <= BASIC.length() ?
+                "" : authorization.substring(BASIC.length());
+        String[] parts = credentials.split(":");
+
+        if (parts.length != 2) {
+            return Mono.empty();
+        }
+
+        String username = parts[0];
+        String password = parts[1];
+
+        return Mono.just(new UsernamePasswordAuthenticationToken(username, password));
+
         //Mono<DataBuffer> mono = exchange.getRequest().getBody().single().switchIfEmpty(Mono.empty());
-        return exchange.getRequest().getBody().single().map(it -> {
+        /*return exchange.getRequest().getBody().single().map(it -> {
             Params p = Params.of(it);
+            logger.debug("{}", p);
 
             return new UsernamePasswordAuthenticationToken(p.getUsername(), p.getPassword());
-        });
+        });*/
 
         //return mono.map(Params::of).map(p -> new UsernamePasswordAuthenticationToken(p.getUsername(), p.getPassword()));
     }

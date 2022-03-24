@@ -9,7 +9,6 @@ import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
-import org.springframework.security.web.server.authentication.ServerFormLoginAuthenticationConverter;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import org.thraex.admin.auth.JpaUserDetailsService;
@@ -24,13 +23,6 @@ import org.thraex.admin.system.repository.UserRepository;
  */
 @EnableWebFluxSecurity
 public class SecurityConfig {
-
-    private ServerWebExchangeMatcher matcher = ServerWebExchangeMatchers.pathMatchers(HttpMethod.POST, "/auth/login");
-
-    //@Bean
-    //ReactiveUserDetailsService userDetailsService(UserRepository userRepository) {
-    //    return new JpaUserDetailsService(userRepository);
-    //}
 
     @Bean
     ReactiveAuthenticationManager authenticationManager(UserRepository userRepository) {
@@ -64,14 +56,15 @@ public class SecurityConfig {
         //        MediaType.APPLICATION_JSON, MediaType.APPLICATION_JSON_UTF8);
         //jsonMatcher.setIgnoredMediaTypes(Collections.singleton(MediaType.ALL));
 
+        ServerWebExchangeMatcher matcher = ServerWebExchangeMatchers.pathMatchers(HttpMethod.POST, "/auth/login");
         AuthenticationWebFilter filter = new AuthenticationWebFilter(manager);
         filter.setRequiresAuthenticationMatcher(matcher);
         filter.setAuthenticationSuccessHandler(RestServerAuthenticationSuccessHandler.of());
         filter.setAuthenticationFailureHandler(RestServerAuthenticationFailureHandler.of());
         //HttpStatusServerEntryPoint entryPoint = new HttpStatusServerEntryPoint(HttpStatus.UNAUTHORIZED);
         //filter.setAuthenticationFailureHandler(new ServerAuthenticationEntryPointFailureHandler(entryPoint));
-        //filter.setServerAuthenticationConverter(RestAuthenticationConverter.of());
-        filter.setServerAuthenticationConverter(new ServerFormLoginAuthenticationConverter());
+        filter.setServerAuthenticationConverter(RestAuthenticationConverter.of());
+        //filter.setServerAuthenticationConverter(new ServerFormLoginAuthenticationConverter());
 
         return filter;
     }
