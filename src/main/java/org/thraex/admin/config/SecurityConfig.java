@@ -9,6 +9,7 @@ import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+import org.springframework.security.web.server.authentication.ServerFormLoginAuthenticationConverter;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import org.thraex.admin.auth.JpaUserDetailsService;
@@ -45,12 +46,12 @@ public class SecurityConfig {
                 .and()
                 .csrf().disable().headers().frameOptions().disable()
                 .and()
-                .httpBasic()
-                .and()
-                .formLogin()
-                .and()
+                //.httpBasic()
+                //.and()
+                //.formLogin()
+                //.and()
                 .authenticationManager(manager)
-                .addFilterAt(webFilter(manager), SecurityWebFiltersOrder.HTTP_BASIC)
+                .addFilterAt(webFilter(manager), SecurityWebFiltersOrder.AUTHENTICATION)
                 //.exceptionHandling()
                 //.accessDeniedHandler(new HttpStatusServerAccessDeniedHandler(HttpStatus.UNAUTHORIZED))
         ;
@@ -69,7 +70,8 @@ public class SecurityConfig {
         filter.setAuthenticationFailureHandler(RestServerAuthenticationFailureHandler.of());
         //HttpStatusServerEntryPoint entryPoint = new HttpStatusServerEntryPoint(HttpStatus.UNAUTHORIZED);
         //filter.setAuthenticationFailureHandler(new ServerAuthenticationEntryPointFailureHandler(entryPoint));
-        filter.setServerAuthenticationConverter(RestAuthenticationConverter.of());
+        //filter.setServerAuthenticationConverter(RestAuthenticationConverter.of());
+        filter.setServerAuthenticationConverter(new ServerFormLoginAuthenticationConverter());
 
         return filter;
     }
