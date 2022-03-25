@@ -22,7 +22,8 @@ import org.thraex.admin.system.repository.UserRepository;
  * @author 鬼王
  * @date 2022/03/18 16:47
  */
-@EnableWebFluxSecurity
+@Deprecated
+//@EnableWebFluxSecurity
 public class SecurityConfig {
 
     @Bean

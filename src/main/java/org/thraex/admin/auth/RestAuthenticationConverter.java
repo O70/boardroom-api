@@ -23,6 +23,7 @@ import java.io.IOException;
  * @author 鬼王
  * @date 2022/03/22 18:44
  */
+@Deprecated
 public class RestAuthenticationConverter implements ServerAuthenticationConverter {
 
     private Logger logger = LoggerFactory.getLogger(RestAuthenticationConverter.class);

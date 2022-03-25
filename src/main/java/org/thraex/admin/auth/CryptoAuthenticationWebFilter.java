@@ -45,6 +45,7 @@ import reactor.core.publisher.Mono;
  * @author 鬼王
  * @date 2022/03/21 22:18
  */
+@Deprecated
 public class CryptoAuthenticationWebFilter implements WebFilter {
 
     private Logger logger = LoggerFactory.getLogger(CryptoAuthenticationWebFilter.class);

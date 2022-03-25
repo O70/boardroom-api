@@ -4,6 +4,7 @@ server:
 spring:
   application:
     name: fund-admin
+#    TODO: remove
   security:
     user:
       name: master

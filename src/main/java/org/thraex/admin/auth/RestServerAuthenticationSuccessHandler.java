@@ -20,6 +20,7 @@ import reactor.core.publisher.Mono;
  * @author 鬼王
  * @date 2022/03/22 17:40
  */
+@Deprecated
 public class RestServerAuthenticationSuccessHandler implements ServerAuthenticationSuccessHandler {
 
     private Logger logger = LoggerFactory.getLogger(RestServerAuthenticationSuccessHandler.class);

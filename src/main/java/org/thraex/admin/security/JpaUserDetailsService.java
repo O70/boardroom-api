@@ -1,12 +1,12 @@
-package org.thraex.admin.auth;
+package org.thraex.admin.security;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.thraex.admin.system.entity.User;
-import org.thraex.admin.system.repository.UserRepository;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
@@ -18,22 +18,25 @@ import java.util.function.Function;
  * @author 鬼王
  * @date 2022/03/22 15:38
  */
-@Deprecated
 public class JpaUserDetailsService implements ReactiveUserDetailsService {
 
     private static final String USERNAME = "username";
 
-    private final UserRepository userRepository;
+    private final JpaSpecificationExecutor<User> repository;
 
-    public JpaUserDetailsService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public JpaUserDetailsService(JpaSpecificationExecutor repository) {
+        this.repository = repository;
+    }
+
+    public static JpaUserDetailsService of(JpaSpecificationExecutor<User> repository) {
+        return new JpaUserDetailsService(repository);
     }
 
     @Override
     public Mono<UserDetails> findByUsername(String username) {
         return Optional.ofNullable(username)
                 .filter(StringUtils::isNotBlank)
-                .map(key -> userRepository.findOne((root, cq, cb) -> cb.equal(root.get(USERNAME), key)))
+                .map(key -> repository.findOne((root, cq, cb) -> cb.equal(root.get(USERNAME), key)))
                 .flatMap(Function.identity())
                 .map(this::with)
                 .map(Mono::just)
