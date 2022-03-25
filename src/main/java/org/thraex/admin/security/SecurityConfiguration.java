@@ -29,7 +29,7 @@ public class SecurityConfiguration {
                 .csrf().disable().headers().frameOptions().disable()
                 .and()
                 .authenticationManager(manager)
-                .addFilterAt(null, SecurityWebFiltersOrder.HTTP_BASIC)
+                .addFilterAt(LoginAuthenticationWebFilter.of(manager), SecurityWebFiltersOrder.HTTP_BASIC)
         ;
 
         return http.build();

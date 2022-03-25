@@ -8,12 +8,12 @@ import reactor.core.publisher.Mono;
 
 /**
  * @author 鬼王
- * @date 2022/03/22 18:44
+ * @date 2022/03/25 14:03
  */
-public class ServerLoginAuthenticationConverter implements ServerAuthenticationConverter {
+public class TokenAuthenticationConverter implements ServerAuthenticationConverter {
 
-    public static ServerLoginAuthenticationConverter of() {
-        return new ServerLoginAuthenticationConverter();
+    public static TokenAuthenticationConverter of() {
+        return new TokenAuthenticationConverter();
     }
 
     @Override

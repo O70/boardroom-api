@@ -11,29 +11,28 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
-
 /**
  * @author 鬼王
  * @date 2022/03/22 18:44
  */
-@Deprecated
-public class EncryptionAuthenticationWebFilter implements ServerAuthenticationConverter {
+public class LoginAuthenticationConverter implements ServerAuthenticationConverter {
 
-    private Logger logger = LoggerFactory.getLogger(EncryptionAuthenticationWebFilter.class);
+    private Logger logger = LoggerFactory.getLogger(LoginAuthenticationConverter.class);
 
-    public static EncryptionAuthenticationWebFilter of() {
-        return new EncryptionAuthenticationWebFilter();
+    public static LoginAuthenticationConverter of() {
+        return new LoginAuthenticationConverter();
     }
 
     @Override
     public Mono<Authentication> convert(ServerWebExchange exchange) {
-        return Optional.of(exchange.getRequest())
+        //Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
+        //        .filter(StringUtils::isNotBlank);
+        return Mono.just(exchange.getRequest())
                 .map(ServerHttpRequest::getHeaders)
-                .map(headers -> headers.getFirst(HttpHeaders.AUTHORIZATION))
-                .filter(StringUtils::isNotBlank)
-                .map(this::apply)
-                .orElse(Mono.empty());
+                .flatMap(headers -> Mono.justOrEmpty(headers.getFirst(HttpHeaders.AUTHORIZATION)))
+                //.filter(StringUtils::isNotBlank)
+                .filter(it -> StringUtils.isNotBlank(it))
+                .flatMap(this::apply);
     }
 
     private Mono<Authentication> apply(String authorization) {

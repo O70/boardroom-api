@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.ReactiveUserDetailsService;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.Assert;
 import org.thraex.admin.system.entity.User;
 import reactor.core.publisher.Mono;
 
@@ -24,7 +25,8 @@ public class JpaUserDetailsService implements ReactiveUserDetailsService {
 
     private final JpaSpecificationExecutor<User> repository;
 
-    public JpaUserDetailsService(JpaSpecificationExecutor repository) {
+    public JpaUserDetailsService(JpaSpecificationExecutor<User> repository) {
+        Assert.notNull(repository, "repository cannot be null");
         this.repository = repository;
     }
 
