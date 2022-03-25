@@ -11,6 +11,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
+import org.thraex.admin.auth.CryptoAuthenticationWebFilter;
 import org.thraex.admin.auth.JpaUserDetailsService;
 import org.thraex.admin.auth.RestAuthenticationConverter;
 import org.thraex.admin.auth.RestServerAuthenticationFailureHandler;
@@ -43,7 +44,8 @@ public class SecurityConfig {
                 //.formLogin()
                 //.and()
                 .authenticationManager(manager)
-                .addFilterAt(webFilter(manager), SecurityWebFiltersOrder.AUTHENTICATION)
+                //.addFilterAt(webFilter(manager), SecurityWebFiltersOrder.AUTHENTICATION)
+                .addFilterAt(CryptoAuthenticationWebFilter.of(), SecurityWebFiltersOrder.AUTHENTICATION)
                 //.exceptionHandling()
                 //.accessDeniedHandler(new HttpStatusServerAccessDeniedHandler(HttpStatus.UNAUTHORIZED))
         ;
