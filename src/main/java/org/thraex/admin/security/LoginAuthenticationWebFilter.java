@@ -1,7 +1,6 @@
 package org.thraex.admin.security;
 
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -53,33 +52,28 @@ public class LoginAuthenticationWebFilter implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
-        WebFilterExchange webFilterExchange = new WebFilterExchange(exchange, chain);
+        WebFilterExchange filterExchange = new WebFilterExchange(exchange, chain);
 
         return matcher.matches(exchange)
                 .filter(ServerWebExchangeMatcher.MatchResult::isMatch)
                 .switchIfEmpty(chain.filter(exchange).then(Mono.empty()))
                 .flatMap(matchResult -> authenticationConverter.convert(exchange))
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new BadCredentialsException("TODO: 用户名密码错误"))))
-                .flatMap(token -> authenticate(exchange, chain, token))
-                .onErrorResume(AuthenticationException.class, e -> authenticationFailureHandler
-                        .onAuthenticationFailure(webFilterExchange, e));
+                .flatMap(token -> authenticate(filterExchange, token))
+                .onErrorResume(AuthenticationException.class,
+                        e -> authenticationFailureHandler.onAuthenticationFailure(filterExchange, e));
     }
 
-    private Mono<Void> authenticate(ServerWebExchange exchange, WebFilterChain chain, Authentication token) {
-        WebFilterExchange webFilterExchange = new WebFilterExchange(exchange, chain);
+    private Mono<Void> authenticate(WebFilterExchange exchange, Authentication token) {
         return authenticationManager.authenticate(token)
                 .switchIfEmpty(Mono.defer(() -> Mono.error(new IllegalStateException("No provider found for " + token.getClass()))))
-                .flatMap(authentication -> onAuthenticationSuccess(webFilterExchange, authentication))
-                .onErrorResume(AuthenticationException.class, e -> authenticationFailureHandler
-                        .onAuthenticationFailure(webFilterExchange, e));
+                .flatMap(authentication -> onAuthenticationSuccess(exchange, authentication));
     }
 
-    protected Mono<Void> onAuthenticationSuccess(WebFilterExchange webFilterExchange, Authentication authentication) {
-        ServerWebExchange exchange = webFilterExchange.getExchange();
+    protected Mono<Void> onAuthenticationSuccess(WebFilterExchange exchange, Authentication authentication) {
         SecurityContextImpl securityContext = new SecurityContextImpl(authentication);
 
-        return securityContextRepository.save(exchange, securityContext)
-                .then(authenticationSuccessHandler.onAuthenticationSuccess(webFilterExchange, authentication))
+        return securityContextRepository.save(exchange.getExchange(), securityContext)
+                .then(authenticationSuccessHandler.onAuthenticationSuccess(exchange, authentication))
                 .subscriberContext(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(securityContext)));
     }
 

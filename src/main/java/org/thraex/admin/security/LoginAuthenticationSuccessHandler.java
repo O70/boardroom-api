@@ -23,10 +23,10 @@ public class LoginAuthenticationSuccessHandler implements ServerAuthenticationSu
     }
 
     @Override
-    public Mono<Void> onAuthenticationSuccess(WebFilterExchange webFilterExchange, Authentication authentication) {
+    public Mono<Void> onAuthenticationSuccess(WebFilterExchange exchange, Authentication authentication) {
         logger.info("Authentication success: [{}]", authentication.getName());
 
-        return LoginAuthenticationWriter.write(webFilterExchange, ResponseResult.ok("TOKEN is XXXXX-YYYY!"));
+        return LoginAuthenticationWriter.write(exchange, ResponseResult.ok("TOKEN is XXXXX-YYYY!"));
     }
 
 }

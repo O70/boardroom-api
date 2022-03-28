@@ -22,10 +22,10 @@ public class LoginAuthenticationFailureHandler implements ServerAuthenticationFa
     }
 
     @Override
-    public Mono<Void> onAuthenticationFailure(WebFilterExchange webFilterExchange, AuthenticationException exception) {
+    public Mono<Void> onAuthenticationFailure(WebFilterExchange exchange, AuthenticationException exception) {
         logger.info("Authentication failure: [{}]", exception.getMessage());
 
-        return LoginAuthenticationWriter.write(webFilterExchange,
+        return LoginAuthenticationWriter.write(exchange,
                 ResponseResult.fail(ResponseStatus.AUTHENTICATION_BAD_CREDENTIALS));
     }
 

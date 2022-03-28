@@ -7,15 +7,13 @@ import org.apache.commons.lang3.builder.ToStringStyle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.web.server.ServerWebExchange;
 import org.thraex.admin.generics.util.RSAUtil;
 import reactor.core.publisher.Mono;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 
 /**
  * @author 鬼王
@@ -41,7 +39,8 @@ public class LoginAuthenticationConverter implements ServerAuthenticationConvert
 
         return Mono.justOrEmpty(headers.getFirst(HttpHeaders.AUTHORIZATION))
                 .filter(StringUtils::isNotBlank)
-                .flatMap(this::apply);
+                .flatMap(this::apply)
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new BadCredentialsException("Invalid Credentials(Authorization)"))));
     }
 
     private Mono<Authentication> apply(String authorization) {
@@ -53,7 +52,7 @@ public class LoginAuthenticationConverter implements ServerAuthenticationConvert
             Params params = mapper.readValue(decrypted, Params.class);
 
             return Mono.just(new UsernamePasswordAuthenticationToken(params.getUsername(), params.getPassword()));
-        } catch (GeneralSecurityException | IOException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
 
