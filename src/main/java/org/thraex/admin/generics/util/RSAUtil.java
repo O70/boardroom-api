@@ -17,6 +17,7 @@ import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
+import java.util.Optional;
 
 /**
  * @author 鬼王
@@ -32,8 +33,12 @@ public abstract class RSAUtil {
     public static final Base64.Decoder DECODER = Base64.getDecoder();
 
     public static Pairs generator() throws NoSuchAlgorithmException {
+        return generator(KEY_SIZE);
+    }
+
+    public static Pairs generator(Integer keySize) throws NoSuchAlgorithmException {
         KeyPairGenerator generator = KeyPairGenerator.getInstance(ALGORITHM);
-        generator.initialize(KEY_SIZE);
+        generator.initialize(Optional.ofNullable(keySize).orElse(KEY_SIZE));
         KeyPair keyPair = generator.generateKeyPair();
 
         PublicKey publicKey = keyPair.getPublic();
@@ -41,6 +46,8 @@ public abstract class RSAUtil {
 
         String pub = ENCODER.encodeToString(publicKey.getEncoded());
         String prv = ENCODER.encodeToString(privateKey.getEncoded());
+        //String pub = new String(publicKey.getEncoded(), UTF_8);
+        //String prv = new String(privateKey.getEncoded(), UTF_8);
 
         return new Pairs(pub, prv);
     }
@@ -116,13 +123,13 @@ public abstract class RSAUtil {
         System.out.println("Private key:");
         System.out.println(pairs.prv());
 
-        String raw = "hanzo";
-        String encrypted = encrypt(raw, pairs.pub());
-        System.out.println("Encrypted:");
-        System.out.println(encrypted);
-
-        System.out.println("Decrypted:");
-        System.out.println(decrypt(encrypted, pairs.prv()));
+        //String raw = "hanzo";
+        //String encrypted = encrypt(raw, pairs.pub());
+        //System.out.println("Encrypted:");
+        //System.out.println(encrypted);
+        //
+        //System.out.println("Decrypted:");
+        //System.out.println(decrypt(encrypted, pairs.prv()));
     }
 
 }
