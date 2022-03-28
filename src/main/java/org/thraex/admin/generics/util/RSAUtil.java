@@ -109,7 +109,7 @@ public abstract class RSAUtil {
 
     }
 
-    public static void main(String[] args) throws GeneralSecurityException {
+    public static void main(String[] args) {
         //testAround();
         testDecrypt();
     }

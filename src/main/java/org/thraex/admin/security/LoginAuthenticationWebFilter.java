@@ -33,19 +33,22 @@ public class LoginAuthenticationWebFilter implements WebFilter {
 
     private ServerSecurityContextRepository securityContextRepository = NoOpServerSecurityContextRepository.getInstance();
 
-    private ServerAuthenticationConverter authenticationConverter = LoginAuthenticationConverter.of();
+    private ServerAuthenticationConverter authenticationConverter;
 
     private ServerAuthenticationSuccessHandler authenticationSuccessHandler = LoginAuthenticationSuccessHandler.of();
 
     private ServerAuthenticationFailureHandler authenticationFailureHandler = LoginAuthenticationFailureHandler.of();
 
-    public LoginAuthenticationWebFilter(ReactiveAuthenticationManager authenticationManager) {
+    public LoginAuthenticationWebFilter(ReactiveAuthenticationManager authenticationManager, String privateKey) {
         Assert.notNull(authenticationManager, "authenticationManager cannot be null");
+        Assert.notNull(privateKey, "privateKey cannot be null");
+
         this.authenticationManager = authenticationManager;
+        this.authenticationConverter = LoginAuthenticationConverter.of(privateKey);
     }
 
-    public static LoginAuthenticationWebFilter of(ReactiveAuthenticationManager authenticationManager) {
-        return new LoginAuthenticationWebFilter(authenticationManager);
+    public static LoginAuthenticationWebFilter of(ReactiveAuthenticationManager authenticationManager, String privateKey) {
+        return new LoginAuthenticationWebFilter(authenticationManager, privateKey);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package org.thraex.admin.security;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
@@ -16,6 +17,8 @@ import org.thraex.admin.system.repository.UserRepository;
 @EnableWebFluxSecurity
 public class SecurityConfiguration {
 
+    private static final String PRIVATE_KEY = "${thraex.security.rsa.private-key}";
+
     @Bean
     ReactiveAuthenticationManager authenticationManager(UserRepository userRepository) {
         JpaUserDetailsService service = JpaUserDetailsService.of(userRepository);
@@ -23,13 +26,15 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http, ReactiveAuthenticationManager manager) {
+    SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http,
+                                               ReactiveAuthenticationManager manager,
+                                               @Value(PRIVATE_KEY) String privateKey) {
         http.authorizeExchange().anyExchange().authenticated()
                 .and()
                 .csrf().disable().headers().frameOptions().disable()
                 .and()
                 .authenticationManager(manager)
-                .addFilterAt(LoginAuthenticationWebFilter.of(manager), SecurityWebFiltersOrder.HTTP_BASIC)
+                .addFilterAt(LoginAuthenticationWebFilter.of(manager, privateKey), SecurityWebFiltersOrder.HTTP_BASIC)
         ;
 
         return http.build();
