@@ -49,7 +49,12 @@ public class LoginAuthenticationConverter implements ServerAuthenticationConvert
     private Mono<Authentication> apply(String authorization) {
         logger.info("Authorization: [{}]", authorization);
 
-        String token = authorization.length() <= prefix.length() ? "" : authorization.substring(prefix.length());
+        if (!StringUtils.startsWithIgnoreCase(authorization, prefix)) {
+            return Mono.empty();
+        }
+
+        int length = prefix.length();
+        String token = authorization.length() <= length ? "" : authorization.substring(length);
         if (StringUtils.isBlank(token)) {
             return Mono.empty();
         }

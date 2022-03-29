@@ -21,9 +21,11 @@ public class TokenAuthenticationConverter implements ServerAuthenticationConvert
     private Logger logger = LoggerFactory.getLogger(TokenAuthenticationConverter.class);
 
     private TokenProcessor tokenProcessor;
+    private final String prefix;
 
     public TokenAuthenticationConverter(TokenProcessor tokenProcessor) {
         this.tokenProcessor = tokenProcessor;
+        this.prefix = tokenProcessor.getProperties().getPrefix();
     }
 
     public static TokenAuthenticationConverter of(TokenProcessor tokenProcessor) {
@@ -42,6 +44,10 @@ public class TokenAuthenticationConverter implements ServerAuthenticationConvert
 
     private Mono<Authentication> apply(String authorization) {
         logger.info("Authorization(Token): [{}]", authorization);
+
+        if (!StringUtils.startsWithIgnoreCase(authorization, prefix)) {
+            return Mono.empty();
+        }
 
         try {
             JwtClaims claims = tokenProcessor.verify(authorization);
