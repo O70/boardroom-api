@@ -10,6 +10,7 @@ import reactor.core.publisher.Mono;
  * @author 鬼王
  * @date 2022/03/25 14:03
  */
+@Deprecated
 public class TokenAuthenticationConverter implements ServerAuthenticationConverter {
 
     public static TokenAuthenticationConverter of() {

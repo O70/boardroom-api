@@ -1,7 +1,8 @@
 package org.thraex.admin.security;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
@@ -14,10 +15,13 @@ import org.thraex.admin.system.repository.UserRepository;
  * @author 鬼王
  * @date 2022/03/18 16:47
  */
+@Import({TokenProcessor.class,
+        LoginAuthenticationWebFilter.class,
+        LoginAuthenticationSuccessHandler.class,
+        TokenAuthenticationWebFilter.class })
+@EnableConfigurationProperties(TokenProperties.class)
 @EnableWebFluxSecurity
 public class SecurityConfiguration {
-
-    private static final String PRIVATE_KEY = "${thraex.security.rsa.private-key}";
 
     @Bean
     ReactiveAuthenticationManager authenticationManager(UserRepository userRepository) {
@@ -28,14 +32,15 @@ public class SecurityConfiguration {
     @Bean
     SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http,
                                                ReactiveAuthenticationManager manager,
-                                               @Value(PRIVATE_KEY) String privateKey) {
+                                               LoginAuthenticationWebFilter loginAuthenticationWebFilter,
+                                               TokenAuthenticationWebFilter tokenAuthenticationWebFilter) {
         http.authorizeExchange().anyExchange().authenticated()
                 .and()
                 .csrf().disable().headers().frameOptions().disable()
                 .and()
                 .authenticationManager(manager)
-                .addFilterAt(LoginAuthenticationWebFilter.of(manager, privateKey), SecurityWebFiltersOrder.HTTP_BASIC)
-        ;
+                .addFilterAt(loginAuthenticationWebFilter, SecurityWebFiltersOrder.HTTP_BASIC)
+                .addFilterAt(tokenAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION);
 
         return http.build();
     }
