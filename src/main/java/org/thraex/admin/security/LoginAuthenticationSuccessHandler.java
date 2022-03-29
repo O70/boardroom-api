@@ -3,14 +3,12 @@ package org.thraex.admin.security;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler;
 import org.thraex.admin.generics.response.ResponseResult;
 import reactor.core.publisher.Mono;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -36,11 +34,17 @@ public class LoginAuthenticationSuccessHandler implements ServerAuthenticationSu
         logger.info("Authentication success: [{}]", authentication.getName());
 
         String token = tokenProcessor.generate(claims -> {
-            User user = (User) authentication.getPrincipal();
-            claims.setSubject(user.getUsername());
-            Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-            claims.setStringListClaim("authorities",
-                    authorities.parallelStream().map(it -> it.getAuthority()).collect(Collectors.toList()));
+            //User user = (User) authentication.getPrincipal();
+            //Object credentials = authentication.getCredentials();
+            //Collection<? extends GrantedAuthority> authorities1 = authentication.getAuthorities();
+            //Object details = authentication.getDetails();
+            //String name = authentication.getName();
+
+            claims.setSubject(authentication.getName());
+            claims.setClaim("principal", authentication.getPrincipal());
+            //List<String> authorities = authentication.getAuthorities().parallelStream()
+            //        .map(it -> it.getAuthority()).collect(Collectors.toList());
+            //claims.setStringListClaim("authorities", authorities);
         });
 
         return LoginAuthenticationWriter.write(exchange, ResponseResult.ok(token));

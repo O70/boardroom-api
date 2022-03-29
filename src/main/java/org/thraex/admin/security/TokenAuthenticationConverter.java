@@ -1,5 +1,6 @@
 package org.thraex.admin.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.consumer.InvalidJwtException;
@@ -7,10 +8,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.web.server.ServerWebExchange;
+import org.thraex.admin.system.entity.User;
 import reactor.core.publisher.Mono;
+
+import java.io.IOException;
 
 /**
  * @author 鬼王
@@ -51,8 +56,15 @@ public class TokenAuthenticationConverter implements ServerAuthenticationConvert
 
         try {
             JwtClaims claims = tokenProcessor.verify(authorization);
+
             System.out.println(claims);
-        } catch (InvalidJwtException e) {
+            String principal = claims.getClaimValueAsString("principal");
+            ObjectMapper mapper = new ObjectMapper();
+            User user = mapper.readValue(principal, User.class);
+            System.out.println(user);
+
+            return Mono.just(new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()));
+        } catch (InvalidJwtException | IOException e) {
             e.printStackTrace();
         }
 
