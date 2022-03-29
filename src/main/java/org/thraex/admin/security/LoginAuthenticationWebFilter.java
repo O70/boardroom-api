@@ -43,7 +43,9 @@ public class LoginAuthenticationWebFilter implements WebFilter {
         Assert.notNull(tokenProcessor, "tokenProcessor cannot be null");
 
         this.authenticationManager = authenticationManager;
-        this.authenticationConverter = LoginAuthenticationConverter.of(tokenProcessor.getProperties().getPrivateKey());
+
+        TokenProperties properties = tokenProcessor.getProperties();
+        this.authenticationConverter = LoginAuthenticationConverter.of(properties.getPrefix(), properties.getPrivateKey());
         this.authenticationSuccessHandler = LoginAuthenticationSuccessHandler.of(tokenProcessor);
         this.authenticationFailureHandler = LoginAuthenticationFailureHandler.of();
     }

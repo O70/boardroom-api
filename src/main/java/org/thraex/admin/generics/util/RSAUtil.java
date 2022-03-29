@@ -39,20 +39,48 @@ public abstract class RSAUtil {
         byte[] privateKeyEncoded = privateKey.getEncoded();
 
         Base64.Encoder encoder = Base64.getEncoder();
-
         String pub = encoder.encodeToString(publicKeyEncoded);
         String prv = encoder.encodeToString(privateKeyEncoded);
 
         return new Pairs(pub, prv);
     }
 
-    public static String encrypt(String raw, String publicKey) throws GeneralSecurityException {
+    public static byte[] toBytes(String key) {
         Base64.Decoder decoder = Base64.getDecoder();
-        byte[] keyBytes = decoder.decode(publicKey);
+        byte[] bytes = decoder.decode(key);
+
+        return bytes;
+    }
+
+    public static PublicKey parsePublicKey(String publicKey) throws GeneralSecurityException {
+        byte[] keyBytes = toBytes(publicKey);
 
         KeyFactory instance = KeyFactory.getInstance(ALGORITHM);
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
         PublicKey pubKey = instance.generatePublic(keySpec);
+
+        return pubKey;
+    }
+
+    public static PrivateKey parsePrivateKey(String privateKey) throws GeneralSecurityException {
+        byte[] keyBytes = toBytes(privateKey);
+
+        KeyFactory instance = KeyFactory.getInstance(ALGORITHM);
+        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
+        PrivateKey prvKey = instance.generatePrivate(keySpec);
+
+        return prvKey;
+    }
+
+    public static KeyPair parser(String publicKey, String privateKey) throws GeneralSecurityException {
+        PublicKey pub = parsePublicKey(publicKey);
+        PrivateKey prv = parsePrivateKey(privateKey);
+
+        return new KeyPair(pub, prv);
+    }
+
+    public static String encrypt(String raw, String publicKey) throws GeneralSecurityException {
+        PublicKey pubKey = parsePublicKey(publicKey);
 
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, pubKey);
@@ -64,12 +92,7 @@ public abstract class RSAUtil {
     }
 
     public static String decrypt(String encrypted, String privateKey) throws GeneralSecurityException {
-        Base64.Decoder decoder = Base64.getDecoder();
-        byte[] keyBytes = decoder.decode(privateKey);
-
-        KeyFactory instance = KeyFactory.getInstance(ALGORITHM);
-        PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(keyBytes);
-        PrivateKey prvKey = instance.generatePrivate(keySpec);
+        PrivateKey prvKey = parsePrivateKey(privateKey);
 
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, prvKey);

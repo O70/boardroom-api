@@ -13,11 +13,16 @@ import org.jose4j.lang.JoseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+import org.thraex.admin.generics.util.RSAUtil;
 
+import java.security.GeneralSecurityException;
+import java.security.KeyPair;
 import java.util.Set;
 import java.util.function.Consumer;
 
 /**
+ * TODO: Opt
+ *
  * @author 鬼王
  * @date 2022/03/29 10:37
  */
@@ -31,23 +36,24 @@ public class TokenProcessor {
 
     private final JwtConsumer consumer;
 
-    public TokenProcessor(TokenProperties properties) throws JoseException {
+    public TokenProcessor(TokenProperties properties) throws JoseException, GeneralSecurityException {
         Assert.notNull(properties, "properties cannot be null");
 
         this.properties = properties;
         this.rsaJsonWebKey = RsaJwkGenerator.generateJwk(2048);
-        this.rsaJsonWebKey.setKeyId(properties.getKeyId());
-        // TODO
-        //this.rsaJsonWebKey.setPrivateKey();
+        rsaJsonWebKey.setKeyId(properties.getKeyId());
+
+        KeyPair keyPair = RSAUtil.parser(properties.getPublicKey(), properties.getPrivateKey());
+        rsaJsonWebKey.setPrivateKey(keyPair.getPrivate());
 
         JwtConsumerBuilder builder = new JwtConsumerBuilder()
                 .setRequireExpirationTime()
                 .setAllowedClockSkewInSeconds(30)
                 .setRequireSubject()
                 .setExpectedIssuer(properties.getIss())
-                .setVerificationKey(rsaJsonWebKey.getKey())
-                .setJwsAlgorithmConstraints(
-                        AlgorithmConstraints.ConstraintType.PERMIT, AlgorithmIdentifiers.RSA_USING_SHA256);
+                .setVerificationKey(keyPair.getPublic())
+                .setJwsAlgorithmConstraints(AlgorithmConstraints.ConstraintType.PERMIT,
+                        AlgorithmIdentifiers.RSA_USING_SHA256);
 
         Set<String> aud = properties.getAud();
         if (!aud.isEmpty()) {
@@ -100,7 +106,12 @@ public class TokenProcessor {
     }
 
     public JwtClaims verify(String token) throws InvalidJwtException {
-        return consumer.processToClaims(token);
+        Assert.notNull(token, "token cannot be null");
+
+        String prefix = properties.getPrefix();
+        String jwt = token.length() <= prefix.length() ? "" : token.substring(prefix.length());
+
+        return consumer.processToClaims(jwt);
     }
 
     public TokenProperties getProperties() {

@@ -23,14 +23,17 @@ public class LoginAuthenticationConverter implements ServerAuthenticationConvert
 
     private Logger logger = LoggerFactory.getLogger(LoginAuthenticationConverter.class);
 
+    private final String prefix;
+
     private final String privateKey;
 
-    public LoginAuthenticationConverter(String privateKey) {
+    public LoginAuthenticationConverter(String prefix, String privateKey) {
+        this.prefix = prefix;
         this.privateKey = privateKey;
     }
 
-    public static LoginAuthenticationConverter of(String privateKey) {
-        return new LoginAuthenticationConverter(privateKey);
+    public static LoginAuthenticationConverter of(String prefix, String privateKey) {
+        return new LoginAuthenticationConverter(prefix, privateKey);
     }
 
     @Override
@@ -46,8 +49,13 @@ public class LoginAuthenticationConverter implements ServerAuthenticationConvert
     private Mono<Authentication> apply(String authorization) {
         logger.info("Authorization: [{}]", authorization);
 
+        String token = authorization.length() <= prefix.length() ? "" : authorization.substring(prefix.length());
+        if (StringUtils.isBlank(token)) {
+            return Mono.empty();
+        }
+
         try {
-            String decrypted = RSAUtil.decrypt(authorization, privateKey);
+            String decrypted = RSAUtil.decrypt(token, privateKey);
             ObjectMapper mapper = new ObjectMapper();
             Params params = mapper.readValue(decrypted, Params.class);
 
