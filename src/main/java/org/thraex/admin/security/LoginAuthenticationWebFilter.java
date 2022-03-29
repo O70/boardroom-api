@@ -1,6 +1,5 @@
 package org.thraex.admin.security;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;
@@ -27,8 +26,6 @@ import reactor.core.publisher.Mono;
  */
 public class LoginAuthenticationWebFilter implements WebFilter {
 
-    private static final String PRIVATE_KEY = "${thraex.security.rsa.private-key}";
-
     private final ReactiveAuthenticationManager authenticationManager;
 
     private ServerWebExchangeMatcher matcher = ServerWebExchangeMatchers.pathMatchers(HttpMethod.POST, "/auth/login");
@@ -39,19 +36,16 @@ public class LoginAuthenticationWebFilter implements WebFilter {
 
     private ServerAuthenticationSuccessHandler authenticationSuccessHandler;
 
-    private ServerAuthenticationFailureHandler authenticationFailureHandler = LoginAuthenticationFailureHandler.of();
+    private ServerAuthenticationFailureHandler authenticationFailureHandler;
 
-    public LoginAuthenticationWebFilter(ReactiveAuthenticationManager authenticationManager,
-                                        ServerAuthenticationSuccessHandler authenticationSuccessHandler,
-                                        @Value(PRIVATE_KEY) String privateKey) {
+    public LoginAuthenticationWebFilter(ReactiveAuthenticationManager authenticationManager, TokenProcessor tokenProcessor) {
         Assert.notNull(authenticationManager, "authenticationManager cannot be null");
-        Assert.notNull(privateKey, "privateKey cannot be null");
+        Assert.notNull(tokenProcessor, "tokenProcessor cannot be null");
 
         this.authenticationManager = authenticationManager;
-        this.authenticationConverter = LoginAuthenticationConverter.of(privateKey);
-        //this.authenticationConverter = authenticationConverter;
-        this.authenticationSuccessHandler = authenticationSuccessHandler;
-        //this.authenticationSuccessHandler = LoginAuthenticationSuccessHandler.of(tokenProcessor);
+        this.authenticationConverter = LoginAuthenticationConverter.of(tokenProcessor.getProperties().getPrivateKey());
+        this.authenticationSuccessHandler = LoginAuthenticationSuccessHandler.of(tokenProcessor);
+        this.authenticationFailureHandler = LoginAuthenticationFailureHandler.of();
     }
 
     @Override

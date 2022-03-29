@@ -15,10 +15,11 @@ import org.thraex.admin.system.repository.UserRepository;
  * @author 鬼王
  * @date 2022/03/18 16:47
  */
-@Import({TokenProcessor.class,
-        LoginAuthenticationWebFilter.class,
-        LoginAuthenticationSuccessHandler.class,
-        TokenAuthenticationWebFilter.class })
+@Import({
+    TokenProcessor.class,
+    LoginAuthenticationWebFilter.class,
+    TokenAuthenticationWebFilter.class
+})
 @EnableConfigurationProperties(TokenProperties.class)
 @EnableWebFluxSecurity
 public class SecurityConfiguration {

@@ -98,4 +98,16 @@ public class TokenProcessor {
         return consumer.processToClaims(token);
     }
 
+    public TokenProperties getProperties() {
+        return properties;
+    }
+
+    public String getPrivateKey() {
+        return properties.getPrivateKey();
+    }
+
+    public String getPublicKey() {
+        return properties.getPublicKey();
+    }
+
 }
