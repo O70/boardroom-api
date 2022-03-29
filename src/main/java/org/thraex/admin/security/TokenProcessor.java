@@ -10,6 +10,8 @@ import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
 import org.jose4j.lang.JoseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
 import java.util.Set;
@@ -21,9 +23,12 @@ import java.util.function.Consumer;
  */
 public class TokenProcessor {
 
+    private Logger logger = LoggerFactory.getLogger(TokenProcessor.class);
+
     private final TokenProperties properties;
 
     private final RsaJsonWebKey rsaJsonWebKey;
+
     private final JwtConsumer consumer;
 
     public TokenProcessor(TokenProperties properties) throws JoseException {
@@ -79,10 +84,10 @@ public class TokenProcessor {
         try {
             jwt = jws.getCompactSerialization();
         } catch (JoseException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
 
-        return jwt;
+        return String.format("%s%s", properties.getPrefix(), jwt);
     }
 
     public String generate(Consumer<JwtClaims> consumer) {

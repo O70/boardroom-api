@@ -42,6 +42,11 @@ public class TokenProperties {
     private float nbf = 2;
 
     /**
+     * Bearer Authentication
+     */
+    private String prefix = "Bearer ";
+
+    /**
      * RSA public key
      */
     private String publicKey = "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgVt4gqPbRI6I+hx3bX9pOPQzpoRNXO+zA5el5gTmhOE6mpfJFmg+097/Msn879H/REZfn2GGT+jGug4WbR5gMKA2G/73M0gfK69Uo6vdS0zMeUeDreAsYG5appgBt3P5zziG/1HCzwjw4Wft57owhDVJFOpkO65n6gKiNR3q6pbelVm2UZcLCSJDF/tt4DhKdyaBwK0xFJ/wRGPKBVBmu1uJKN4KbIQQjhr52BelUdrMJAI+d53ZjNkudK4TVkQikmSpHHYGji/rQ1OKEjSEEanqoGy5oDfzP6Xr//oMMSEAPLFOweJEx77omRKUkmwp4RYKUfy0F1ln8OxAWNrQfQIDAQAB";
@@ -93,6 +98,15 @@ public class TokenProperties {
 
     public TokenProperties setNbf(float nbf) {
         this.nbf = nbf;
+        return this;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public TokenProperties setPrefix(String prefix) {
+        this.prefix = prefix;
         return this;
     }
 
