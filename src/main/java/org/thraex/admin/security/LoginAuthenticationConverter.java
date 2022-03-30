@@ -12,10 +12,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.web.server.ServerWebExchange;
+import org.thraex.admin.generics.response.ResponseStatus;
 import org.thraex.admin.generics.util.RSAUtil;
 import reactor.core.publisher.Mono;
 
 /**
+ * TODO: Opt Exception
+ *
  * @author 鬼王
  * @date 2022/03/22 18:44
  */
@@ -43,7 +46,7 @@ public class LoginAuthenticationConverter implements ServerAuthenticationConvert
         return Mono.justOrEmpty(headers.getFirst(HttpHeaders.AUTHORIZATION))
                 .filter(StringUtils::isNotBlank)
                 .flatMap(this::apply)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new BadCredentialsException("Invalid Credentials(Authorization)"))));
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new BadCredentialsException(ResponseStatus.AUTHENTICATION_BAD_CREDENTIALS.phrase()))));
     }
 
     private Mono<Authentication> apply(String authorization) {

@@ -1,6 +1,12 @@
 package org.thraex.admin.security;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
@@ -20,15 +26,20 @@ import reactor.core.publisher.Mono;
  */
 public class TokenAuthenticationWebFilter implements WebFilter {
 
+    private Logger logger = LoggerFactory.getLogger(TokenAuthenticationWebFilter.class);
+
     private ServerWebExchangeMatcher matcher = ServerWebExchangeMatchers.anyExchange();
 
     private ServerSecurityContextRepository securityContextRepository = NoOpServerSecurityContextRepository.getInstance();
 
     private ServerAuthenticationConverter authenticationConverter;
 
+    private final String prefix;
+
     public TokenAuthenticationWebFilter(TokenProcessor tokenProcessor) {
         Assert.notNull(tokenProcessor, "tokenProcessor cannot be null");
         this.authenticationConverter = TokenAuthenticationConverter.of(tokenProcessor);
+        this.prefix = tokenProcessor.getProperties().getPrefix();
     }
 
     public static TokenAuthenticationWebFilter of(TokenProcessor tokenProcessor) {
@@ -41,7 +52,8 @@ public class TokenAuthenticationWebFilter implements WebFilter {
                 .filter(ServerWebExchangeMatcher.MatchResult::isMatch)
                 .switchIfEmpty(chain.filter(exchange).then(Mono.empty()))
                 .flatMap(matchResult -> authenticationConverter.convert(exchange))
-                .flatMap(authentication -> onAuthenticationSuccess(exchange, chain, authentication));
+                .flatMap(authentication -> onAuthenticationSuccess(exchange, chain, authentication))
+                .onErrorResume(AuthenticationException.class, e -> onAuthenticationFailure(exchange, e));
     }
 
     protected Mono<Void> onAuthenticationSuccess(ServerWebExchange exchange,
@@ -52,6 +64,18 @@ public class TokenAuthenticationWebFilter implements WebFilter {
         return securityContextRepository.save(exchange, securityContext)
                 .thenEmpty(chain.filter(exchange).then(Mono.empty()))
                 .subscriberContext(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(securityContext)));
+    }
+
+    protected Mono<Void> onAuthenticationFailure(ServerWebExchange exchange, AuthenticationException exception) {
+        String message = exception.getMessage();
+        logger.info("Authentication(Token) failure: [{}]", message);
+
+        return Mono.fromRunnable(() -> {
+            ServerHttpResponse response = exchange.getResponse();
+            response.setStatusCode(HttpStatus.UNAUTHORIZED);
+            HttpHeaders headers = response.getHeaders();
+            headers.set(HttpHeaders.WWW_AUTHENTICATE, String.format("%s error=\"%s\"", prefix, message));
+        });
     }
 
 }

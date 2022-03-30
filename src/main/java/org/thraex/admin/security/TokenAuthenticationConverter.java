@@ -8,16 +8,20 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.web.server.ServerWebExchange;
+import org.thraex.admin.generics.response.ResponseStatus;
 import org.thraex.admin.system.entity.User;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 
 /**
+ * TODO: Opt Exception
+ *
  * @author 鬼王
  * @date 2022/03/25 14:03
  */
@@ -44,7 +48,7 @@ public class TokenAuthenticationConverter implements ServerAuthenticationConvert
         return Mono.justOrEmpty(headers.getFirst(HttpHeaders.AUTHORIZATION))
                 .filter(StringUtils::isNotBlank)
                 .flatMap(this::apply)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new BadCredentialsException("Invalid Credentials(Authorization Token)"))));
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new BadCredentialsException(message(ResponseStatus.AUTHENTICATION_INVALID_TOKEN)))));
     }
 
     private Mono<Authentication> apply(String authorization) {
@@ -64,14 +68,18 @@ public class TokenAuthenticationConverter implements ServerAuthenticationConvert
         } catch (InvalidJwtException e) {
             logger.error(e.getMessage());
 
-            //logger.error(e);
-            //return Mono.defer(() -> Mono.error(new BadCredentialsException("Invalid Credentials(Authorization Token)")));
-            //return Mono.error(new BadCredentialsException("Invalid Credentials(Authorization Token)"));
+            if (e.hasExpired()) {
+                throw new CredentialsExpiredException(message(ResponseStatus.AUTHENTICATION_EXPIRED_TOKEN));
+            }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
 
-        return Mono.empty();
+        throw new BadCredentialsException(message(ResponseStatus.AUTHENTICATION_INVALID_TOKEN));
+    }
+
+    private String message(ResponseStatus status) {
+        return status.toString();
     }
 
 }
