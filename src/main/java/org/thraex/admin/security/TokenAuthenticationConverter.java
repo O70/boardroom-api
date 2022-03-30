@@ -56,16 +56,19 @@ public class TokenAuthenticationConverter implements ServerAuthenticationConvert
 
         try {
             JwtClaims claims = tokenProcessor.verify(authorization);
-
-            System.out.println(claims);
             String principal = claims.getClaimValueAsString("principal");
             ObjectMapper mapper = new ObjectMapper();
             User user = mapper.readValue(principal, User.class);
-            System.out.println(user);
 
             return Mono.just(new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()));
-        } catch (InvalidJwtException | IOException e) {
-            e.printStackTrace();
+        } catch (InvalidJwtException e) {
+            logger.error(e.getMessage());
+
+            //logger.error(e);
+            //return Mono.defer(() -> Mono.error(new BadCredentialsException("Invalid Credentials(Authorization Token)")));
+            //return Mono.error(new BadCredentialsException("Invalid Credentials(Authorization Token)"));
+        } catch (IOException e) {
+            logger.error(e.getMessage());
         }
 
         return Mono.empty();

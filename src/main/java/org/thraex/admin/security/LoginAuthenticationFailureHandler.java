@@ -2,6 +2,7 @@ package org.thraex.admin.security;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.authentication.ProviderNotFoundException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.ServerAuthenticationFailureHandler;
@@ -23,10 +24,14 @@ public class LoginAuthenticationFailureHandler implements ServerAuthenticationFa
 
     @Override
     public Mono<Void> onAuthenticationFailure(WebFilterExchange exchange, AuthenticationException exception) {
-        logger.info("Authentication failure: [{}]", exception.getMessage());
+        String message = exception.getMessage();
+        logger.warn("Authentication failure: [{}]", message);
 
-        return LoginAuthenticationWriter.write(exchange,
-                ResponseResult.fail(ResponseStatus.AUTHENTICATION_BAD_CREDENTIALS));
+        ResponseStatus status = exception instanceof ProviderNotFoundException ?
+                ResponseStatus.INTERNAL_SERVER_ERROR :
+                ResponseStatus.AUTHENTICATION_BAD_CREDENTIALS;
+
+        return LoginAuthenticationWriter.write(exchange, ResponseResult.fail(status, message));
     }
 
 }

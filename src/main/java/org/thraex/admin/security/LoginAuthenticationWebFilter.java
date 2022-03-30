@@ -1,6 +1,7 @@
 package org.thraex.admin.security;
 
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.ProviderNotFoundException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -65,7 +66,7 @@ public class LoginAuthenticationWebFilter implements WebFilter {
 
     private Mono<Void> authenticate(WebFilterExchange exchange, Authentication token) {
         return authenticationManager.authenticate(token)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new IllegalStateException("No provider found for " + token.getClass()))))
+                .switchIfEmpty(Mono.defer(() -> Mono.error(new ProviderNotFoundException("No provider found for " + token.getClass()))))
                 .flatMap(authentication -> onAuthenticationSuccess(exchange, authentication));
     }
 

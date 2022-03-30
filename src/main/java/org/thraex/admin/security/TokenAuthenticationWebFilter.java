@@ -1,8 +1,11 @@
 package org.thraex.admin.security;
 
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.server.WebFilterExchange;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
+import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
+import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
+import org.springframework.security.web.server.context.ServerSecurityContextRepository;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
 import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import org.springframework.util.Assert;
@@ -18,6 +21,8 @@ import reactor.core.publisher.Mono;
 public class TokenAuthenticationWebFilter implements WebFilter {
 
     private ServerWebExchangeMatcher matcher = ServerWebExchangeMatchers.anyExchange();
+
+    private ServerSecurityContextRepository securityContextRepository = NoOpServerSecurityContextRepository.getInstance();
 
     private ServerAuthenticationConverter authenticationConverter;
 
@@ -36,12 +41,17 @@ public class TokenAuthenticationWebFilter implements WebFilter {
                 .filter(ServerWebExchangeMatcher.MatchResult::isMatch)
                 .switchIfEmpty(chain.filter(exchange).then(Mono.empty()))
                 .flatMap(matchResult -> authenticationConverter.convert(exchange))
-                .flatMap(token -> authenticate(null, token))
-                ;
+                .flatMap(authentication -> onAuthenticationSuccess(exchange, chain, authentication));
     }
 
-    private Mono<Void> authenticate(WebFilterExchange exchange, Authentication token) {
-        return null;
+    protected Mono<Void> onAuthenticationSuccess(ServerWebExchange exchange,
+                                                 WebFilterChain chain,
+                                                 Authentication authentication) {
+        SecurityContextImpl securityContext = new SecurityContextImpl(authentication);
+
+        return securityContextRepository.save(exchange, securityContext)
+                .thenEmpty(chain.filter(exchange).then(Mono.empty()))
+                .subscriberContext(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(securityContext)));
     }
 
 }

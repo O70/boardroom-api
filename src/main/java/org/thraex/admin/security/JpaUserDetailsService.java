@@ -19,8 +19,6 @@ import java.util.function.Function;
  */
 public class JpaUserDetailsService implements ReactiveUserDetailsService {
 
-    private static final String USERNAME = "username";
-
     private final JpaSpecificationExecutor<User> repository;
 
     public JpaUserDetailsService(JpaSpecificationExecutor<User> repository) {
@@ -36,7 +34,7 @@ public class JpaUserDetailsService implements ReactiveUserDetailsService {
     public Mono<UserDetails> findByUsername(String username) {
         return Optional.ofNullable(username)
                 .filter(StringUtils::isNotBlank)
-                .map(key -> repository.findOne((root, cq, cb) -> cb.equal(root.get(USERNAME), key)))
+                .map(key -> repository.findOne((root, cq, cb) -> cb.equal(root.get("username"), key)))
                 .flatMap(Function.identity())
                 .map(this::with)
                 .map(Mono::just)
@@ -44,24 +42,9 @@ public class JpaUserDetailsService implements ReactiveUserDetailsService {
     }
 
     private UserDetails with(User user) {
+        // TODO: Authorities
         String password = String.format("{bcrypt}%s", user.getPassword());
         return user.setPassword(password);
-
-        /*String username = user.getUsername();
-        String password = String.format("{bcrypt}%s", user.getPassword());
-
-        List<GrantedAuthority> authorities = new ArrayList<>(1);
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + username.toUpperCase()));
-
-        return new org.springframework.security.core.userdetails.User(
-                username,
-                password,
-                user.isEnabled(),
-                user.isExpired(),
-                false,
-                user.isLocked(),
-                authorities
-        );*/
     }
 
 }
