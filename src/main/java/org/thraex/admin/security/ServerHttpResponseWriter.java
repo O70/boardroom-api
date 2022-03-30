@@ -16,13 +16,19 @@ import reactor.core.publisher.Mono;
  * @author 鬼王
  * @date 2022/03/25 17:35
  */
-public abstract class LoginAuthenticationWriter {
+public abstract class ServerHttpResponseWriter {
 
-    public static Mono<Void> write(WebFilterExchange webFilterExchange, ResponseResult<String> data) {
-        ServerWebExchange exchange = webFilterExchange.getExchange();
-        ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(HttpStatus.OK);
+    public static Mono<Void> ok(WebFilterExchange exchange, ResponseResult<String> data) {
+        return write(exchange.getExchange(), HttpStatus.OK, data);
+    }
+
+    public static Mono<Void> write(ServerWebExchange exchange, HttpStatus status, ResponseResult<String> data) {
+        return write(exchange.getResponse(), status, data);
+    }
+
+    public static Mono<Void> write(ServerHttpResponse response, HttpStatus status, ResponseResult<String> data) {
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON_UTF8);
+        response.setStatusCode(status);
 
         ObjectMapper mapper = new ObjectMapper();
         byte[] bytes = new byte[0];
@@ -32,7 +38,7 @@ public abstract class LoginAuthenticationWriter {
             e.printStackTrace();
         }
 
-        DataBufferFactory bufferFactory = exchange.getResponse().bufferFactory();
+        DataBufferFactory bufferFactory = response.bufferFactory();
         DataBuffer wrap = bufferFactory.wrap(bytes);
 
         return response.writeWith(Mono.just(wrap));

@@ -15,6 +15,7 @@ public enum ResponseStatus {
     AUTHENTICATION_BAD_CREDENTIALS(40400, "Invalid Credentials"),
     AUTHENTICATION_INVALID_TOKEN(40401, "Invalid Token"),
     AUTHENTICATION_EXPIRED_TOKEN(40402, "Expired Token"),
+    AUTHENTICATION_ACCESS_DENIED(40403, "Access Denied"),
     INTERNAL_SERVER_ERROR(50000, "Internal Server Error");
 
     private final int value;

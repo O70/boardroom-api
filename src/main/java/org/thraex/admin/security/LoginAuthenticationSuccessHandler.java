@@ -35,7 +35,7 @@ public class LoginAuthenticationSuccessHandler implements ServerAuthenticationSu
             claims.setClaim("principal", authentication.getPrincipal());
         });
 
-        return LoginAuthenticationWriter.write(exchange, ResponseResult.ok(token));
+        return ServerHttpResponseWriter.ok(exchange, ResponseResult.ok(token));
     }
 
 }

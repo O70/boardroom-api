@@ -31,7 +31,7 @@ public class LoginAuthenticationFailureHandler implements ServerAuthenticationFa
                 ResponseStatus.INTERNAL_SERVER_ERROR :
                 ResponseStatus.AUTHENTICATION_BAD_CREDENTIALS;
 
-        return LoginAuthenticationWriter.write(exchange, ResponseResult.fail(status, message));
+        return ServerHttpResponseWriter.ok(exchange, ResponseResult.fail(status, message));
     }
 
 }

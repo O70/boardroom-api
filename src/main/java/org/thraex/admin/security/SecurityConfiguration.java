@@ -3,13 +3,17 @@ package org.thraex.admin.security;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.thraex.admin.generics.response.ResponseResult;
+import org.thraex.admin.generics.response.ResponseStatus;
 import org.thraex.admin.system.repository.UserRepository;
+import reactor.core.publisher.Mono;
 
 /**
  * @author 鬼王
@@ -35,13 +39,19 @@ public class SecurityConfiguration {
                                                ReactiveAuthenticationManager manager,
                                                LoginAuthenticationWebFilter loginAuthenticationWebFilter,
                                                TokenAuthenticationWebFilter tokenAuthenticationWebFilter) {
-        http.authorizeExchange().anyExchange().authenticated()
+        http.authorizeExchange()
+                // TODO: Remove
+                .pathMatchers("/role").hasAuthority("SUPER")
+                .anyExchange().authenticated()
                 .and()
                 .csrf().disable().headers().frameOptions().disable()
                 .and()
                 .authenticationManager(manager)
                 .addFilterAt(loginAuthenticationWebFilter, SecurityWebFiltersOrder.HTTP_BASIC)
-                .addFilterAt(tokenAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION);
+                .addFilterAt(tokenAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+                .exceptionHandling().accessDeniedHandler((exchange, e) -> Mono.defer(() ->
+                    ServerHttpResponseWriter.write(exchange, HttpStatus.FORBIDDEN,
+                        ResponseResult.fail(ResponseStatus.AUTHENTICATION_ACCESS_DENIED))));
 
         return http.build();
     }
