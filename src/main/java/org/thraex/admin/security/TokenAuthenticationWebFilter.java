@@ -18,7 +18,11 @@ import org.springframework.util.Assert;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
+import org.thraex.admin.generics.response.ResponseResult;
+import org.thraex.admin.generics.response.ResponseStatus;
 import reactor.core.publisher.Mono;
+
+import java.util.Optional;
 
 /**
  * @author 鬼王
@@ -62,7 +66,7 @@ public class TokenAuthenticationWebFilter implements WebFilter {
         SecurityContextImpl securityContext = new SecurityContextImpl(authentication);
 
         return securityContextRepository.save(exchange, securityContext)
-                .thenEmpty(chain.filter(exchange).then(Mono.empty()))
+                .then(chain.filter(exchange))
                 .subscriberContext(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(securityContext)));
     }
 
@@ -72,9 +76,17 @@ public class TokenAuthenticationWebFilter implements WebFilter {
 
         return Mono.fromRunnable(() -> {
             ServerHttpResponse response = exchange.getResponse();
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
             HttpHeaders headers = response.getHeaders();
             headers.set(HttpHeaders.WWW_AUTHENTICATE, String.format("%s error=\"%s\"", prefix, message));
+
+            ResponseStatus status = null;
+            if (exception instanceof TokenAuthenticationException) {
+                TokenAuthenticationException e = (TokenAuthenticationException) exception;
+                status = e.getStatus();
+            }
+
+            ServerHttpResponseWriter.write(response, HttpStatus.UNAUTHORIZED,
+                    ResponseResult.fail(Optional.ofNullable(status).orElse(ResponseStatus.AUTHENTICATION_INVALID_TOKEN)));
         });
     }
 

@@ -7,8 +7,6 @@ import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
@@ -48,7 +46,7 @@ public class TokenAuthenticationConverter implements ServerAuthenticationConvert
         return Mono.justOrEmpty(headers.getFirst(HttpHeaders.AUTHORIZATION))
                 .filter(StringUtils::isNotBlank)
                 .flatMap(this::apply)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(new BadCredentialsException(message(ResponseStatus.AUTHENTICATION_INVALID_TOKEN)))));
+                .switchIfEmpty(Mono.defer(() -> Mono.error(TokenAuthenticationException.of(ResponseStatus.AUTHENTICATION_INVALID_TOKEN))));
     }
 
     private Mono<Authentication> apply(String authorization) {
@@ -69,17 +67,13 @@ public class TokenAuthenticationConverter implements ServerAuthenticationConvert
             logger.error(e.getMessage());
 
             if (e.hasExpired()) {
-                throw new CredentialsExpiredException(message(ResponseStatus.AUTHENTICATION_EXPIRED_TOKEN));
+                throw TokenAuthenticationException.of(ResponseStatus.AUTHENTICATION_EXPIRED_TOKEN);
             }
         } catch (IOException e) {
             logger.error(e.getMessage());
         }
 
-        throw new BadCredentialsException(message(ResponseStatus.AUTHENTICATION_INVALID_TOKEN));
-    }
-
-    private String message(ResponseStatus status) {
-        return status.toString();
+        throw TokenAuthenticationException.of(ResponseStatus.AUTHENTICATION_INVALID_TOKEN);
     }
 
 }
