@@ -8,5 +8,7 @@
 - [ ] Optimization response result(ok/fail)
 - [ ] Optimization exception
 - [ ] Permitted
-- [ ] Fix **Auditor**
+- [ ] Fix **Auditor**, use **Redis**
+- [ ] `LogoutWebFilter`
 - [ ] Clear `@Deprecated` codes
+- [ ] Testing

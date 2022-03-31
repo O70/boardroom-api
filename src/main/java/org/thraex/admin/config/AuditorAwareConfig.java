@@ -17,7 +17,7 @@ public class AuditorAwareConfig implements AuditorAware<String> {
     @Override
     public Optional<String> getCurrentAuditor() {
         // TODO: Get user id
-        return Optional.ofNullable("HANZO");
+        return Optional.of("HANZO");
     }
 
 }
