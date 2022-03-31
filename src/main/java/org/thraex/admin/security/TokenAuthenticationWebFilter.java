@@ -74,20 +74,18 @@ public class TokenAuthenticationWebFilter implements WebFilter {
         String message = exception.getMessage();
         logger.info("Authentication(Token) failure: [{}]", message);
 
-        return Mono.fromRunnable(() -> {
-            ServerHttpResponse response = exchange.getResponse();
-            HttpHeaders headers = response.getHeaders();
-            headers.set(HttpHeaders.WWW_AUTHENTICATE, String.format("%s error=\"%s\"", prefix, message));
+        ServerHttpResponse response = exchange.getResponse();
+        HttpHeaders headers = response.getHeaders();
+        headers.set(HttpHeaders.WWW_AUTHENTICATE, String.format("%s error=\"%s\"", prefix, message));
 
-            ResponseStatus status = null;
-            if (exception instanceof TokenAuthenticationException) {
-                TokenAuthenticationException e = (TokenAuthenticationException) exception;
-                status = e.getStatus();
-            }
+        ResponseStatus status = null;
+        if (exception instanceof TokenAuthenticationException) {
+            TokenAuthenticationException e = (TokenAuthenticationException) exception;
+            status = e.getStatus();
+        }
 
-            ServerHttpResponseWriter.write(response, HttpStatus.UNAUTHORIZED,
-                    ResponseResult.fail(Optional.ofNullable(status).orElse(ResponseStatus.AUTHENTICATION_INVALID_TOKEN)));
-        });
+        return ServerHttpResponseWriter.write(response, HttpStatus.UNAUTHORIZED,
+                ResponseResult.fail(Optional.ofNullable(status).orElse(ResponseStatus.AUTHENTICATION_INVALID_TOKEN)));
     }
 
 }
