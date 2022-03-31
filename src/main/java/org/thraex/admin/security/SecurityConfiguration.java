@@ -19,11 +19,7 @@ import reactor.core.publisher.Mono;
  * @author 鬼王
  * @date 2022/03/18 16:47
  */
-@Import({
-    TokenProcessor.class,
-    LoginAuthenticationWebFilter.class,
-    TokenAuthenticationWebFilter.class
-})
+@Import(TokenProcessor.class)
 @EnableConfigurationProperties(TokenProperties.class)
 @EnableWebFluxSecurity
 public class SecurityConfiguration {
@@ -37,8 +33,7 @@ public class SecurityConfiguration {
     @Bean
     SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http,
                                                ReactiveAuthenticationManager manager,
-                                               LoginAuthenticationWebFilter loginAuthenticationWebFilter,
-                                               TokenAuthenticationWebFilter tokenAuthenticationWebFilter) {
+                                               TokenProcessor tokenProcessor) {
         http.authorizeExchange()
                 // TODO: Remove
                 .pathMatchers("/role").hasAuthority("SUPER")
@@ -47,8 +42,8 @@ public class SecurityConfiguration {
                 .csrf().disable().headers().frameOptions().disable()
                 .and()
                 .authenticationManager(manager)
-                .addFilterAt(loginAuthenticationWebFilter, SecurityWebFiltersOrder.HTTP_BASIC)
-                .addFilterAt(tokenAuthenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
+                .addFilterAt(LoginAuthenticationWebFilter.of(manager, tokenProcessor), SecurityWebFiltersOrder.HTTP_BASIC)
+                .addFilterAt(TokenAuthenticationWebFilter.of(tokenProcessor), SecurityWebFiltersOrder.AUTHENTICATION)
                 .exceptionHandling().accessDeniedHandler((exchange, e) -> Mono.defer(() ->
                     ServerHttpResponseWriter.write(exchange, HttpStatus.FORBIDDEN,
                         ResponseResult.fail(ResponseStatus.AUTHENTICATION_ACCESS_DENIED))));

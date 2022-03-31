@@ -51,6 +51,10 @@ public class LoginAuthenticationWebFilter implements WebFilter {
         this.authenticationFailureHandler = LoginAuthenticationFailureHandler.of();
     }
 
+    public static LoginAuthenticationWebFilter of(ReactiveAuthenticationManager authenticationManager, TokenProcessor tokenProcessor) {
+        return new LoginAuthenticationWebFilter(authenticationManager, tokenProcessor);
+    }
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         WebFilterExchange filterExchange = new WebFilterExchange(exchange, chain);
