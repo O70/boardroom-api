@@ -1,8 +1,6 @@
 package org.thraex.admin.security;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,6 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ import java.util.Optional;
 @Deprecated
 public class EncryptionAuthenticationWebFilter implements ServerAuthenticationConverter {
 
-    private Logger logger = LoggerFactory.getLogger(EncryptionAuthenticationWebFilter.class);
+    private Logger logger = Loggers.getLogger(EncryptionAuthenticationWebFilter.class);
 
     public static EncryptionAuthenticationWebFilter of() {
         return new EncryptionAuthenticationWebFilter();

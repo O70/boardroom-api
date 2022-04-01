@@ -10,10 +10,10 @@ import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
 import org.jose4j.lang.JoseException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 import org.thraex.admin.generics.util.RSAUtil;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 
 import java.security.GeneralSecurityException;
 import java.security.KeyPair;
@@ -28,7 +28,7 @@ import java.util.function.Consumer;
  */
 public class TokenProcessor {
 
-    private Logger logger = LoggerFactory.getLogger(TokenProcessor.class);
+    private Logger logger = Loggers.getLogger(TokenProcessor.class);
 
     private final TokenProperties properties;
 

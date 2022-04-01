@@ -1,7 +1,5 @@
 package org.thraex.admin.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -12,8 +10,6 @@ import org.springframework.security.core.context.SecurityContextImpl;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.security.web.server.context.NoOpServerSecurityContextRepository;
 import org.springframework.security.web.server.context.ServerSecurityContextRepository;
-import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatcher;
-import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
 import org.springframework.util.Assert;
 import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
@@ -21,6 +17,8 @@ import org.springframework.web.server.WebFilterChain;
 import org.thraex.admin.generics.response.ResponseResult;
 import org.thraex.admin.generics.response.ResponseStatus;
 import reactor.core.publisher.Mono;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 
 import java.util.Optional;
 
@@ -30,9 +28,7 @@ import java.util.Optional;
  */
 public class TokenAuthenticationWebFilter implements WebFilter {
 
-    private Logger logger = LoggerFactory.getLogger(TokenAuthenticationWebFilter.class);
-
-    private ServerWebExchangeMatcher matcher = ServerWebExchangeMatchers.anyExchange();
+    private Logger logger = Loggers.getLogger(TokenAuthenticationWebFilter.class);
 
     private ServerSecurityContextRepository securityContextRepository = NoOpServerSecurityContextRepository.getInstance();
 

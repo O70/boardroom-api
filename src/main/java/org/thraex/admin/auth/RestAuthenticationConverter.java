@@ -1,8 +1,6 @@
 package org.thraex.admin.auth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.http.HttpHeaders;
@@ -25,8 +23,6 @@ import java.io.IOException;
  */
 @Deprecated
 public class RestAuthenticationConverter implements ServerAuthenticationConverter {
-
-    private Logger logger = LoggerFactory.getLogger(RestAuthenticationConverter.class);
 
     public static final String BASIC = "THRAEX ";
 

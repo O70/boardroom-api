@@ -1,7 +1,5 @@
 package org.thraex.admin.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.authentication.ProviderNotFoundException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.server.WebFilterExchange;
@@ -9,6 +7,8 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import org.thraex.admin.generics.response.ResponseResult;
 import org.thraex.admin.generics.response.ResponseStatus;
 import reactor.core.publisher.Mono;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 
 /**
  * @author 鬼王
@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
  */
 public class LoginAuthenticationFailureHandler implements ServerAuthenticationFailureHandler {
 
-    private Logger logger = LoggerFactory.getLogger(LoginAuthenticationFailureHandler.class);
+    private Logger logger = Loggers.getLogger(LoginAuthenticationFailureHandler.class);
 
     public static LoginAuthenticationFailureHandler of() {
         return new LoginAuthenticationFailureHandler();

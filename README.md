@@ -10,6 +10,6 @@
 - [X] Permitted
 - [ ] Fix **Auditor**, use **Redis**
 - [ ] `LogoutWebFilter`
-- [ ] Optimization log
+- [X] Optimization log
 - [ ] Clear `@Deprecated` codes
 - [ ] Testing

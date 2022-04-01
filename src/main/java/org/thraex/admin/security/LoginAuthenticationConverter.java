@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -15,6 +13,8 @@ import org.springframework.web.server.ServerWebExchange;
 import org.thraex.admin.generics.response.ResponseStatus;
 import org.thraex.admin.generics.util.RSAUtil;
 import reactor.core.publisher.Mono;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 
 /**
  * TODO: Opt Exception
@@ -24,7 +24,7 @@ import reactor.core.publisher.Mono;
  */
 public class LoginAuthenticationConverter implements ServerAuthenticationConverter {
 
-    private Logger logger = LoggerFactory.getLogger(LoginAuthenticationConverter.class);
+    private Logger logger = Loggers.getLogger(LoginAuthenticationConverter.class);
 
     private final String prefix;
 

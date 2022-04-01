@@ -2,8 +2,6 @@ package org.thraex.admin.auth;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.http.HttpStatus;
@@ -15,6 +13,8 @@ import org.springframework.security.web.server.authentication.ServerAuthenticati
 import org.springframework.web.server.ServerWebExchange;
 import org.thraex.admin.generics.response.ResponseResult;
 import reactor.core.publisher.Mono;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 
 /**
  * @author 鬼王
@@ -23,7 +23,7 @@ import reactor.core.publisher.Mono;
 @Deprecated
 public class RestServerAuthenticationSuccessHandler implements ServerAuthenticationSuccessHandler {
 
-    private Logger logger = LoggerFactory.getLogger(RestServerAuthenticationSuccessHandler.class);
+    private Logger logger = Loggers.getLogger(RestServerAuthenticationSuccessHandler.class);
 
     public static RestServerAuthenticationSuccessHandler of() {
         return new RestServerAuthenticationSuccessHandler();

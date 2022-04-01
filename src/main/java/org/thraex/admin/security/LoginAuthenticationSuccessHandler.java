@@ -1,12 +1,12 @@
 package org.thraex.admin.security;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler;
 import org.thraex.admin.generics.response.ResponseResult;
 import reactor.core.publisher.Mono;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 
 /**
  * @author 鬼王
@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
  */
 public class LoginAuthenticationSuccessHandler implements ServerAuthenticationSuccessHandler {
 
-    private Logger logger = LoggerFactory.getLogger(LoginAuthenticationSuccessHandler.class);
+    private Logger logger = Loggers.getLogger(LoginAuthenticationSuccessHandler.class);
 
     private final TokenProcessor tokenProcessor;
 

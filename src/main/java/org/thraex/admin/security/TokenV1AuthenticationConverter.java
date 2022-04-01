@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.consumer.InvalidJwtException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,6 +12,8 @@ import org.springframework.web.server.ServerWebExchange;
 import org.thraex.admin.generics.response.ResponseStatus;
 import org.thraex.admin.system.entity.User;
 import reactor.core.publisher.Mono;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 
 import java.io.IOException;
 
@@ -26,7 +26,7 @@ import java.io.IOException;
 @Deprecated
 public class TokenV1AuthenticationConverter implements ServerAuthenticationConverter {
 
-    private Logger logger = LoggerFactory.getLogger(TokenV1AuthenticationConverter.class);
+    private Logger logger = Loggers.getLogger(TokenV1AuthenticationConverter.class);
 
     private TokenProcessor tokenProcessor;
     private final String prefix;

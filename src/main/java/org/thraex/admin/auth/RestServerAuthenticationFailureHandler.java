@@ -1,7 +1,5 @@
 package org.thraex.admin.auth;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.security.core.AuthenticationException;
@@ -9,6 +7,8 @@ import org.springframework.security.web.server.WebFilterExchange;
 import org.springframework.security.web.server.authentication.ServerAuthenticationFailureHandler;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 
 /**
  * @author 鬼王
@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 @Deprecated
 public class RestServerAuthenticationFailureHandler implements ServerAuthenticationFailureHandler {
 
-    private Logger logger = LoggerFactory.getLogger(RestServerAuthenticationFailureHandler.class);
+    private Logger logger = Loggers.getLogger(RestServerAuthenticationFailureHandler.class);
 
     public static RestServerAuthenticationFailureHandler of() {
         return new RestServerAuthenticationFailureHandler();

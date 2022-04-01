@@ -1,7 +1,5 @@
 package org.thraex.admin.auth;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,6 +17,8 @@ import org.springframework.web.server.ServerWebExchange;
 import org.springframework.web.server.WebFilter;
 import org.springframework.web.server.WebFilterChain;
 import reactor.core.publisher.Mono;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 
 /**
  * <p>
@@ -48,7 +48,7 @@ import reactor.core.publisher.Mono;
 @Deprecated
 public class CryptoAuthenticationWebFilter implements WebFilter {
 
-    private Logger logger = LoggerFactory.getLogger(CryptoAuthenticationWebFilter.class);
+    private Logger logger = Loggers.getLogger(CryptoAuthenticationWebFilter.class);
 
     private ServerWebExchangeMatcher matcher = ServerWebExchangeMatchers
             .pathMatchers(HttpMethod.POST, "/auth/login");
