@@ -8,6 +8,7 @@
 - [ ] Optimization response result(ok/fail)
 - [ ] Optimization exception
 - [X] Permitted
+- [ ] `Token` wrapper
 - [ ] Fix **Auditor**, use **Redis**
 - [ ] `LogoutWebFilter`
 - [X] Optimization log
