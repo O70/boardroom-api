@@ -7,8 +7,9 @@
 - [ ] Optimization Authentication(filter/converter/writer/processor)
 - [ ] Optimization response result(ok/fail)
 - [ ] Optimization exception
-- [ ] Permitted
+- [X] Permitted
 - [ ] Fix **Auditor**, use **Redis**
 - [ ] `LogoutWebFilter`
+- [ ] Optimization log
 - [ ] Clear `@Deprecated` codes
 - [ ] Testing

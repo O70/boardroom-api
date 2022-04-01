@@ -42,7 +42,7 @@ public class TokenAuthenticationWebFilter implements WebFilter {
 
     public TokenAuthenticationWebFilter(TokenProcessor tokenProcessor) {
         Assert.notNull(tokenProcessor, "tokenProcessor cannot be null");
-        this.authenticationConverter = TokenV2AuthenticationConverter.of(tokenProcessor);
+        this.authenticationConverter = TokenAuthenticationConverter.of(tokenProcessor);
         this.prefix = tokenProcessor.getProperties().getPrefix();
     }
 
@@ -75,6 +75,7 @@ public class TokenAuthenticationWebFilter implements WebFilter {
                 .subscriberContext(ReactiveSecurityContextHolder.withSecurityContext(Mono.just(securityContext)));
     }
 
+    @Deprecated
     protected Mono<Void> onAuthenticationFailure(ServerWebExchange exchange, AuthenticationException exception) {
         String message = exception.getMessage();
         logger.info("Authentication(Token) failure: [{}]", message);

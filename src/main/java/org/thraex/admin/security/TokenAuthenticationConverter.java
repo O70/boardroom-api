@@ -4,18 +4,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.consumer.InvalidJwtException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.server.authentication.ServerAuthenticationConverter;
 import org.springframework.web.server.ServerWebExchange;
-import org.thraex.admin.generics.response.ResponseStatus;
 import org.thraex.admin.system.entity.User;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.SignalType;
+import reactor.util.Logger;
+import reactor.util.Loggers;
 
 import java.io.IOException;
+import java.util.logging.Level;
 
 /**
  * TODO: Opt Exception
@@ -25,7 +26,7 @@ import java.io.IOException;
  */
 public class TokenAuthenticationConverter implements ServerAuthenticationConverter {
 
-    private Logger logger = LoggerFactory.getLogger(TokenAuthenticationConverter.class);
+    private Logger logger = Loggers.getLogger(TokenAuthenticationConverter.class);
 
     private TokenProcessor tokenProcessor;
     private final String prefix;
@@ -41,39 +42,27 @@ public class TokenAuthenticationConverter implements ServerAuthenticationConvert
 
     @Override
     public Mono<Authentication> convert(ServerWebExchange exchange) {
-        HttpHeaders headers = exchange.getRequest().getHeaders();
-
-        return Mono.justOrEmpty(headers.getFirst(HttpHeaders.AUTHORIZATION))
-                .filter(StringUtils::isNotBlank)
-                .flatMap(this::apply)
-                .switchIfEmpty(Mono.defer(() -> Mono.error(TokenAuthenticationException.of(ResponseStatus.AUTHENTICATION_INVALID_TOKEN))));
+        return Mono.justOrEmpty(exchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
+                .log(logger, Level.INFO, false, SignalType.ON_SUBSCRIBE, SignalType.ON_NEXT)
+                .filter(a -> StringUtils.startsWithIgnoreCase(a, prefix))
+                .flatMap(this::apply);
     }
 
     private Mono<Authentication> apply(String authorization) {
-        logger.info("Authorization(Token): [{}]", authorization);
-
-        if (!StringUtils.startsWithIgnoreCase(authorization, prefix)) {
-            return Mono.empty();
-        }
-
         try {
             JwtClaims claims = tokenProcessor.verify(authorization);
+            logger.debug(claims.toString());
+
             String principal = claims.getClaimValueAsString("principal");
             ObjectMapper mapper = new ObjectMapper();
             User user = mapper.readValue(principal, User.class);
 
             return Mono.just(new UsernamePasswordAuthenticationToken(user, user.getPassword(), user.getAuthorities()));
-        } catch (InvalidJwtException e) {
-            logger.error(e.getMessage());
-
-            if (e.hasExpired()) {
-                throw TokenAuthenticationException.of(ResponseStatus.AUTHENTICATION_EXPIRED_TOKEN);
-            }
-        } catch (IOException e) {
+        } catch (InvalidJwtException | IOException e) {
             logger.error(e.getMessage());
         }
 
-        throw TokenAuthenticationException.of(ResponseStatus.AUTHENTICATION_INVALID_TOKEN);
+        return Mono.empty();
     }
 
 }

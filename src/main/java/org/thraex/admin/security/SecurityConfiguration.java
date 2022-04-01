@@ -4,13 +4,18 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.server.reactive.ServerHttpResponse;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.web.server.ServerWebExchange;
 import org.thraex.admin.generics.response.ResponseResult;
 import org.thraex.admin.generics.response.ResponseStatus;
 import org.thraex.admin.system.repository.UserRepository;
@@ -31,6 +36,8 @@ public class SecurityConfiguration {
 
     private Set<String> permitted = Collections.EMPTY_SET;
 
+    private String prefix;
+
     @Bean
     ReactiveAuthenticationManager authenticationManager(UserRepository userRepository) {
         JpaUserDetailsService service = JpaUserDetailsService.of(userRepository);
@@ -41,23 +48,38 @@ public class SecurityConfiguration {
     SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http,
                                                ReactiveAuthenticationManager manager,
                                                TokenProcessor tokenProcessor) {
+        this.prefix = tokenProcessor.getProperties().getPrefix();
+
         ServerHttpSecurity.AuthorizeExchangeSpec authorizeExchange = http.authorizeExchange();
         if (!permitted.isEmpty()) {
             authorizeExchange.pathMatchers(permitted.toArray(new String[0])).permitAll();
         }
+        authorizeExchange.anyExchange().authenticated();
 
-        authorizeExchange.anyExchange().authenticated()
-                .and()
-                .csrf().disable().headers().frameOptions().disable()
-                .and()
-                .authenticationManager(manager)
+        http.csrf().disable().headers().frameOptions().disable();
+
+        http.authenticationManager(manager)
                 .addFilterAt(LoginAuthenticationWebFilter.of(manager, tokenProcessor), SecurityWebFiltersOrder.HTTP_BASIC)
                 .addFilterAt(TokenAuthenticationWebFilter.of(tokenProcessor), SecurityWebFiltersOrder.AUTHENTICATION)
-                .exceptionHandling().accessDeniedHandler((exchange, e) -> Mono.defer(() ->
-                    ServerHttpResponseWriter.write(exchange, HttpStatus.FORBIDDEN,
-                        ResponseResult.fail(ResponseStatus.AUTHENTICATION_ACCESS_DENIED))));
+                .exceptionHandling()
+                .authenticationEntryPoint(this::unauthorized)
+                .accessDeniedHandler(this::denied);
 
         return http.build();
+    }
+
+    private Mono<Void> unauthorized(ServerWebExchange exchange, AuthenticationException e) {
+        ServerHttpResponse response = exchange.getResponse();
+        HttpHeaders headers = response.getHeaders();
+        headers.set(HttpHeaders.WWW_AUTHENTICATE, String.format("%s error=\"%s\"", prefix, e.getMessage()));
+
+        return ServerHttpResponseWriter.write(response, HttpStatus.UNAUTHORIZED,
+                ResponseResult.fail(ResponseStatus.AUTHENTICATION_UNAUTHORIZED));
+    }
+
+    private Mono<Void> denied(ServerWebExchange exchange, AccessDeniedException e) {
+        return ServerHttpResponseWriter.write(exchange, HttpStatus.FORBIDDEN,
+                ResponseResult.fail(ResponseStatus.AUTHENTICATION_ACCESS_DENIED));
     }
 
     public void setPermitted(Set<String> permitted) {
