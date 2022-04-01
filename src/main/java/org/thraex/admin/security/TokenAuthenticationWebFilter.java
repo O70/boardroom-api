@@ -42,7 +42,7 @@ public class TokenAuthenticationWebFilter implements WebFilter {
 
     public TokenAuthenticationWebFilter(TokenProcessor tokenProcessor) {
         Assert.notNull(tokenProcessor, "tokenProcessor cannot be null");
-        this.authenticationConverter = TokenAuthenticationConverter.of(tokenProcessor);
+        this.authenticationConverter = TokenV2AuthenticationConverter.of(tokenProcessor);
         this.prefix = tokenProcessor.getProperties().getPrefix();
     }
 
@@ -52,12 +52,17 @@ public class TokenAuthenticationWebFilter implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        return authenticationConverter.convert(exchange)
+                .switchIfEmpty(chain.filter(exchange).then(Mono.empty()))
+                .flatMap(authentication -> onAuthenticationSuccess(exchange, chain, authentication));
+        /*
         return matcher.matches(exchange)
                 .filter(ServerWebExchangeMatcher.MatchResult::isMatch)
                 .switchIfEmpty(chain.filter(exchange).then(Mono.empty()))
                 .flatMap(matchResult -> authenticationConverter.convert(exchange))
                 .flatMap(authentication -> onAuthenticationSuccess(exchange, chain, authentication))
                 .onErrorResume(AuthenticationException.class, e -> onAuthenticationFailure(exchange, e));
+        */
     }
 
     protected Mono<Void> onAuthenticationSuccess(ServerWebExchange exchange,

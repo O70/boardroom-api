@@ -1,5 +1,6 @@
 package org.thraex.admin.security;
 
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -15,14 +16,20 @@ import org.thraex.admin.generics.response.ResponseStatus;
 import org.thraex.admin.system.repository.UserRepository;
 import reactor.core.publisher.Mono;
 
+import java.util.Collections;
+import java.util.Set;
+
 /**
  * @author 鬼王
  * @date 2022/03/18 16:47
  */
 @Import(TokenProcessor.class)
+@ConfigurationProperties("thraex.security")
 @EnableConfigurationProperties(TokenProperties.class)
 @EnableWebFluxSecurity
 public class SecurityConfiguration {
+
+    private Set<String> permitted = Collections.EMPTY_SET;
 
     @Bean
     ReactiveAuthenticationManager authenticationManager(UserRepository userRepository) {
@@ -34,10 +41,12 @@ public class SecurityConfiguration {
     SecurityWebFilterChain securityFilterChain(ServerHttpSecurity http,
                                                ReactiveAuthenticationManager manager,
                                                TokenProcessor tokenProcessor) {
-        http.authorizeExchange()
-                // TODO: Remove
-                .pathMatchers("/role").hasAuthority("SUPER")
-                .anyExchange().authenticated()
+        ServerHttpSecurity.AuthorizeExchangeSpec authorizeExchange = http.authorizeExchange();
+        if (!permitted.isEmpty()) {
+            authorizeExchange.pathMatchers(permitted.toArray(new String[0])).permitAll();
+        }
+
+        authorizeExchange.anyExchange().authenticated()
                 .and()
                 .csrf().disable().headers().frameOptions().disable()
                 .and()
@@ -49,6 +58,10 @@ public class SecurityConfiguration {
                         ResponseResult.fail(ResponseStatus.AUTHENTICATION_ACCESS_DENIED))));
 
         return http.build();
+    }
+
+    public void setPermitted(Set<String> permitted) {
+        this.permitted = permitted;
     }
 
 }
